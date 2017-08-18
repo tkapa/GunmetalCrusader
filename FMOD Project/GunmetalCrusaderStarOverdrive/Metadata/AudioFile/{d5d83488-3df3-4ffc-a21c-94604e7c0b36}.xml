@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.09.00">
+    <object class="AudioFile" id="{d5d83488-3df3-4ffc-a21c-94604e7c0b36}">
+        <property name="assetPath">
+            <value>AI/Anime/Anime_Androids_Scope.wav</value>
+        </property>
+        <property name="frequencyInKHz">
+            <value>48</value>
+        </property>
+        <property name="channelCount">
+            <value>1</value>
+        </property>
+        <property name="length">
+            <value>2.3039999999999998</value>
+        </property>
+        <relationship name="masterAssetFolder">
+            <destination>{ffb01531-4fb6-4220-9bd8-a7dbe8d3ac86}</destination>
+        </relationship>
+    </object>
+</objects>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.09.00">
+    <object class="AudioFile" id="{8c9b2cc0-1333-48e6-aebc-328805a49d1d}">
+        <property name="assetPath">
+            <value>AI/Vanilla/Crusader_Online_3.wav</value>
+        </property>
+        <property name="frequencyInKHz">
+            <value>48</value>
+        </property>
+        <property name="channelCount">
+            <value>1</value>
+        </property>
+        <property name="length">
+            <value>2.4266666666666667</value>
+        </property>
+        <relationship name="masterAssetFolder">
+            <destination>{ffb01531-4fb6-4220-9bd8-a7dbe8d3ac86}</destination>
+        </relationship>
+    </object>
+</objects>

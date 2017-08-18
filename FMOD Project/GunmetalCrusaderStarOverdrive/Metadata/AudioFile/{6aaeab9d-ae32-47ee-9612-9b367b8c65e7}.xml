@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.09.00">
+    <object class="AudioFile" id="{6aaeab9d-ae32-47ee-9612-9b367b8c65e7}">
+        <property name="assetPath">
+            <value>Mech/Mech_HealthLoss01.wav</value>
+        </property>
+        <property name="frequencyInKHz">
+            <value>48</value>
+        </property>
+        <property name="channelCount">
+            <value>2</value>
+        </property>
+        <property name="length">
+            <value>1.1093333333333333</value>
+        </property>
+        <relationship name="masterAssetFolder">
+            <destination>{ffb01531-4fb6-4220-9bd8-a7dbe8d3ac86}</destination>
+        </relationship>
+    </object>
+</objects>
