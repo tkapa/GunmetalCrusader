@@ -32,3 +32,11 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+
+#FMOD Studio
+/Assets/FMODStudioCache.asset
+/Assets/FMODStudioCache.asset.meta
+fmod_editor.log
+/FMOD Project/GunmetalCrusaderStarOverdrive/**.user
+/FMOD Project/GunmetalCrusaderStarOverdrive/**.unsaved
+/FMOD Project/GunmetalCrusaderStarOverdrive/**.cache
