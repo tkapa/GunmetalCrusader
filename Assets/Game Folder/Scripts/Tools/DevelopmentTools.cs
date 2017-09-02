@@ -1,34 +1,33 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DevelopmentTools : MonoBehaviour {
 
-    public string killAllEnemiesInput = "k";
+    public string killEnemiesKey = "k", resetLevelKey = "r";
 
 	// Use this for initialization
 	void Start () {
 		
 	}
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(killAllEnemiesInput))
-        {
-            KillAllActiveEnemies();
-        }
+	
+	// Update is called once per frame
+	void Update () {
+        if (Input.GetKeyDown(killEnemiesKey))
+            KillEnemies();
+        if (Input.GetKeyDown(resetLevelKey))
+            ResetLevel();
     }
 
-    //Kills All active enemies on the scene
-    void KillAllActiveEnemies()
+    void KillEnemies()
     {
-        if (FindObjectOfType<Enemy>())
-        {
-            foreach(Enemy e in FindObjectsOfType<Enemy>())
-            {
-                e.OnDeath();
-            }
-        }
+        foreach (Enemy e in FindObjectsOfType<Enemy>())
+            e.OnDeath();
+    }
+
+    void ResetLevel()
+    {
+        SceneManager.LoadScene(0);
     }
 }

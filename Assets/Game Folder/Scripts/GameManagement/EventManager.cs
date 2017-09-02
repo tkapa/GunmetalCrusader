@@ -3,11 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-// Temporary example event
-public class DummyEvent : UnityEvent<bool>
-{
-}
-
 // Called on Weapon Equip. Param equates to weapon index.
 public class WeaponEquip : UnityEvent<int>
 {
@@ -20,6 +15,11 @@ public class WeaponFire : UnityEvent<int,bool>
 
 // Called on Weapon Reload. Param equates to weapon index.
 public class WeaponReload : UnityEvent<int>
+{
+}
+
+//Called when an enemy dies
+public class EnemyDeath : UnityEvent
 {
 }
 
@@ -42,10 +42,10 @@ public class EventManager : MonoBehaviour
     }
 
     // Bind Events
-    public DummyEvent OnDummyEvent = new DummyEvent();
     public WeaponEquip OnWeaponEquip = new WeaponEquip();
     public WeaponFire OnWeaponFire = new WeaponFire();
     public WeaponReload OnWeaponReload = new WeaponReload();
+    public EnemyDeath OnEnemyDeath = new EnemyDeath();
 
     // Self deletion on duplicate creation
     private void Awake()

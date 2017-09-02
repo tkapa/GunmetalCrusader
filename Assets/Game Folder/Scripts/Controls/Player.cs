@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour {
+public class Player : MonoBehaviour {
+
+    public float health = 100.0f;
 
 	// Use this for initialization
 	void Start () {
@@ -14,15 +16,8 @@ public class Enemy : MonoBehaviour {
 		
 	}
 
-    //Called when the enemy is killed
-    public void OnDeath()
-    {
-
-    }
-
-    //Called when the enemy will be taking damage
     public void TakeDamage(float damage)
     {
-
+        health -= damage;
     }
 }
