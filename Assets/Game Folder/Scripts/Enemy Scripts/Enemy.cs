@@ -33,14 +33,17 @@ public class Enemy : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-
         if (!GetComponent<NavMeshAgent>())
             Debug.LogError("Enemy does not have a NavMeshAgent!");
         else
             agent = GetComponent<NavMeshAgent>();
 
+        agent.enabled = false;
+
         if (!FindObjectOfType<Player>())
             Debug.LogError("There is no Player script attached to the mech!");
+        else
+            target = FindObjectOfType<Player>();
 
         destinationUpdateTimer = destinationUpdateTime;
         attackIntervalCounter = attackInterval;
@@ -48,6 +51,7 @@ public class Enemy : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
         //Switch the enemy behaviour based on state
         switch (state)
         {
@@ -91,6 +95,7 @@ public class Enemy : MonoBehaviour {
     {
         if (attackIntervalCounter < 0)
         {
+            print(damage);
             attackIntervalCounter = attackInterval;
             target.TakeDamage(damage);
         }
@@ -126,7 +131,10 @@ public class Enemy : MonoBehaviour {
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (state == Enemy_States.EES_Falling)
+        if (state == Enemy_States.EES_Falling && collision.gameObject.tag == "ground")
+        {
             state = Enemy_States.EES_Tracking;
+            agent.enabled = true;
+        }
     }
 }

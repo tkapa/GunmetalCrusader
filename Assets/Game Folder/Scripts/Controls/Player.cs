@@ -16,8 +16,12 @@ public class Player : MonoBehaviour {
 		
 	}
 
+    //Called when the player takes damage
     public void TakeDamage(float damage)
     {
         health -= damage;
+
+        if(health <= 0)
+            EventManager.instance.OnPlayerDeath.Invoke();
     }
 }

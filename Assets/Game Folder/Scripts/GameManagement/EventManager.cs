@@ -23,6 +23,31 @@ public class EnemyDeath : UnityEvent
 {
 }
 
+//Called when the game is started
+public class StartGame : UnityEvent
+{
+}
+
+//Called when the game ends
+public class EndGame : UnityEvent
+{
+}
+
+//Called when the round begins
+public class StartRound : UnityEvent
+{
+}
+
+//Called when the round ends
+public class EndRound : UnityEvent
+{
+}
+
+//Called when the player dies
+public class PlayerDeath : UnityEvent
+{
+}
+
 public class EventManager : MonoBehaviour
 {
     // Initialize as Singleton
@@ -46,6 +71,11 @@ public class EventManager : MonoBehaviour
     public WeaponFire OnWeaponFire = new WeaponFire();
     public WeaponReload OnWeaponReload = new WeaponReload();
     public EnemyDeath OnEnemyDeath = new EnemyDeath();
+    public StartGame OnStartGame = new StartGame();
+    public EndGame OnEndGame = new EndGame();
+    public StartRound OnStartRound = new StartRound();
+    public EndRound OnEndRound = new EndRound();
+    public PlayerDeath OnPlayerDeath = new PlayerDeath();
 
     // Self deletion on duplicate creation
     private void Awake()
