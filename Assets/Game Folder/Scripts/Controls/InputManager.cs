@@ -5,8 +5,7 @@ using UnityEngine;
 public class InputManager : MonoBehaviour {
 
     [Tooltip("Denotes whether or not we should be using VR Peripherals as our method of input or a Gamepad.")]
-    [SerializeField]
-    private bool useGamePad = false;
+    public bool useGamePad = false;
 
     [Tooltip("Reference to the parent GameObject that holds the VRTK Rig.")]
     [SerializeField]
@@ -46,7 +45,7 @@ public class InputManager : MonoBehaviour {
     private int rightWeaponIndex = -1;
 
     // Initialize as Singleton
-    private static InputManager inst;
+    public static InputManager inst;
 
     // Disables VR systems if using Gamepad input and activates our Camera.
     private void Start ()
@@ -67,9 +66,11 @@ public class InputManager : MonoBehaviour {
         {
             // Face Button Inputs //
             reloadBtnDown = Input.GetKey(KeyCode.Joystick1Button2);
-            jetBtnDown = Input.GetKey(KeyCode.Joystick1Button6);
+            jetBtnDown = Input.GetKey(KeyCode.Joystick1Button3);
             snapBtnDown = Input.GetKey(KeyCode.Joystick1Button8);
             int invert = -1; if (CameraInversion) { invert = 1; } // Grab Inversion Multiplier
+
+            Debug.Log(jetBtnDown);
 
             // Camea Look //
             Vector3 tempRotation = GamepadCam.transform.localEulerAngles; // Grab old rotation

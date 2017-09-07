@@ -18,7 +18,10 @@ public class WeaponMaster : MonoBehaviour {
     protected bool isEquipped = false;
 
     // Holds whether the weapon is currently firing.
-    private bool isFiring = false;
+    protected bool isFiring = false;
+
+    // Holds whether the weapon is currently firing.
+    protected bool isReloading = false;
 
     /*
      * Called on instance create
@@ -50,13 +53,37 @@ public class WeaponMaster : MonoBehaviour {
      */
     protected virtual void Update()
     {
-        // TODO: Move this into the IK script for the Mech's Arms
-        GameObject myInterface = GameObject.FindGameObjectWithTag("ControllerUsingObj_" + weaponPointIndex.ToString());
-
-        if (myInterface != null)
-            this.transform.LookAt(myInterface.GetComponent<VRControllerInterface>().GetHitLocation());
+        UpdateWeaponAim();
     }
 
+    // Points the weapon at the spot it's aiming at
+    // TODO: Aim the muzzle
+    // TODO: Make the weapon's aim dependent on the Arm IK and just the muzzle rotation changed here.
+    private void UpdateWeaponAim()
+    {
+        if (isEquipped)
+        {
+            GameObject myInterface;
+            if (InputManager.inst.useGamePad)
+            {
+                // TODO: Move this into the IK script for the Mech's Arms
+                myInterface = GameObject.FindGameObjectWithTag("UsingGamepadControllerObj");
+
+                if (myInterface != null)
+                    this.transform.LookAt(myInterface.GetComponent<GamepadPointer>().GetHitLocation());
+            }
+            else
+            {
+                // TODO: Move this into the IK script for the Mech's Arms
+                myInterface = GameObject.FindGameObjectWithTag("ControllerUsingObj_" + weaponPointIndex.ToString());
+
+                if (myInterface != null)
+                    this.transform.LookAt(myInterface.GetComponent<VRControllerInterface>().GetHitLocation());
+            }
+        }
+    }
+
+    // Called when the weapon is equipped
     protected virtual void OnEquip()
     {
         isEquipped = !isEquipped;
@@ -66,6 +93,7 @@ public class WeaponMaster : MonoBehaviour {
             Debug.Log(weaponName + " at " + weaponPointIndex.ToString() + " is no longer equipped.");
     }
 
+    // Called when the weapon receives fire input
     protected virtual void OnFireInput(bool startFire)
     {
         if (isEquipped)
@@ -80,11 +108,14 @@ public class WeaponMaster : MonoBehaviour {
             Debug.Log("WARNING: " + weaponName + " at " + weaponPointIndex.ToString() + " attempted fire without being equipped.");
     }
 
+    // Called when the weapon reload is called.
     protected virtual void OnReload()
     {
         Debug.Log(weaponName + " at " + weaponPointIndex.ToString() + " attempted reload.");
+        isReloading = true;
     }
 
+    // Sets the weapon point index
     public void SetWeaponPointIndex(int i)
     {
         weaponPointIndex = i;
