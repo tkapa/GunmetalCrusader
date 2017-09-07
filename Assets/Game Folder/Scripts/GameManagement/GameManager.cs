@@ -14,18 +14,6 @@ public class GameManager : MonoBehaviour {
     public AnimationCurve enemyNumberCurve;
     public int maximumEnemyNumber;
 
-    //Manage enemy health count
-    public AnimationCurve enemyHealthCurve;
-    public float maximumEnemyHealth;
-
-    //Manage enemy damage count
-    public AnimationCurve enemyDamageCurve;
-    public float maximumEnemyDamage;
-
-    //Manage enemy speed count
-    public AnimationCurve enemySpeedCurve;
-    public float maximumEnemySpeed;
-
     public EnemySpawningManager spawnManager;
 
 	// Use this for initialization
@@ -60,10 +48,7 @@ public class GameManager : MonoBehaviour {
 
         float roundPercentage = (float)currentRound / maximumNumberOfRounds;
         int enemyCount = (int)(enemyNumberCurve.Evaluate(roundPercentage) * maximumEnemyNumber);
-        float health = enemyHealthCurve.Evaluate(roundPercentage) * maximumEnemyHealth;
-        float damage = enemyDamageCurve.Evaluate(roundPercentage) * maximumEnemyDamage;
-        float speed = enemySpeedCurve.Evaluate(roundPercentage) * maximumEnemySpeed;
-        print(roundPercentage +" " +currentRound + " " +enemyCount + " " + health + " " +damage + " " + speed);
-        spawnManager.EnemyRoundValues(enemyCount, health, damage, speed);
+        print(roundPercentage +" " +currentRound + " " +enemyCount);
+        spawnManager.EnemyRoundValues(enemyCount);
     }
 }

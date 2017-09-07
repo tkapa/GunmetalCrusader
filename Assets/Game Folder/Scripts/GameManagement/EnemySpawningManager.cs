@@ -8,25 +8,25 @@ public class EnemySpawningManager : MonoBehaviour {
     int roundEnemyCount;
     int spawnedEnemyCount;
     int deadEnemyCount;
-    
-    //Enemy value spawning
-    float enemyHealth, enemyDamage, enemySpeed;
 
     public float spawningInterval = 1.5f;
     float spawningIntervalTimer;
 
     //The current enemy prefab
-    public GameObject enemyPrefab;
+    public GameObject swarmerPrefab;
 
     [HideInInspector]
     public List<GameObject> spawningObjects = new List<GameObject>();
+
+    [HideInInspector]
+    public List<GameObject> swarmers = new List<GameObject>();
 
     bool isSpawning = false;
 
 	// Use this for initialization
 	void Start () {
-        if (enemyPrefab == null)
-            Debug.LogError("The enemy prefab is not set!");
+        if (swarmerPrefab == null)
+            Debug.LogError("The swarmer prefab is not set!");
 
         EventManager.instance.OnStartRound.AddListener(()=> {
             isSpawning = true;
@@ -53,12 +53,7 @@ public class EnemySpawningManager : MonoBehaviour {
     {
         if (spawningIntervalTimer < 0)
         {
-            GameObject e = Instantiate(enemyPrefab, spawningObjects[(int)Random.Range(0, spawningObjects.Count)].transform) as GameObject;
-            Enemy ec = e.GetComponent<Enemy>();
-            ec.health = enemyHealth;
-            ec.damage = enemyDamage;
-            ec.speed = enemySpeed;
-
+            SpawnSwarmer();
             ++spawnedEnemyCount;
             spawningIntervalTimer = spawningInterval;
         }
@@ -70,11 +65,14 @@ public class EnemySpawningManager : MonoBehaviour {
     }
 
     //Called by the game manager when the round starts to set values
-    public void EnemyRoundValues(int _enemyRoundCount, float _health, float _damage, float _speed)
+    public void EnemyRoundValues(int _enemyRoundCount)
     {
         roundEnemyCount = _enemyRoundCount;
-        enemyHealth = _health;
-        enemyDamage = _damage;
-        enemySpeed = _speed;
+    }
+
+    public void SpawnSwarmer()
+    {
+        GameObject s = Instantiate(swarmerPrefab, spawningObjects[(int)Random.Range(0, spawningObjects.Count)].transform);
+        swarmers.Add(s);
     }
 }

@@ -13,26 +13,50 @@ public class Enemy : MonoBehaviour {
         EES_Attacking
     }
 
-    Enemy_States state = Enemy_States.EES_Falling;
+    public Enemy_States state = Enemy_States.EES_Falling;
+
+    [HideInInspector]
+    public int currentRound = 0;
 
     //Variables that set the stats for this agent
     [HideInInspector]
     public float health, damage, speed;
+
+    //Manage enemy health count
+    public AnimationCurve enemyHealthCurve;
+    public float maximumEnemyHealth;
+
+    //Manage enemy damage count
+    public AnimationCurve enemyDamageCurve;
+    public float maximumEnemyDamage;
+
+    //Manage enemy speed count
+    public AnimationCurve enemySpeedCurve;
+    public float maximumEnemySpeed;
 
     //Distance the enemy must be to attack at
     public float attackingDistance = 3.0f, attackInterval = 1.0f;
     float attackIntervalCounter;
 
     //My reference to the player
-    Player target;
+    [HideInInspector]
+    public Player target;
 
     //This navmesh agent
-    private NavMeshAgent agent;
+    [HideInInspector]
+    public NavMeshAgent agent;
+    private GameManager gameManager;
 
-    private float destinationUpdateTime = 0.5f, destinationUpdateTimer;
+    [HideInInspector]
+    public float destinationUpdateTime = 0.5f, destinationUpdateTimer;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    public virtual void Start () {
+        if (!FindObjectOfType<GameManager>())
+            Debug.LogError("There is no GameManager on the scene");
+        else
+            gameManager = FindObjectOfType<GameManager>();
+
         if (!GetComponent<NavMeshAgent>())
             Debug.LogError("Enemy does not have a NavMeshAgent!");
         else
@@ -45,12 +69,14 @@ public class Enemy : MonoBehaviour {
         else
             target = FindObjectOfType<Player>();
 
+        SetValues(gameManager.currentRound, gameManager.maximumNumberOfRounds);
+
         destinationUpdateTimer = destinationUpdateTime;
         attackIntervalCounter = attackInterval;
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	public virtual void Update () {
 
         //Switch the enemy behaviour based on state
         switch (state)
@@ -66,7 +92,7 @@ public class Enemy : MonoBehaviour {
 	}
 
     //Used to set the enemy path for the next half second
-    void UpdateDestination()
+    public virtual void UpdateDestination()
     {
         if (destinationUpdateTimer < 0)
         {
@@ -78,20 +104,20 @@ public class Enemy : MonoBehaviour {
     }
 
     //Set the state to either tracking or attacking
-    void SetTracking()
+    public virtual void SetTracking()
     {
         state = Enemy_States.EES_Tracking;
         agent.isStopped = false;
     }
 
-    void SetAttacking()
+    public virtual void SetAttacking()
     {
         state = Enemy_States.EES_Attacking;
         agent.isStopped = true;
     }
 
     //Attack the player
-    void Attack()
+    public virtual void Attack()
     {
         if (attackIntervalCounter < 0)
         {
@@ -107,7 +133,7 @@ public class Enemy : MonoBehaviour {
     }
 
     //Track the player
-    void Track()
+    public virtual void Track()
     {
         UpdateDestination();
         if (Vector3.Distance(transform.position, target.transform.position) < attackingDistance)
@@ -115,7 +141,7 @@ public class Enemy : MonoBehaviour {
     }
 
     //Allow the enemy to die
-    public void TakeDamage(float damage)
+    public virtual void TakeDamage(float damage)
     {
         health -= damage;
 
@@ -124,17 +150,25 @@ public class Enemy : MonoBehaviour {
     }
 
     //Called when the enemy dies
-    public void OnDeath() {
+    public virtual void OnDeath() {
         EventManager.instance.OnEnemyDeath.Invoke();
         Destroy(this.gameObject);
     }
 
-    private void OnCollisionEnter(Collision collision)
+    public virtual void OnCollisionEnter(Collision collision)
     {
         if (state == Enemy_States.EES_Falling && collision.gameObject.tag == "ground")
         {
             state = Enemy_States.EES_Tracking;
             agent.enabled = true;
         }
+    }
+
+    //Used to set the heatlh, damage and speed values of this unit
+    public virtual void SetValues(int _round, int _maxRounds) {
+        float percentage = _round / _maxRounds;
+        health = enemyHealthCurve.Evaluate(percentage) * maximumEnemyHealth;
+        damage = enemyHealthCurve.Evaluate(percentage) * maximumEnemyDamage;
+        speed = enemyHealthCurve.Evaluate(percentage) * maximumEnemySpeed;
     }
 }
