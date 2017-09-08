@@ -14,6 +14,7 @@ public class WeaponEffect : MonoBehaviour {
      */
     protected virtual void Start()
     {
+        this.tag = "FiredObject";
         Destroy(this.gameObject, existTime);
     }
 

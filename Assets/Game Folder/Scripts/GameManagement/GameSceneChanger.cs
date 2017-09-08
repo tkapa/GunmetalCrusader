@@ -46,8 +46,6 @@ public class GameSceneChanger : MonoBehaviour {
     {
         float alpha = Mathf.Lerp(0.0f, 1.25f, 1 -(Mathf.Abs(transitionTimer) / maxTransitionTimer));
 
-        Debug.Log(alpha);
-
         tSphere.material.SetColor("_Color", new Color(0,0,0, alpha));
     }
 

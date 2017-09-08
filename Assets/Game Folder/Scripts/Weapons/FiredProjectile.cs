@@ -44,6 +44,10 @@ public class FiredProjectile : FiredObject {
     {
         switch(other.tag)
         {
+            case "FiredObject":
+                {
+                    return;
+                }
             case "Player":
                 {
                     return;

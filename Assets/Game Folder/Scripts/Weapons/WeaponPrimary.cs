@@ -191,10 +191,12 @@ public class WeaponPrimary : WeaponMaster
     {
         // Spawn our projectiles
         for (int i = 0; i < projectilesPerShot; i++) // For Shotguns, fire more than one
+        {
             Instantiate(firedObject, muzzles[currentMuzzle].transform.position, Quaternion.Euler(muzzles[currentMuzzle].transform.eulerAngles + new Vector3(CalcSpreadAmount().x, CalcSpreadAmount().y, 0)));//muzzles[currentMuzzle].transform.rotation);
-        // Play a particle effect.
-        // TODO: Spawn a game object instead of playing the system right on the muzzle
-        //muzzles[currentMuzzle].GetComponent<ParticleSystem>().Play();
+                                                                                                                                                                                                             // Play a particle effect.
+            Instantiate(muzzleFlashObject, muzzles[currentMuzzle].transform);//muzzles[currentMuzzle].transform.rotation);                     
+        }
+        
         // Post shot setup: Increment muzzle, set timers, decrease ammo etc.
         currentMuzzle = nextMuzzle();
         fireTimer = fireInterval;
