@@ -5,6 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour {
 
     public float health = 100.0f;
+    public float maxHealth = 100.0f;
 
 	// Use this for initialization
 	void Start () {
