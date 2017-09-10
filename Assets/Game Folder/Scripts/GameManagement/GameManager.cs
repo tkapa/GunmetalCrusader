@@ -45,10 +45,11 @@ public class GameManager : MonoBehaviour {
     void UpdateStartRoundVariables()
     {
         ++currentRound;
+        print(currentRound);
+
 
         float roundPercentage = (float)currentRound / maximumNumberOfRounds;
         int enemyCount = (int)(enemyNumberCurve.Evaluate(roundPercentage) * maximumEnemyNumber);
-        print(roundPercentage +" " +currentRound + " " +enemyCount);
         spawnManager.EnemyRoundValues(enemyCount);
     }
 }

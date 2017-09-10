@@ -31,11 +31,13 @@ public class EnemySpawningManager : MonoBehaviour {
         EventManager.instance.OnStartRound.AddListener(()=> {
             isSpawning = true;
             spawnedEnemyCount = 0;
-
+            deadEnemyCount = 0;
             spawningIntervalTimer = spawningInterval;
         });
         EventManager.instance.OnEnemyDeath.AddListener(() => {
             ++deadEnemyCount;
+
+            print("Dead enemies: " + deadEnemyCount + "Kills Needed: " + roundEnemyCount);
 
             if (deadEnemyCount == roundEnemyCount)
                 EventManager.instance.OnEndRound.Invoke();

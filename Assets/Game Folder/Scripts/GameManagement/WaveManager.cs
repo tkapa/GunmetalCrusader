@@ -14,6 +14,8 @@ public class WaveManager : MonoBehaviour {
         roundIntervalTimer = roundIntervalTime;
 
         EventManager.instance.OnEndRound.AddListener(() => {
+            print("Round has ended!");
+
             roundIntervalTimer = roundIntervalTime;
             isCounting = true;
         });
@@ -30,6 +32,8 @@ public class WaveManager : MonoBehaviour {
     {
         if(roundIntervalTimer <= 0)
         {
+            print("Starting new round!");
+
             isCounting = false;
             EventManager.instance.OnStartRound.Invoke();
         }

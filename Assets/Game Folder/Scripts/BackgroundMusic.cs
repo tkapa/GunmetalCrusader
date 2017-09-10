@@ -18,11 +18,11 @@ public class BackgroundMusic : MonoBehaviour {
         StartInitials();
 
         EventManager.instance.OnStartRound.AddListener(()=> {
-            isTakingPlayerHealth = true;
+            StartCoroutine("Fade", true);
         });
         EventManager.instance.OnEndRound.AddListener(()=> {
             isTakingPlayerHealth = false;
-            lowPassFilter.cutoffFrequency = 250.0f;
+            StartCoroutine("Fade", false);
         });
 
     }
@@ -65,9 +65,28 @@ public class BackgroundMusic : MonoBehaviour {
         else
             lowPassFilter = GetComponent<AudioLowPassFilter>();
 
+        lowPassFilter.cutoffFrequency = 250;
+
         if (!FindObjectOfType<Player>())
             Debug.Log("There is no Player object on the scene!");
         else
             playerObject = FindObjectOfType<Player>();
+    }
+
+    IEnumerator Fade(bool isFadingIn)
+    {
+        float fadeValue = 0.0f;
+        
+        while(fadeValue < 1)
+        {
+            yield return new WaitForSeconds(0.05f);
+            fadeValue += Time.deltaTime;
+            if(isFadingIn)
+                lowPassFilter.cutoffFrequency = Mathf.Clamp(fadeValue * maximumCutOffValue, 250, maximumCutOffValue);
+            else if(!isFadingIn)
+                lowPassFilter.cutoffFrequency = Mathf.Clamp(maximumCutOffValue - (fadeValue * maximumCutOffValue), 250, maximumCutOffValue);
+        }
+
+        isTakingPlayerHealth = isFadingIn;
     }
 }

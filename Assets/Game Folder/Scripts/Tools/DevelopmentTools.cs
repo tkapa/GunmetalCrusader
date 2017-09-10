@@ -22,7 +22,7 @@ public class DevelopmentTools : MonoBehaviour {
 
     void KillEnemies()
     {
-        foreach (Enemy e in FindObjectsOfType<Enemy>())
+        foreach (Swarmer e in FindObjectsOfType<Swarmer>())
             e.OnDeath();
     }
 
