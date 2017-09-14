@@ -18,6 +18,16 @@ public class WeaponReload : UnityEvent<int>
 {
 }
 
+// Called on Mecha Jump Start.
+public class MechaJumpStart : UnityEvent
+{
+}
+
+// Called on Mecha Jump End.
+public class MechaJumpEnd : UnityEvent
+{
+}
+
 //Called when an enemy dies
 public class EnemyDeath : UnityEvent
 {
@@ -70,6 +80,8 @@ public class EventManager : MonoBehaviour
     public WeaponEquip OnWeaponEquip = new WeaponEquip();
     public WeaponFire OnWeaponFire = new WeaponFire();
     public WeaponReload OnWeaponReload = new WeaponReload();
+    public MechaJumpStart OnMechaJumpStart = new MechaJumpStart();
+    public MechaJumpEnd OnMechaJumpEnd = new MechaJumpEnd();
     public EnemyDeath OnEnemyDeath = new EnemyDeath();
     public StartGame OnStartGame = new StartGame();
     public EndGame OnEndGame = new EndGame();

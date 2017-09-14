@@ -70,8 +70,6 @@ public class InputManager : MonoBehaviour {
             snapBtnDown = Input.GetKey(KeyCode.Joystick1Button8);
             int invert = -1; if (CameraInversion) { invert = 1; } // Grab Inversion Multiplier
 
-            Debug.Log(jetBtnDown);
-
             // Camea Look //
             Vector3 tempRotation = GamepadCam.transform.localEulerAngles; // Grab old rotation
 
