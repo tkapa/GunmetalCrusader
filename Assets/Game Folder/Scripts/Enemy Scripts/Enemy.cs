@@ -36,7 +36,9 @@ public class Enemy : MonoBehaviour {
 
     //Distance the enemy must be to attack at
     public float attackingDistance = 3.0f, attackInterval = 1.0f;
-    float attackIntervalCounter;
+
+    [HideInInspector]
+    public float attackIntervalCounter;
 
     //My reference to the player
     [HideInInspector]
@@ -70,7 +72,7 @@ public class Enemy : MonoBehaviour {
             target = FindObjectOfType<Player>();
 
         SetValues(gameManager.currentRound, gameManager.maximumNumberOfRounds);
-
+        agent.updateRotation = true;
         destinationUpdateTimer = destinationUpdateTime;
         attackIntervalCounter = attackInterval;
 	}
@@ -82,6 +84,28 @@ public class Enemy : MonoBehaviour {
 
         if (health <= 0)
             OnDeath();
+    }
+
+    //Checks the dstance from this unit to the player
+    public void CheckDistance()
+    {
+        if (Vector3.Distance(transform.position, target.transform.position) < attackingDistance)
+        {
+            if (state != Enemy_States.EES_Attacking)
+            {
+                state = Enemy_States.EES_Attacking;
+                agent.isStopped = true;
+            }                
+        }
+        else
+        {
+            if (state != Enemy_States.EES_Tracking)
+            {
+                agent.isStopped = false;
+                state = Enemy_States.EES_Tracking;
+            }                
+        }
+
     }
 
     //Called when the enemy dies
@@ -101,7 +125,7 @@ public class Enemy : MonoBehaviour {
 
     //Used to set the heatlh, damage and speed values of this unit
     public virtual void SetValues(int _round, int _maxRounds) {
-        float percentage = _round / _maxRounds;
+        float percentage = (float)_round / _maxRounds;
         health = enemyHealthCurve.Evaluate(percentage) * maximumEnemyHealth;
         damage = enemyHealthCurve.Evaluate(percentage) * maximumEnemyDamage;
         speed = enemyHealthCurve.Evaluate(percentage) * maximumEnemySpeed;
