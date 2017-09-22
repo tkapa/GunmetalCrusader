@@ -38,6 +38,16 @@ public class Mecha_MovementHandler : MonoBehaviour {
     [SerializeField]
     public float StopThreshold = 2.5f;
 
+    // Reference to the jump-smonke particles.
+    [Tooltip("Reference to the jump-smonke particles.")]
+    [SerializeField]
+    private ParticleSystem jumpParticles;
+
+    // Reference to the jump-smonke particles.
+    [Tooltip("Reference to the prefab containing launch particles.")]
+    [SerializeField]
+    private GameObject launchParticlePrefab;
+
     // Use this for initialization
     void Start () {
         // Bind Events
@@ -61,6 +71,9 @@ public class Mecha_MovementHandler : MonoBehaviour {
         currDist = 0.0f;
         travelSpeed = 0.0f;
         jumpStartPosition = this.transform.position;
+
+        jumpParticles.Play(true);
+        Instantiate(launchParticlePrefab, this.transform);
     }
 
     // Called during Fixed Update
@@ -93,6 +106,7 @@ public class Mecha_MovementHandler : MonoBehaviour {
         else
         {
             rb.constraints = RigidbodyConstraints.FreezeRotation;
+            jumpParticles.Stop(true);
         }
     }
 }

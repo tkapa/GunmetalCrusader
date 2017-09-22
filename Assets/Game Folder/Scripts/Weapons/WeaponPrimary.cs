@@ -180,7 +180,13 @@ public class WeaponPrimary : WeaponMaster
      */
     Vector2 CalcSpreadAmount()
     {
-        float multiplier = Mathf.Lerp(minSpreadPercentage, 1.0f, volleyLength / maxVolleyLength);
+
+        float multiplier = 0;
+        if (volleyLength > 0)
+        {
+            multiplier = Mathf.Lerp(minSpreadPercentage, 1.0f, (float)volleyLength/ (float)maxVolleyLength);
+        }
+        multiplier = Mathf.Clamp(multiplier, 0, 1);
         return new Vector2(Random.Range(-maxSpreadAmount.x, maxSpreadAmount.x) * multiplier, Random.Range(-maxSpreadAmount.y, maxSpreadAmount.y) * multiplier);
     }
 
