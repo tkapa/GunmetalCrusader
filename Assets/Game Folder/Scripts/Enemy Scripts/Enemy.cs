@@ -139,14 +139,12 @@ public class Enemy : MonoBehaviour {
             if (state != Enemy_States.EES_Attacking)
             {
                 state = Enemy_States.EES_Attacking;
-                agent.isStopped = true;
             }                
         }
         else
         {
             if (state != Enemy_States.EES_Tracking)
             {
-                agent.isStopped = false;
                 state = Enemy_States.EES_Tracking;
             }                
         }

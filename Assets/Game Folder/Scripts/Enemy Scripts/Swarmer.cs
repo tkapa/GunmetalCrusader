@@ -10,9 +10,6 @@ public class Swarmer : Enemy {
     [HideInInspector]
     float baseDamage, baseHealth;
 
-    [HideInInspector]
-    public bool isBuffed;
-
     public override void Start()
     {
         base.Start();
@@ -27,14 +24,15 @@ public class Swarmer : Enemy {
         base.Update();
     }
 
-    void ShepherdBuff()
+    public void ShepherdBuff(bool isBuffing)
     {
-        if (isBuffed)
+        if (isBuffing)
         {
             print("Buffed by Shepherd");
             damage = baseDamage + 5;
             health = baseHealth + 5;
-        } else
+        }
+        else
         {
             damage = baseDamage;
             health = baseHealth;

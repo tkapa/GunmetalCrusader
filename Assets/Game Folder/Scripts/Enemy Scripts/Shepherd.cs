@@ -27,9 +27,9 @@ public class Shepherd : Enemy {
                 float distance = Vector3.Distance(transform.position, s.transform.position);
 
                 if (distance < effectiveRange)
-                    s.isBuffed = true;
+                    s.ShepherdBuff(true);
                 else
-                    s.isBuffed = false;
+                    s.ShepherdBuff(false);
             }
         }
     }
