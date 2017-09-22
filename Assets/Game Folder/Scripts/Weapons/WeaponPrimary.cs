@@ -181,7 +181,7 @@ public class WeaponPrimary : WeaponMaster
     Vector2 CalcSpreadAmount()
     {
 
-        float multiplier = minSpreadPercentage;
+        float multiplier = 0;
         if (volleyLength > 0)
         {
             multiplier = Mathf.Lerp(minSpreadPercentage, 1.0f, (float)volleyLength/ (float)maxVolleyLength);
