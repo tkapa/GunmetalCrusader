@@ -7,41 +7,36 @@ public class Swarmer : Enemy {
     [HideInInspector]
     public List<GameObject> surroundingSwarmers = new List<GameObject>();
 
+    [HideInInspector]
+    float baseDamage, baseHealth;
+
     public override void Start()
     {
         base.Start();
+        baseDamage = damage;
+        baseHealth = health;
     }
 
-    private void Update()
+    public override void Update()
     {
-        transform.LookAt(agent.velocity);
-
-        switch (state)
-        {
-            case Enemy_States.EES_Tracking:
-                print("tracking");
-                SetDestination();
-                break;
-
-            case Enemy_States.EES_Attacking:
-                print("attacking");
-                Attack();
-                break;
-        }        
+        //Set moveToTransform to the transform of the position I want to move to
+        moveToTransform = target.transform.position;
+        base.Update();
     }
 
-    //Sets the next destination for this enemy
-    void SetDestination()
+    public void ShepherdBuff(bool isBuffing)
     {
-        if (destinationUpdateTimer < 0)
+        if (isBuffing)
         {
-            agent.SetDestination((FindFriends() +FindPlayer())/2);
-            destinationUpdateTimer = destinationUpdateTime;
+            print("Buffed by Shepherd");
+            damage = baseDamage + 5;
+            health = baseHealth + 5;
         }
         else
-            destinationUpdateTimer -= Time.deltaTime;
-
-        CheckDistance();
+        {
+            damage = baseDamage;
+            health = baseHealth;
+        }
     }
 
     //Looks For Friendly Swarmers and sets a point to move towards
@@ -67,23 +62,4 @@ public class Swarmer : Enemy {
     {
         return target.transform.position;
     }   
-    
-    void Attack()
-    {
-        if (attackIntervalCounter < 0)
-        {
-            print(damage);
-            target.TakeDamage(damage);
-            attackIntervalCounter = attackInterval;
-        }
-        else
-            attackIntervalCounter -= Time.deltaTime;
-
-        CheckDistance();
-    }
-
-    public override void TakeDamage(float damage)
-    {
-        base.TakeDamage(damage);
-    }
 }
