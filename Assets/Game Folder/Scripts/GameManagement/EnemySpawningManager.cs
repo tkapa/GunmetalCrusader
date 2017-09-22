@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class EnemySpawningManager : MonoBehaviour {
 
+    GameManager gameManager;
+
     //Used to maange enemy values and round count
     int roundEnemyCount;
     int spawnedEnemyCount;
@@ -12,14 +14,14 @@ public class EnemySpawningManager : MonoBehaviour {
     public float spawningInterval = 1.5f;
     float spawningIntervalTimer;
 
+    [Tooltip("The percentage chance that an android has of spawning each round")]
+    public AnimationCurve shepherdSpawnRate;
+
     //The current enemy prefab
-    public GameObject swarmerPrefab;
+    public GameObject swarmerPrefab, shepherdPrefab;
 
     [HideInInspector]
     public List<GameObject> spawningObjects = new List<GameObject>();
-
-    [HideInInspector]
-    public List<GameObject> swarmers = new List<GameObject>();
 
     bool isSpawning = false;
 
@@ -27,6 +29,8 @@ public class EnemySpawningManager : MonoBehaviour {
 	void Start () {
         if (swarmerPrefab == null)
             Debug.LogError("The swarmer prefab is not set!");
+
+        gameManager = FindObjectOfType<GameManager>();
 
         EventManager.instance.OnStartRound.AddListener(()=> {
             isSpawning = true;
@@ -55,7 +59,7 @@ public class EnemySpawningManager : MonoBehaviour {
     {
         if (spawningIntervalTimer < 0)
         {
-            SpawnSwarmer();
+            SpawnEnemy();
             ++spawnedEnemyCount;
             spawningIntervalTimer = spawningInterval;
         }
@@ -72,9 +76,25 @@ public class EnemySpawningManager : MonoBehaviour {
         roundEnemyCount = _enemyRoundCount;
     }
 
+    public void SpawnEnemy()
+    {
+        float chance = Random.Range(0, 100)/100.0f;
+      
+        float shepSpawnRate = shepherdSpawnRate.Evaluate((float)gameManager.currentRound / gameManager.maximumNumberOfRounds);
+        print(chance);
+        if (chance <= shepSpawnRate)
+            SpawnShepherd();
+        else
+            SpawnSwarmer();
+    }
+
     public void SpawnSwarmer()
     {
-        GameObject s = Instantiate(swarmerPrefab, spawningObjects[(int)Random.Range(0, spawningObjects.Count)].transform);
-        swarmers.Add(s);
+        Instantiate(swarmerPrefab, spawningObjects[Random.Range(0, spawningObjects.Count)].transform);
+    }
+
+    void SpawnShepherd()
+    {
+        Instantiate(shepherdPrefab, spawningObjects[Random.Range(0, spawningObjects.Count)].transform);
     }
 }

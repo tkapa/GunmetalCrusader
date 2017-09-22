@@ -13,6 +13,7 @@ public class Enemy : MonoBehaviour {
         EES_Attacking
     }
 
+    [HideInInspector]
     public Enemy_States state = Enemy_States.EES_Falling;
 
     [HideInInspector]
@@ -50,6 +51,9 @@ public class Enemy : MonoBehaviour {
     private GameManager gameManager;
 
     [HideInInspector]
+    public Vector3 moveToTransform;
+
+    [HideInInspector]
     public float destinationUpdateTime = 0.5f, destinationUpdateTimer;
 
     // Use this for initialization
@@ -76,6 +80,47 @@ public class Enemy : MonoBehaviour {
         destinationUpdateTimer = destinationUpdateTime;
         attackIntervalCounter = attackInterval;
 	}
+
+    public virtual void Update()
+    {
+        switch (state)
+        {
+            case Enemy_States.EES_Tracking:
+                SetDestination();
+                break;
+
+            case Enemy_States.EES_Attacking:
+                Attack();
+                break;
+        }
+
+        CheckDistance();
+    }
+
+    //Changes how the enemy attacks
+    public virtual void Attack()
+    {
+        if (attackIntervalCounter < 0)
+        {
+            print(damage);
+            target.TakeDamage(damage);
+            attackIntervalCounter = attackInterval;
+        }
+        else
+            attackIntervalCounter -= Time.deltaTime;
+    }
+
+    //Sets the next destination for this enemy
+    public void SetDestination()
+    {
+        if (destinationUpdateTimer < 0)
+        {
+            agent.SetDestination(moveToTransform);
+            destinationUpdateTimer = destinationUpdateTime;
+        }
+        else
+            destinationUpdateTimer -= Time.deltaTime;
+    }
 
     //Allow the enemy to die
     public virtual void TakeDamage(float damage)
@@ -124,8 +169,9 @@ public class Enemy : MonoBehaviour {
     }
 
     //Used to set the heatlh, damage and speed values of this unit
-    public virtual void SetValues(int _round, int _maxRounds) {
+    public void SetValues(int _round, int _maxRounds) {
         float percentage = (float)_round / _maxRounds;
+        print(percentage);
         health = enemyHealthCurve.Evaluate(percentage) * maximumEnemyHealth;
         damage = enemyHealthCurve.Evaluate(percentage) * maximumEnemyDamage;
         speed = enemyHealthCurve.Evaluate(percentage) * maximumEnemySpeed;
