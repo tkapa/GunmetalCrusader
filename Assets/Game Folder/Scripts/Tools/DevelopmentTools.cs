@@ -22,8 +22,16 @@ public class DevelopmentTools : MonoBehaviour {
 
     void KillEnemies()
     {
-        foreach (Swarmer e in FindObjectsOfType<Swarmer>())
-            e.OnDeath();
+        if (FindObjectOfType<Swarmer>())
+        {
+            foreach (Swarmer e in FindObjectsOfType<Swarmer>())
+                e.OnDeath();
+        }
+        if (FindObjectOfType<Shepherd>())
+        {
+            foreach (Shepherd e in FindObjectsOfType<Shepherd>())
+                e.OnDeath();
+        }
     }
 
     void ResetLevel()

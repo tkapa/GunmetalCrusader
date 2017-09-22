@@ -14,7 +14,7 @@ public class Enemy : MonoBehaviour {
     }
 
     [HideInInspector]
-    public Enemy_States state = Enemy_States.EES_Falling;
+    public Enemy_States state;
 
     [HideInInspector]
     public int currentRound = 0;
@@ -58,6 +58,8 @@ public class Enemy : MonoBehaviour {
 
     // Use this for initialization
     public virtual void Start () {
+        state = Enemy_States.EES_Falling;
+
         if (!FindObjectOfType<GameManager>())
             Debug.LogError("There is no GameManager on the scene");
         else
@@ -83,6 +85,8 @@ public class Enemy : MonoBehaviour {
 
     public virtual void Update()
     {
+        print(state);
+
         switch (state)
         {
             case Enemy_States.EES_Tracking:
@@ -136,15 +140,17 @@ public class Enemy : MonoBehaviour {
     {
         if (Vector3.Distance(transform.position, target.transform.position) < attackingDistance)
         {
-            if (state != Enemy_States.EES_Attacking)
+            if (state != Enemy_States.EES_Attacking && state != Enemy_States.EES_Falling)
             {
+                agent.updateRotation = false;
                 state = Enemy_States.EES_Attacking;
             }                
         }
         else
         {
-            if (state != Enemy_States.EES_Tracking)
+            if (state != Enemy_States.EES_Tracking && state != Enemy_States.EES_Falling)
             {
+                agent.updateRotation = true;
                 state = Enemy_States.EES_Tracking;
             }                
         }
