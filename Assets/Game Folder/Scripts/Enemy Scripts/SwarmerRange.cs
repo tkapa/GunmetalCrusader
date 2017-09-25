@@ -6,8 +6,11 @@ public class SwarmerRange : MonoBehaviour {
 
     Swarmer parent;
 
+    public int rangeRadius = 3;
+
 	// Use this for initialization
 	void Start () {
+        GetComponent<SphereCollider>().radius = rangeRadius;
         parent = GetComponentInParent<Swarmer>();
 	}
 

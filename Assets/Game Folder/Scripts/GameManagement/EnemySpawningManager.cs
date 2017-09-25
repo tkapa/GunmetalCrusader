@@ -7,18 +7,26 @@ public class EnemySpawningManager : MonoBehaviour {
     GameManager gameManager;
 
     //Used to maange enemy values and round count
-    int roundEnemyCount;
-    int spawnedEnemyCount;
-    int deadEnemyCount;
+    int roundEnemyCount,
+        spawnedEnemyCount,
+        deadEnemyCount,
+        aliveEnemyCount;
+
+    public int maximumAliveEnemyCount;
 
     public float spawningInterval = 1.5f;
     float spawningIntervalTimer;
 
+    float roundPercentage;
+
     [Tooltip("The percentage chance that an android has of spawning each round")]
-    public AnimationCurve shepherdSpawnRate;
+    public AnimationCurve shepherdSpawnRate, 
+        glitchSpawnRate;
 
     //The current enemy prefab
-    public GameObject swarmerPrefab, shepherdPrefab;
+    public GameObject swarmerPrefab, 
+        shepherdPrefab, 
+        glitchPrefab;
 
     [HideInInspector]
     public List<GameObject> spawningObjects = new List<GameObject>();
@@ -33,14 +41,16 @@ public class EnemySpawningManager : MonoBehaviour {
         gameManager = FindObjectOfType<GameManager>();
 
         EventManager.instance.OnStartRound.AddListener(()=> {
+            
             isSpawning = true;
             spawnedEnemyCount = 0;
             deadEnemyCount = 0;
             spawningIntervalTimer = spawningInterval;
+            roundPercentage = (float)gameManager.currentRound / gameManager.maximumNumberOfRounds;
         });
         EventManager.instance.OnEnemyDeath.AddListener(() => {
             ++deadEnemyCount;
-
+            --aliveEnemyCount;
             print("Dead enemies: " + deadEnemyCount + "Kills Needed: " + roundEnemyCount);
 
             if (deadEnemyCount == roundEnemyCount)
@@ -61,6 +71,7 @@ public class EnemySpawningManager : MonoBehaviour {
         {
             SpawnEnemy();
             ++spawnedEnemyCount;
+            ++aliveEnemyCount;
             spawningIntervalTimer = spawningInterval;
         }
         else
@@ -80,9 +91,12 @@ public class EnemySpawningManager : MonoBehaviour {
     {
         float chance = Random.Range(0, 100)/100.0f;
       
-        float shepSpawnRate = shepherdSpawnRate.Evaluate((float)gameManager.currentRound / gameManager.maximumNumberOfRounds);
-        print(chance);
-        if (chance <= shepSpawnRate)
+        float shepSpawnRate = shepherdSpawnRate.Evaluate(roundPercentage);
+        float glitSpawnRate = glitchSpawnRate.Evaluate(roundPercentage);
+
+        if (chance < glitSpawnRate)
+            SpawnGlitch();
+        if (chance < shepSpawnRate)
             SpawnShepherd();
         else
             SpawnSwarmer();
@@ -96,5 +110,10 @@ public class EnemySpawningManager : MonoBehaviour {
     void SpawnShepherd()
     {
         Instantiate(shepherdPrefab, spawningObjects[Random.Range(0, spawningObjects.Count)].transform);
+    }
+
+    void SpawnGlitch()
+    {
+        Instantiate(glitchPrefab, spawningObjects[Random.Range(0, spawningObjects.Count)].transform);
     }
 }

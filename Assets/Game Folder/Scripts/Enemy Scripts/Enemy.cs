@@ -41,6 +41,9 @@ public class Enemy : MonoBehaviour {
     [HideInInspector]
     public float attackIntervalCounter;
 
+    [HideInInspector]
+    public float roundPercentage;
+
     //My reference to the player
     [HideInInspector]
     public Player target;
@@ -174,10 +177,10 @@ public class Enemy : MonoBehaviour {
 
     //Used to set the heatlh, damage and speed values of this unit
     public void SetValues(int _round, int _maxRounds) {
-        float percentage = (float)_round / _maxRounds;
-        print(percentage);
-        health = enemyHealthCurve.Evaluate(percentage) * maximumEnemyHealth;
-        damage = enemyHealthCurve.Evaluate(percentage) * maximumEnemyDamage;
-        speed = enemyHealthCurve.Evaluate(percentage) * maximumEnemySpeed;
+        roundPercentage = (float)_round / _maxRounds;
+        print(roundPercentage);
+        health = enemyHealthCurve.Evaluate(roundPercentage) * maximumEnemyHealth;
+        damage = enemyHealthCurve.Evaluate(roundPercentage) * maximumEnemyDamage;
+        speed = enemyHealthCurve.Evaluate(roundPercentage) * maximumEnemySpeed;
     }
 }

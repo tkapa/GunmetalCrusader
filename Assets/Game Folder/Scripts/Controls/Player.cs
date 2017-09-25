@@ -25,4 +25,10 @@ public class Player : MonoBehaviour {
         if(health <= 0)
             EventManager.instance.OnPlayerDeath.Invoke();
     }
+
+    public void ShutDown(float downTime)
+    {
+        //Implement a way to disable player completely
+        print("Shutdown for " + downTime);
+    }
 }
