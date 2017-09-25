@@ -10,6 +10,8 @@ public class Swarmer : Enemy {
     [HideInInspector]
     float baseDamage, baseHealth;
 
+    int swarmerGroupSize;
+
     public override void Start()
     {
         base.Start();
@@ -20,7 +22,7 @@ public class Swarmer : Enemy {
     public override void Update()
     {
         //Set moveToTransform to the transform of the position I want to move to
-        moveToTransform = target.transform.position;
+        moveToTransform = FindFriends();
         base.Update();
     }
 
@@ -44,17 +46,28 @@ public class Swarmer : Enemy {
     {
         Vector3 retVec = transform.position;
 
-        if(surroundingSwarmers.Count > 0)
+        if (FindObjectOfType<Shepherd>())
         {
+            retVec = FindObjectOfType<Shepherd>().transform.position;
+        }
+        else if (surroundingSwarmers.Count > 0)
+        {
+            int i = 0;
+
             foreach (GameObject s in surroundingSwarmers)
             {
-                retVec += s.transform.position;
+                if (i < swarmerGroupSize)
+                    retVec += s.transform.position;
             }
 
-            retVec /= surroundingSwarmers.Count;
-        }
+            retVec += target.transform.position;
 
-        return retVec * 0.2f;
+            retVec /= swarmerGroupSize + 1;
+        }
+        else
+            retVec = target.transform.position;
+
+        return retVec;
     }
 
     //Finds the player
