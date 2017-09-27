@@ -144,18 +144,14 @@ public class Enemy : MonoBehaviour {
         if (Vector3.Distance(transform.position, target.transform.position) < attackingDistance)
         {
             if (state != Enemy_States.EES_Attacking && state != Enemy_States.EES_Falling)
-            {
-                agent.updateRotation = false;
                 state = Enemy_States.EES_Attacking;
-            }                
+                           
         }
         else
         {
             if (state != Enemy_States.EES_Tracking && state != Enemy_States.EES_Falling)
-            {
-                agent.updateRotation = true;
                 state = Enemy_States.EES_Tracking;
-            }                
+                           
         }
 
     }

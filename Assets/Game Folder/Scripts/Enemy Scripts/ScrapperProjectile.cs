@@ -5,12 +5,11 @@ using UnityEngine;
 public class ScrapperProjectile : MonoBehaviour {
 
     public float movementSpeed = 10.0f;
-    public float damageValue = 0.0f;
-
-    public List<GameObject> damagingObjects = new List<GameObject>();
-
+    float damageValue = 0.0f;
+    public Scrapper parent;
 	// Use this for initialization
 	void Start () {
+        damageValue = parent.damage;
 	}
 	
 	// Update is called once per frame
@@ -20,7 +19,7 @@ public class ScrapperProjectile : MonoBehaviour {
 
     void Move()
     {
-        transform.position += Vector3.forward * movementSpeed * Time.deltaTime;
+        transform.position += transform.forward * movementSpeed * Time.deltaTime;
     }
 
     void DamageObjects()
@@ -30,7 +29,7 @@ public class ScrapperProjectile : MonoBehaviour {
 
     private void OnCollisionEnter(Collision collision)
     {
-        print("Boom");
-        Destroy(this.gameObject, 0.2f);
+        print("Boom, dealt: " + damageValue);
+        Destroy(this.gameObject, 0.1f);
     }
 }

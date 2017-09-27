@@ -21,12 +21,14 @@ public class EnemySpawningManager : MonoBehaviour {
 
     [Tooltip("The percentage chance that an android has of spawning each round")]
     public AnimationCurve shepherdSpawnRate, 
-        glitchSpawnRate;
+        glitchSpawnRate,
+        scrapSpawnRate;
 
     //The current enemy prefab
     public GameObject swarmerPrefab, 
         shepherdPrefab, 
-        glitchPrefab;
+        glitchPrefab,
+        scrapperPrefab;
 
     [HideInInspector]
     public List<GameObject> spawningObjects = new List<GameObject>();
@@ -70,9 +72,6 @@ public class EnemySpawningManager : MonoBehaviour {
         if (spawningIntervalTimer < 0)
         {
             SpawnEnemy();
-            ++spawnedEnemyCount;
-            ++aliveEnemyCount;
-            spawningIntervalTimer = spawningInterval;
         }
         else
             spawningIntervalTimer -= Time.deltaTime;
@@ -89,15 +88,27 @@ public class EnemySpawningManager : MonoBehaviour {
 
     public void SpawnEnemy()
     {
+        print("Attempting Spawn");
+        spawningIntervalTimer = spawningInterval;
+
+        if (aliveEnemyCount >= maximumAliveEnemyCount)
+            return;
+
+        ++spawnedEnemyCount;
+        ++aliveEnemyCount;
+
         float chance = Random.Range(0, 100)/100.0f;
       
-        float shepSpawnRate = shepherdSpawnRate.Evaluate(roundPercentage);
-        float glitSpawnRate = glitchSpawnRate.Evaluate(roundPercentage);
+        float shepSpawnChance = shepherdSpawnRate.Evaluate(roundPercentage);
+        float glitSpawnChance = glitchSpawnRate.Evaluate(roundPercentage);
+        float scrapSpawnChance = scrapSpawnRate.Evaluate(roundPercentage);
 
-        if (chance < glitSpawnRate)
+        if (chance < glitSpawnChance)
             SpawnGlitch();
-        if (chance < shepSpawnRate)
+        else if (chance < shepSpawnChance)
             SpawnShepherd();
+        else if (chance < scrapSpawnChance)
+            SpawnScrapper();
         else
             SpawnSwarmer();
     }
@@ -113,6 +124,11 @@ public class EnemySpawningManager : MonoBehaviour {
     }
 
     void SpawnGlitch()
+    {
+        Instantiate(glitchPrefab, spawningObjects[Random.Range(0, spawningObjects.Count)].transform);
+    }
+
+    void SpawnScrapper()
     {
         Instantiate(glitchPrefab, spawningObjects[Random.Range(0, spawningObjects.Count)].transform);
     }

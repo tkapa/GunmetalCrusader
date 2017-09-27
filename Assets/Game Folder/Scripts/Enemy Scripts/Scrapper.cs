@@ -7,44 +7,19 @@ public class Scrapper : Enemy {
     public Transform firePoint;
     public GameObject projectile;
 
-	// Use this for initialization
-	void Start () {
-        base.Start();
-	}
-	
 	// Update is called once per frame
-	void Update () {
-        switch (state)
-        {
-            case Enemy_States.EES_Tracking:
-                FindEnemy();
-                break;
+	public override void Update () {
+        moveToTransform = target.transform.position;
 
-            case Enemy_States.EES_Attacking:
-                Attack();
-                break;
-        }
+        base.Update();
 	}
 
-    //Sets destination to the player
-    void FindEnemy()
-    {
-        if (destinationUpdateTimer < 0)
-        {
-            agent.SetDestination(target.transform.position);
-            destinationUpdateTimer = destinationUpdateTime;
-        }
-        else
-            destinationUpdateTimer -= Time.deltaTime;
-
-        CheckDistance();
-    }
-
-    void Attack()
+    public override void Attack()
     {
         if (attackIntervalCounter < 0)
         {
-            Instantiate(projectile, firePoint.position, firePoint.rotation);
+            GameObject p = Instantiate(projectile, firePoint.position, transform.rotation);
+            p.GetComponent<ScrapperProjectile>().parent = this;
             attackIntervalCounter = attackInterval;
         }
         else
