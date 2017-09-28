@@ -164,8 +164,10 @@ public class Enemy : MonoBehaviour {
 
     public virtual void OnCollisionEnter(Collision collision)
     {
-        if (state == Enemy_States.EES_Falling && collision.gameObject.tag == "ground")
+		print ("Collision");
+        if (state == Enemy_States.EES_Falling && collision.gameObject.tag == "Floor")
         {
+			print ("pathing");
             state = Enemy_States.EES_Tracking;
             agent.enabled = true;
         }
