@@ -1,10 +1,18 @@
 fileFormatVersion: 2
 guid: 65d8804c1317b6e47a37f20e2734c976
-timeCreated: 1504339763
-licenseType: Free
+timeCreated: 1506597302
+licenseType: Pro
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - swarmerPrefab: {fileID: 1593673491223248, guid: e5abfd8ceeabcb5409e062639acb558c,
+      type: 2}
+  - shepherdPrefab: {fileID: 1243371897981308, guid: a99bf9e990a93a343b634d3da9236c86,
+      type: 2}
+  - glitchPrefab: {fileID: 1320288284851602, guid: 78aeb896f5b5ef04fb530bd9196dd8d5,
+      type: 2}
+  - scrapperPrefab: {fileID: 1832340261395870, guid: 5bce939d419dd1c4dae3845007964804,
+      type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
