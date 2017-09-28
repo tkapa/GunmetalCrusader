@@ -16,25 +16,31 @@ public class JackShopTestScript : MonoBehaviour {
     public string LeftAmmoTrigger;
 
     public string RightAmmoTrigger;
+
 	// Use this for initialization
 	void Start () {
-		
-	}
-	
+        // Bind Events
+        EventManager.instance.OnToggleShop.AddListener((i) =>
+        {
+            if (i)
+                CalledShopOpen();
+            else
+                CalledShopClosed();
+        });
+
+        // Bind Events
+        EventManager.instance.OnNavigateShop.AddListener((i) =>
+        {
+            if (i)
+                CalledShopOpen();
+            else
+                CalledShopClosed();
+        });
+    }
+
+	/*
 	// Update is called once per frame
 	void Update () {
-
-
-        // here are just a bunch of debug keys I was using to make sure things ran smoothly. 
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            CalledShopClosed();
-        }
-
-            if (Input.GetKeyDown(KeyCode.O))
-            {
-            CalledShopOpen();
-            }
 
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
@@ -57,7 +63,7 @@ public class JackShopTestScript : MonoBehaviour {
         }
     }
 
-
+    */
     public void CalledShopOpen()
     {
         MyAnim.SetTrigger(OpenShopTrigger);

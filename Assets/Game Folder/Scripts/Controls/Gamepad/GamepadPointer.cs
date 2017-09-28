@@ -8,7 +8,9 @@ public class GamepadPointer : MonoBehaviour {
     // Refers to the attached line renderer.
     private LineRenderer targetBeam;
     public bool displayLines = true;
+
     private Vector3 hitLocation;
+    private GameObject hitObject;
 
     // Use this for initialization
     protected virtual void Start () {
@@ -28,9 +30,11 @@ public class GamepadPointer : MonoBehaviour {
         if (Physics.Raycast(transform.position, this.transform.forward, out hit))
         {
             hitLocation = hit.point;
+            hitObject = hit.collider.gameObject;
         }else
         {
             hitLocation = this.transform.position + (this.transform.forward * 1000);
+            hitObject = null;
         }
     }
 
@@ -52,5 +56,10 @@ public class GamepadPointer : MonoBehaviour {
     public Vector3 GetHitLocation()
     {
         return hitLocation;
+    }
+
+    public bool testHitObjectAgainst(GameObject go)
+    {
+        return (go == hitObject);
     }
 }

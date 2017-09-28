@@ -58,6 +58,17 @@ public class PlayerDeath : UnityEvent
 {
 }
 
+// Called when Opening and Closing the Shop
+public class ToggleShop : UnityEvent<bool>
+{
+}
+
+// Called when buying a weapon. Index is determined via the shop
+public class NavigateShop : UnityEvent<bool>
+{
+}
+
+
 public class EventManager : MonoBehaviour
 {
     // Initialize as Singleton
@@ -88,6 +99,8 @@ public class EventManager : MonoBehaviour
     public StartRound OnStartRound = new StartRound();
     public EndRound OnEndRound = new EndRound();
     public PlayerDeath OnPlayerDeath = new PlayerDeath();
+    public ToggleShop OnToggleShop = new ToggleShop();
+    public NavigateShop OnNavigateShop = new NavigateShop();
 
     // Self deletion on duplicate creation
     private void Awake()

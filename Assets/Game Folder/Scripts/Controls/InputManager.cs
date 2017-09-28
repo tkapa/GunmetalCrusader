@@ -66,9 +66,24 @@ public class InputManager : MonoBehaviour {
         {
             // Face Button Inputs //
             reloadBtnDown = Input.GetKey(KeyCode.Joystick1Button2);
-            jetBtnDown = Input.GetKey(KeyCode.Joystick1Button3);
             snapBtnDown = Input.GetKey(KeyCode.Joystick1Button8);
             int invert = -1; if (CameraInversion) { invert = 1; } // Grab Inversion Multiplier
+
+            // Y Button // 
+            if (Input.GetKey(KeyCode.Joystick1Button3))
+            {
+                if (FindObjectOfType<WeaponShopActivator>().GetPlayerColliding() && Input.GetKeyDown(KeyCode.Joystick1Button3))
+                {
+                    jetBtnDown = false;
+                    if(!GameObject.FindGameObjectWithTag("WeaponShop").GetComponent<WeaponShopController>().CheckIfShopOpen())
+                        EventManager.instance.OnToggleShop.Invoke(true);
+                    else
+                        EventManager.instance.OnToggleShop.Invoke(false);
+                }
+                else
+                    jetBtnDown = true;
+            }else
+                jetBtnDown = false;
 
             // Camea Look //
             Vector3 tempRotation = GamepadCam.transform.localEulerAngles; // Grab old rotation
