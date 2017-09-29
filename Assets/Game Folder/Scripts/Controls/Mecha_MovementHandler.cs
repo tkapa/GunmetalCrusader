@@ -82,7 +82,7 @@ public class Mecha_MovementHandler : MonoBehaviour {
         if(bMidJump)
         {
             rb.constraints = RigidbodyConstraints.FreezeAll;
-            Vector3 Target = GameObject.FindGameObjectWithTag("JumpReticule").transform.position;
+			Vector3 Target = GameObject.FindGameObjectWithTag("JumpReticule").transform.position;
 
             float MaxDist = Vector3.Distance(new Vector3(jumpStartPosition.x, 0, jumpStartPosition.z), new Vector3(Target.x, 0, Target.z));
             if (MaxDist - currDist < StopThreshold)
@@ -106,7 +106,7 @@ public class Mecha_MovementHandler : MonoBehaviour {
         else
         {
             rb.constraints = RigidbodyConstraints.FreezeRotation;
-            jumpParticles.Stop(true);
+			jumpParticles.Stop(true);
         }
     }
 }
