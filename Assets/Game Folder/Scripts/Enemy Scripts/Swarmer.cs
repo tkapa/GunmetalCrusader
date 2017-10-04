@@ -15,8 +15,6 @@ public class Swarmer : Enemy {
     public override void Start()
     {
         base.Start();
-        baseDamage = damage;
-        baseHealth = health;
     }
 
     public override void Update()
@@ -28,16 +26,19 @@ public class Swarmer : Enemy {
 
     public void ShepherdBuff(bool isBuffing)
     {
+        baseDamage = damage;
+        baseHealth = healthComponent.health;
+
         if (isBuffing)
         {
             print("Buffed by Shepherd");
             damage = baseDamage + 5;
-            health = baseHealth + 5;
+            healthComponent.health = baseHealth + 5;
         }
         else
         {
             damage = baseDamage;
-            health = baseHealth;
+            healthComponent.health = baseHealth;
         }
     }
 
@@ -69,10 +70,4 @@ public class Swarmer : Enemy {
 
         return retVec;
     }
-
-    //Finds the player
-    Vector3 FindPlayer()
-    {
-        return target.transform.position;
-    }   
 }

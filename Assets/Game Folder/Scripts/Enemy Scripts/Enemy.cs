@@ -59,6 +59,9 @@ public class Enemy : MonoBehaviour {
     [HideInInspector]
     public float destinationUpdateTime = 0.5f, destinationUpdateTimer;
 
+    [HideInInspector]
+    public EnemyHealthComponent healthComponent;
+
     // Use this for initialization
     public virtual void Start () {
         state = Enemy_States.EES_Falling;
@@ -141,6 +144,8 @@ public class Enemy : MonoBehaviour {
     //Checks the dstance from this unit to the player
     public void CheckDistance()
     {
+
+
         if (Vector3.Distance(transform.position, target.transform.position) < attackingDistance)
         {
             if (state != Enemy_States.EES_Attacking && state != Enemy_States.EES_Falling)
@@ -150,8 +155,7 @@ public class Enemy : MonoBehaviour {
         else
         {
             if (state != Enemy_States.EES_Tracking && state != Enemy_States.EES_Falling)
-                state = Enemy_States.EES_Tracking;
-                           
+                state = Enemy_States.EES_Tracking;                           
         }
 
     }
@@ -177,8 +181,10 @@ public class Enemy : MonoBehaviour {
     public void SetValues(int _round, int _maxRounds) {
         roundPercentage = (float)_round / _maxRounds;
         print(roundPercentage);
-        health = enemyHealthCurve.Evaluate(roundPercentage) * maximumEnemyHealth;
+        healthComponent.health = enemyHealthCurve.Evaluate(roundPercentage) * maximumEnemyHealth;
         damage = enemyHealthCurve.Evaluate(roundPercentage) * maximumEnemyDamage;
-        speed = enemyHealthCurve.Evaluate(roundPercentage) * maximumEnemySpeed;
+        agent.speed = enemyHealthCurve.Evaluate(roundPercentage) * maximumEnemySpeed;
+
+        agent.stoppingDistance = attackingDistance;
     }
 }

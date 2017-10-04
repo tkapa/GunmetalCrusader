@@ -68,7 +68,7 @@ public class FiredObject : WeaponEffect {
      */
     protected virtual void hitEnemy(GameObject e, float damageMod)
     {
-        e.GetComponent<Enemy>().TakeDamage(baseDamage * damageMod);
+        e.GetComponent<EnemyHealthComponent>().TakeDamage(baseDamage * damageMod);
     }
 
     /*
