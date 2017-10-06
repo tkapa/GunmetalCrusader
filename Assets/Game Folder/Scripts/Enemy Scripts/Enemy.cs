@@ -84,9 +84,6 @@ public class Enemy : MonoBehaviour {
             target = FindObjectOfType<Player>();
 
         SetValues(gameManager.currentRound, gameManager.maximumNumberOfRounds);
-        agent.updateRotation = true;
-        destinationUpdateTimer = destinationUpdateTime;
-        attackIntervalCounter = attackInterval;
 	}
 
     public virtual void Update()
@@ -180,11 +177,14 @@ public class Enemy : MonoBehaviour {
     //Used to set the heatlh, damage and speed values of this unit
     public void SetValues(int _round, int _maxRounds) {
         roundPercentage = (float)_round / _maxRounds;
-        print(roundPercentage);
-        healthComponent.health = enemyHealthCurve.Evaluate(roundPercentage) * maximumEnemyHealth;
+                
+		healthComponent.health = enemyHealthCurve.Evaluate(roundPercentage) * maximumEnemyHealth;
         damage = enemyHealthCurve.Evaluate(roundPercentage) * maximumEnemyDamage;
-        agent.speed = enemyHealthCurve.Evaluate(roundPercentage) * maximumEnemySpeed;
-
+        
+		agent.speed = enemyHealthCurve.Evaluate(roundPercentage) * maximumEnemySpeed;
         agent.stoppingDistance = attackingDistance;
+
+		destinationUpdateTimer = destinationUpdateTime;
+		attackIntervalCounter = attackInterval;
     }
 }
