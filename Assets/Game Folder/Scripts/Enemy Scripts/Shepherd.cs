@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class Shepherd : Enemy {
 
-    [Tooltip("The range at which ")]
+    [Tooltip("The range at which Swarmers are affected")]
     public float effectiveRange = 10.0f;
+
+    List<Swarmer> mySwarmers = new List<Swarmer>();
 
 	// Use this for initialization
 	public override void Start () {
@@ -26,10 +28,16 @@ public class Shepherd : Enemy {
             {
                 float distance = Vector3.Distance(transform.position, s.transform.position);
 
-                if (distance < effectiveRange)
+                if (distance < effectiveRange && !mySwarmers.Contains(s))
+                {
                     s.ShepherdBuff(true);
-                else
+                    mySwarmers.Add(s);
+                }
+                else if(mySwarmers.Contains(s))
+                {
                     s.ShepherdBuff(false);
+                    mySwarmers.Remove(s);
+                }                
             }
         }
     }
