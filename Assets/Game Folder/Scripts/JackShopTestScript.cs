@@ -42,6 +42,9 @@ public class JackShopTestScript : MonoBehaviour {
     //the raycast pointer
     public JackShopRaycastScript RayCastOrigin;
 
+    //the inventory
+    public Mecha_InventoryManager MechInv;
+
 
     // Use this for initialization
     void Start () {
@@ -166,11 +169,13 @@ public class JackShopTestScript : MonoBehaviour {
     public void CalledBuyNewLeft()
     {
         MyAnim.SetTrigger(LeftBuyTrigger);
+        MechInv.AddWeapon(CurrentWeaponOnScreen, 0);
     }
 
     public void CalledBuyNewRight()
     {
         MyAnim.SetTrigger(RightBuyTrigger);
+        MechInv.AddWeapon(CurrentWeaponOnScreen, 1);
     }
 
     public void CalledBuyAmmoLeft()
