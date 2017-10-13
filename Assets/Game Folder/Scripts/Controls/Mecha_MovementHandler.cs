@@ -74,6 +74,7 @@ public class Mecha_MovementHandler : MonoBehaviour {
 
         jumpParticles.Play(true);
         Instantiate(launchParticlePrefab, this.transform);
+        //this.gameObject.GetComponent<Rigidbody>().isKinematic = true;
     }
 
     // Called during Fixed Update
@@ -88,6 +89,7 @@ public class Mecha_MovementHandler : MonoBehaviour {
             if (MaxDist - currDist < StopThreshold)
             {
                 bMidJump = false;
+                //this.gameObject.GetComponent<Rigidbody>().isKinematic = false;
                 EventManager.instance.OnMechaJumpEnd.Invoke();
             }
             else
