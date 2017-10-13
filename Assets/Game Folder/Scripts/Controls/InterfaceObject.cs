@@ -99,8 +99,12 @@ public class InterfaceObject : MonoBehaviour {
                     }
                 case interfaceEvent.ie_EquipReloadHybrid:
                     {
-                        //EventManager.instance.OnWeaponEquip.Invoke(weaponPointIndex);
-                        Debug.Log("WOULD REQUIRE EXTRA WIRING SO NOT YET. ASK DAKOTA IF YOU WANT THIS IN LEL");
+                        // Let the controller know that it's now tagged
+                        cEvents.gameObject.GetComponent<VRControllerInterface>().linkedweap = weaponPointIndex;
+                        cEvents.gameObject.GetComponent<VRControllerInterface>().displayLines = false;
+                        cEvents.gameObject.tag = "ControllerUsingObj_" + weaponPointIndex.ToString();
+
+                        EventManager.instance.OnWeaponEquipAndReload.Invoke(weaponPointIndex);                       
                         break;
                     }
                 case interfaceEvent.ie_OpenShop:

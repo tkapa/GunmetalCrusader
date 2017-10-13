@@ -18,7 +18,7 @@ public class Mecha_InventoryManager : MonoBehaviour {
             AddWeapon(TEMPORARY_WpRefs[i], i);
     }
 	
-	void AddWeapon(GameObject weaponPrefab, int socketIndex)
+	public void AddWeapon(GameObject weaponPrefab, int socketIndex)
     {
         if(weaponPrefab.GetComponent<WeaponMaster>() == null)
         {

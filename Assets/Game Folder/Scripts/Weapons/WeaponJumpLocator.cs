@@ -104,22 +104,26 @@ public class WeaponJumpLocator : WeaponMaster {
     // FiredFunctionality
     private void ChargeJumpTarget()
     {
-        if (isEquipped)
-        {
-            if (isFiring)
-            {
-                ChargeAmount = Mathf.Clamp(ChargeAmount + (ChargeSpeed * Time.deltaTime), 0.0f, MaxCharge);
-                if (ChargeAmount >= MaxCharge && !LockedIn)
-                {
-                    LockedIn = true;
-                    EventManager.instance.OnMechaJumpStart.Invoke();
-                }
-            }
-            else if(!LockedIn)
-                ChargeAmount = Mathf.Clamp(ChargeAmount - (ChargeSpeed * 2.5f * Time.deltaTime), 0.0f, MaxCharge);
+        GameObject myInterface = GameObject.FindGameObjectWithTag("ControllerUsingObj_" + weaponPointIndex.ToString());
 
-            if(GameObject.FindGameObjectWithTag("JumpReticuleChargeBar").GetComponent<PercentScale>() != null)
-                GameObject.FindGameObjectWithTag("JumpReticuleChargeBar").GetComponent<PercentScale>().ScalePercent = new Vector3((ChargeAmount / MaxCharge) * 100.0f, 100.0f, 100.0f);
+        if (myInterface != null && !myInterface.GetComponent<VRControllerInterface>().testHitObjectAgainst(null)) {
+            if (isEquipped)
+            {
+                if (isFiring)
+                {
+                    ChargeAmount = Mathf.Clamp(ChargeAmount + (ChargeSpeed * Time.deltaTime), 0.0f, MaxCharge);
+                    if (ChargeAmount >= MaxCharge && !LockedIn)
+                    {
+                        LockedIn = true;
+                        EventManager.instance.OnMechaJumpStart.Invoke();
+                    }
+                }
+                else if (!LockedIn)
+                    ChargeAmount = Mathf.Clamp(ChargeAmount - (ChargeSpeed * 2.5f * Time.deltaTime), 0.0f, MaxCharge);
+
+                if (GameObject.FindGameObjectWithTag("JumpReticuleChargeBar").GetComponent<PercentScale>() != null)
+                    GameObject.FindGameObjectWithTag("JumpReticuleChargeBar").GetComponent<PercentScale>().ScalePercent = new Vector3((ChargeAmount / MaxCharge) * 100.0f, 100.0f, 100.0f);
+            }
         }
     }
 

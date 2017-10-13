@@ -18,6 +18,11 @@ public class WeaponReload : UnityEvent<int>
 {
 }
 
+// Called on Weapon Reload. Param equates to weapon index.
+public class WeaponEquipAndReload : UnityEvent<int>
+{
+}
+
 // Called on Mecha Jump Start.
 public class MechaJumpStart : UnityEvent
 {
@@ -91,6 +96,7 @@ public class EventManager : MonoBehaviour
     public WeaponEquip OnWeaponEquip = new WeaponEquip();
     public WeaponFire OnWeaponFire = new WeaponFire();
     public WeaponReload OnWeaponReload = new WeaponReload();
+    public WeaponEquipAndReload OnWeaponEquipAndReload = new WeaponEquipAndReload();
     public MechaJumpStart OnMechaJumpStart = new MechaJumpStart();
     public MechaJumpEnd OnMechaJumpEnd = new MechaJumpEnd();
     public EnemyDeath OnEnemyDeath = new EnemyDeath();

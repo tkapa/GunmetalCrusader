@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class JackShopTestScript : MonoBehaviour {
-    public Animator MyAnim;
 
+    public Animator MyAnim;
+    //the triggers for the animator
     public string OpenShopTrigger;
 
     public string CloseShopTrigger;
@@ -16,9 +17,37 @@ public class JackShopTestScript : MonoBehaviour {
     public string LeftAmmoTrigger;
 
     public string RightAmmoTrigger;
+    //the shop big screen 
+    public GameObject MasterWeaponScreen;
+    public GameObject CurrentWeaponOnScreen;
 
-	// Use this for initialization
-	void Start () {
+
+    //the sprites and prefabs we need to change the big screen too for weapon changes
+    public Sprite SMG;
+    public GameObject _SMG;
+
+    public Sprite LMG;
+    public GameObject _LMG;
+
+    public Sprite Gren;
+    public GameObject _Gren;
+
+    public Sprite Flak;
+    public GameObject _Flak;
+
+    public Sprite Rail;
+    public GameObject _Rail;
+
+
+    //the raycast pointer
+    public JackShopRaycastScript RayCastOrigin;
+
+    //the inventory
+    public Mecha_InventoryManager MechInv;
+
+
+    // Use this for initialization
+    void Start () {
         // Bind Events
         EventManager.instance.OnToggleShop.AddListener((i) =>
         {
@@ -38,8 +67,6 @@ public class JackShopTestScript : MonoBehaviour {
         });
     }
 
-	/*
-	// Update is called once per frame
 	void Update () {
 
         if (Input.GetKeyDown(KeyCode.LeftArrow))
@@ -61,13 +88,77 @@ public class JackShopTestScript : MonoBehaviour {
         {
             CalledBuyAmmoRight();
         }
+
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            CalledShopOpen();
+        }
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            CalledShopClosed();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            SelectedSMG();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            SelectedLMG();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            SelectedGren();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            SelectedRail();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            SelectedFlak();
+        }
     }
 
-    */
+    public void SelectedSMG()
+    {
+        MasterWeaponScreen.GetComponent<SpriteRenderer>().sprite = SMG;
+        CurrentWeaponOnScreen = _SMG;
+    }
+
+    public void SelectedLMG()
+    {
+        MasterWeaponScreen.GetComponent<SpriteRenderer>().sprite = LMG;
+        CurrentWeaponOnScreen = _LMG;
+    }
+
+    public void SelectedGren()
+    {
+        MasterWeaponScreen.GetComponent<SpriteRenderer>().sprite = Gren;
+        CurrentWeaponOnScreen = _Gren;
+    }
+
+    public void SelectedRail()
+    {
+        MasterWeaponScreen.GetComponent<SpriteRenderer>().sprite = Rail;
+        CurrentWeaponOnScreen = _Rail;
+    }
+
+    public void SelectedFlak()
+    {
+        MasterWeaponScreen.GetComponent<SpriteRenderer>().sprite = Flak;
+        CurrentWeaponOnScreen = _Flak;
+    }
+
     public void CalledShopOpen()
     {
         MyAnim.SetTrigger(OpenShopTrigger);
         Debug.Log("Should have opened shop");
+        RayCastOrigin.ShopOpen = true;
     }
 
     public void CalledShopClosed()
@@ -78,11 +169,13 @@ public class JackShopTestScript : MonoBehaviour {
     public void CalledBuyNewLeft()
     {
         MyAnim.SetTrigger(LeftBuyTrigger);
+        MechInv.AddWeapon(CurrentWeaponOnScreen, 0);
     }
 
     public void CalledBuyNewRight()
     {
         MyAnim.SetTrigger(RightBuyTrigger);
+        MechInv.AddWeapon(CurrentWeaponOnScreen, 1);
     }
 
     public void CalledBuyAmmoLeft()

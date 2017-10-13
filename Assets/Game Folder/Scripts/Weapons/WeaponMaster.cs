@@ -46,6 +46,17 @@ public class WeaponMaster : MonoBehaviour {
             if (i == weaponPointIndex)
                 OnReload();
         });
+
+        EventManager.instance.OnWeaponEquipAndReload.AddListener((i) =>
+        {
+            if (i == weaponPointIndex)
+            {
+                if (isEquipped)
+                    OnReload();
+                else
+                    OnEquip();
+            }
+        });
     }
 
     /*

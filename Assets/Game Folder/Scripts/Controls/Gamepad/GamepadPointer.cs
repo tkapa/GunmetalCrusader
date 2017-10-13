@@ -12,6 +12,10 @@ public class GamepadPointer : MonoBehaviour {
     private Vector3 hitLocation;
     private GameObject hitObject;
 
+    public LayerMask mask;
+
+    public Transform tOffset;
+
     // Use this for initialization
     protected virtual void Start () {
         targetBeam = GetComponent<LineRenderer>();
@@ -27,7 +31,7 @@ public class GamepadPointer : MonoBehaviour {
     {
         RaycastHit hit;
 
-        if (Physics.Raycast(transform.position, this.transform.forward, out hit))
+        if (Physics.Raycast(transform.position, this.transform.forward, out hit, mask))
         {
             hitLocation = hit.point;
             hitObject = hit.collider.gameObject;
