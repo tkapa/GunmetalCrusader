@@ -14,7 +14,7 @@ public class GamepadPointer : MonoBehaviour {
 
     public LayerMask mask;
 
-    public Transform tOffset;
+    public Vector3 rotOffset;
 
     // Use this for initialization
     protected virtual void Start () {
@@ -31,13 +31,13 @@ public class GamepadPointer : MonoBehaviour {
     {
         RaycastHit hit;
 
-        if (Physics.Raycast(transform.position, this.transform.forward, out hit, mask))
+        if (Physics.Raycast(transform.position, Vector3.Normalize(this.transform.forward + rotOffset), out hit, mask))
         {
             hitLocation = hit.point;
             hitObject = hit.collider.gameObject;
         }else
         {
-            hitLocation = this.transform.position + (this.transform.forward * 1000);
+            hitLocation = this.transform.position + (Vector3.Normalize(this.transform.forward + rotOffset) * 1000);
             hitObject = null;
         }
     }

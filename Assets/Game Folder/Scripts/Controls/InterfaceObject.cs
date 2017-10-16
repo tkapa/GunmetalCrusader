@@ -6,7 +6,7 @@ public class InterfaceObject : MonoBehaviour {
 
     // Enum Declaration
     public enum interfaceEvent { ie_None, ie_EquipWeapon, ie_ReloadWeapon, ie_EquipReloadHybrid, ie_OpenShop, ie_CloseShop, ie_PurchaseWeapon };
-    public enum interfactButton { ib_None, ie_TouchOnly, ib_CirclePad, ib_Trigger, ib_Grip };
+    public enum interfactButton { ib_None, ie_TouchOnly, ib_CirclePad, ib_Trigger, ib_TriggerAndCirclePad, ib_Grip };
 
     // The event to be executed upon usage of this interface point.
     [Tooltip("The event to be executed upon usage of this interface point.")]
@@ -30,6 +30,8 @@ public class InterfaceObject : MonoBehaviour {
 
     private float FreezeTimer = 0.0f;
 
+    private bool pickedItemExists = false;
+
     // Init
     void Start()
     {
@@ -40,6 +42,11 @@ public class InterfaceObject : MonoBehaviour {
     void Update()
     {
         FreezeTimer -= Time.deltaTime;
+
+        if (GameObject.FindGameObjectWithTag("ControllerUsingObj_" + weaponPointIndex.ToString()))
+            pickedItemExists = true;
+        else
+            pickedItemExists = false;
     }
 
     // Called to test if the event was executed.
@@ -72,6 +79,20 @@ public class InterfaceObject : MonoBehaviour {
                             return;
                         break;
                     }
+                case interfactButton.ib_TriggerAndCirclePad:
+                    {
+                        if (pickedItemExists)
+                        {
+                            if (!cEvents.triggerClicked)
+                                return;
+                        }
+                        else
+                        {
+                            if (!cEvents.touchpadPressed)
+                                return;
+                        }
+                            break;
+                    }
                 default:
                     {
                         return;
@@ -99,12 +120,19 @@ public class InterfaceObject : MonoBehaviour {
                     }
                 case interfaceEvent.ie_EquipReloadHybrid:
                     {
-                        // Let the controller know that it's now tagged
-                        cEvents.gameObject.GetComponent<VRControllerInterface>().linkedweap = weaponPointIndex;
-                        cEvents.gameObject.GetComponent<VRControllerInterface>().displayLines = false;
-                        cEvents.gameObject.tag = "ControllerUsingObj_" + weaponPointIndex.ToString();
+                        if (pickedItemExists)
+                        {
+                            EventManager.instance.OnWeaponReload.Invoke(weaponPointIndex);
+                        }
+                        else
+                        {
+                            // Let the controller know that it's now tagged
+                            cEvents.gameObject.GetComponent<VRControllerInterface>().linkedweap = weaponPointIndex;
+                            cEvents.gameObject.GetComponent<VRControllerInterface>().displayLines = false;
+                            cEvents.gameObject.tag = "ControllerUsingObj_" + weaponPointIndex.ToString();
 
-                        EventManager.instance.OnWeaponEquipAndReload.Invoke(weaponPointIndex);                       
+                            EventManager.instance.OnWeaponEquip.Invoke(weaponPointIndex);
+                        }                    
                         break;
                     }
                 case interfaceEvent.ie_OpenShop:

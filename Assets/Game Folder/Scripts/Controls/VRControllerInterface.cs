@@ -49,6 +49,8 @@ public class VRControllerInterface : GamepadPointer {
     {
         base.Update();
 
+        Debug.Log(tag);
+
         // Tell the Interface Object that we're touching to check if it can do it's stuff.
         if (io)
         {
