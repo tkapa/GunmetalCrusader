@@ -9,6 +9,8 @@ public class WaveManager : MonoBehaviour {
 
     bool isCounting = true;
 
+    HeadsUpInfo hud;
+
 	// Use this for initialization
 	void Start () {
         roundIntervalTimer = roundIntervalTime;
@@ -34,12 +36,15 @@ public class WaveManager : MonoBehaviour {
         {
             print("Starting new round!");
 
+            hud.timeToNextRound = 0;
+
             isCounting = false;
             EventManager.instance.OnStartRound.Invoke();
         }
         else
         {
             roundIntervalTimer -= Time.deltaTime;
+            hud.timeToNextRound = roundIntervalTimer;
         }
     }
 }
