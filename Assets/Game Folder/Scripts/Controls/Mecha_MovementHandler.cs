@@ -48,6 +48,16 @@ public class Mecha_MovementHandler : MonoBehaviour {
     [SerializeField]
     private GameObject launchParticlePrefab;
 
+    // Reference to the jump-smonke particles.
+    [Tooltip("Reference to the prefab containing launch particles.")]
+    [SerializeField]
+    private float mechaGravity = 0.2f;
+
+    // Reference to the jump-smonke particles.
+    [Tooltip("Reference to the prefab containing launch particles.")]
+    [SerializeField]
+    private float mechaGroundClearance = 3.0f;
+
     // Use this for initialization
     void Start () {
         // Bind Events
@@ -107,8 +117,13 @@ public class Mecha_MovementHandler : MonoBehaviour {
         }
         else
         {
-            rb.constraints = RigidbodyConstraints.FreezeRotation;
-			jumpParticles.Stop(true);
+            if (!Physics.Raycast(transform.position + new Vector3(0,-mechaGroundClearance,0), -transform.up, mechaGravity * Time.deltaTime))
+            {
+                this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y - (mechaGravity * Time.deltaTime), this.transform.position.z);
+            }
+
+            rb.constraints = RigidbodyConstraints.FreezeAll;
+            jumpParticles.Stop(true);
         }
     }
 }

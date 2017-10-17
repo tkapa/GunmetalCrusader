@@ -72,15 +72,15 @@ public class InputManager : MonoBehaviour {
             // Y Button // 
             if (Input.GetKey(KeyCode.Joystick1Button3))
             {
-                if (FindObjectOfType<WeaponShopActivator>().GetPlayerColliding() && Input.GetKeyDown(KeyCode.Joystick1Button3))
-                {
-                    jetBtnDown = false;
-                    if(!GameObject.FindGameObjectWithTag("WeaponShop").GetComponent<WeaponShopController>().CheckIfShopOpen())
-                        EventManager.instance.OnToggleShop.Invoke(true);
-                    else
-                        EventManager.instance.OnToggleShop.Invoke(false);
-                }
-                else
+                //if (FindObjectOfType<WeaponShopActivator>().GetPlayerColliding() && Input.GetKeyDown(KeyCode.Joystick1Button3))
+                //{
+                    //jetBtnDown = false;
+                    //if(!GameObject.FindGameObjectWithTag("WeaponShop").GetComponent<WeaponShopController>().CheckIfShopOpen())
+                        //EventManager.instance.OnToggleShop.Invoke(true);
+                    //else
+                        //EventManager.instance.OnToggleShop.Invoke(false);
+                //}
+                //else
                     jetBtnDown = true;
             }else
                 jetBtnDown = false;

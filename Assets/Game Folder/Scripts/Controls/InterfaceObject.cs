@@ -42,11 +42,6 @@ public class InterfaceObject : MonoBehaviour {
     void Update()
     {
         FreezeTimer -= Time.deltaTime;
-
-        if (GameObject.FindGameObjectWithTag("ControllerUsingObj_" + weaponPointIndex.ToString()))
-            pickedItemExists = true;
-        else
-            pickedItemExists = false;
     }
 
     // Called to test if the event was executed.
@@ -81,7 +76,7 @@ public class InterfaceObject : MonoBehaviour {
                     }
                 case interfactButton.ib_TriggerAndCirclePad:
                     {
-                        if (pickedItemExists)
+                        if (GameObject.FindGameObjectWithTag("ControllerUsingObj_" + weaponPointIndex.ToString()))
                         {
                             if (!cEvents.triggerClicked)
                                 return;
@@ -120,7 +115,7 @@ public class InterfaceObject : MonoBehaviour {
                     }
                 case interfaceEvent.ie_EquipReloadHybrid:
                     {
-                        if (pickedItemExists)
+                        if (GameObject.FindGameObjectWithTag("ControllerUsingObj_" + weaponPointIndex.ToString()))
                         {
                             EventManager.instance.OnWeaponReload.Invoke(weaponPointIndex);
                         }

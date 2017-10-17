@@ -31,7 +31,7 @@ public class GamepadPointer : MonoBehaviour {
     {
         RaycastHit hit;
 
-        if (Physics.Raycast(transform.position, Vector3.Normalize(this.transform.forward + rotOffset), out hit, mask))
+        if (Physics.Raycast(transform.position, Vector3.Normalize(this.transform.forward + rotOffset), out hit))
         {
             hitLocation = hit.point;
             hitObject = hit.collider.gameObject;
