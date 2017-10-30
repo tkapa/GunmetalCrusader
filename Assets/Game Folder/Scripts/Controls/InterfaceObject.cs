@@ -5,7 +5,7 @@ using UnityEngine;
 public class InterfaceObject : MonoBehaviour {
 
     // Enum Declaration
-    public enum interfaceEvent { ie_None, ie_EquipWeapon, ie_ReloadWeapon, ie_EquipReloadHybrid, ie_OpenShop, ie_CloseShop, ie_PurchaseWeapon };
+    public enum interfaceEvent { ie_None, ie_EquipWeapon, ie_ReloadWeapon, ie_EquipReloadHybrid, ie_OpenShop, ie_CloseShop, ie_PurchaseWeapon, ie_UsePickup };
     public enum interfactButton { ib_None, ie_TouchOnly, ib_CirclePad, ib_Trigger, ib_TriggerAndCirclePad, ib_Grip };
 
     // The event to be executed upon usage of this interface point.
@@ -133,6 +133,11 @@ public class InterfaceObject : MonoBehaviour {
                 case interfaceEvent.ie_OpenShop:
                     {
                         EventManager.instance.OnWeaponEquip.Invoke(weaponPointIndex);
+                        break;
+                    }
+                case interfaceEvent.ie_UsePickup:
+                    {
+                        Mecha_InventoryManager.Instance.UsePickup(cEvents.);
                         break;
                     }
                 default:

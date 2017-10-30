@@ -126,8 +126,7 @@ public class WeaponJumpLocator : WeaponMaster {
         }
 
         if (myInterface != null && !isCol) {
-
-            Debug.Log("YES");
+            
             if (isEquipped)
             {
                 if (isFiring)

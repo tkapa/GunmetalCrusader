@@ -4,18 +4,24 @@ using UnityEngine;
 
 public class Mecha_InventoryManager : MonoBehaviour {
 
+    public static Mecha_InventoryManager Instance;
+
     [Tooltip("The points on the Mech that weapons will be spawned and parented to.")]
     [SerializeField]
     private Transform[] mechaWeaponSockets = new Transform[3];
 
     [SerializeField]
     private GameObject[] TEMPORARY_WpRefs = new GameObject[3];
+    
+    private GameObject touchedPickup;
 
     // Use this for initialization
     void Start () {
         // TODO: These should be added and taken away as the player enters and leaves a "match" by the Game Manager, not this script.
         for (int i = 0; i < TEMPORARY_WpRefs.Length; i++)
             AddWeapon(TEMPORARY_WpRefs[i], i);
+
+        Instance = this;
     }
 	
 	public void AddWeapon(GameObject weaponPrefab, int socketIndex)
@@ -35,5 +41,37 @@ public class Mecha_InventoryManager : MonoBehaviour {
         GameObject wp = (GameObject)Instantiate(weaponPrefab, mechaWeaponSockets[socketIndex]);
 
         wp.GetComponent<WeaponMaster>().SetWeaponPointIndex(socketIndex);
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == "Pickup")
+        {
+            touchedPickup = other.gameObject;
+        }
+    }
+
+    public void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject == touchedPickup)
+            touchedPickup = null;
+    }
+
+    public bool touchingPickup()
+    {
+        return !(touchedPickup == null);
+    }
+
+    public bool comparePickup (GameObject pickup)
+    {
+        if (!touchingPickup())
+            return false;
+        return pickup == touchedPickup;
+    }
+
+    public void UsePickup()
+    {
+        if (touchingPickup())
+            touchedPickup.GetComponent<PickupScript>().OnUsePickup();
     }
 }
