@@ -38,11 +38,6 @@ public class PickupScript : MonoBehaviour {
         {
             CabinDisplay.SetActive(false);
         }
-
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            EventManager.instance.OnUsePickup.Invoke(0);
-        }
 	}
 
     public void OnUsePickup(int usageIndex)
