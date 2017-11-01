@@ -17,11 +17,11 @@ public class Mecha_InventoryManager : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        Instance = this;
+
         // TODO: These should be added and taken away as the player enters and leaves a "match" by the Game Manager, not this script.
         for (int i = 0; i < TEMPORARY_WpRefs.Length; i++)
             AddWeapon(TEMPORARY_WpRefs[i], i);
-
-        Instance = this;
     }
 	
 	public void AddWeapon(GameObject weaponPrefab, int socketIndex)
@@ -37,6 +37,10 @@ public class Mecha_InventoryManager : MonoBehaviour {
             Debug.Log("ERROR! Attempting to equip a Weapon into a Socket which does not exist!");
             return;
         }
+
+        // Kill old gun if it exists
+        if(mechaWeaponSockets[socketIndex].transform.childCount > 0)
+            Destroy(mechaWeaponSockets[socketIndex].transform.GetChild(0).gameObject);
 
         GameObject wp = (GameObject)Instantiate(weaponPrefab, mechaWeaponSockets[socketIndex]);
 
@@ -67,11 +71,5 @@ public class Mecha_InventoryManager : MonoBehaviour {
         if (!touchingPickup())
             return false;
         return pickup == touchedPickup;
-    }
-
-    public void UsePickup()
-    {
-        if (touchingPickup())
-            touchedPickup.GetComponent<PickupScript>().OnUsePickup();
     }
 }

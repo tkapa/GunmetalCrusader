@@ -20,8 +20,7 @@ public class InterfaceObject : MonoBehaviour {
 
     // The index of this weapon. Generally speaking for GC:SO, 0 = Left Arm, 1 = Right Arm, 2 = Jump jet target locator, 3 = Missile Pods if I get my way ;).
     [Tooltip("The index of this weapon. Generally speaking for GC:SO, 0 = Left Arm, 1 = Right Arm, 2 = Jump jet target locator, 3 = Missile Pods if I get my way ;)")]
-    [SerializeField]
-    private int weaponPointIndex = 0;
+    public int weaponPointIndex = 0;
 
     // The amount of time between allowed uses of this object.
     [Tooltip("The amount of time between allowed uses of this object.")]
@@ -137,7 +136,7 @@ public class InterfaceObject : MonoBehaviour {
                     }
                 case interfaceEvent.ie_UsePickup:
                     {
-                        Mecha_InventoryManager.Instance.UsePickup(cEvents.);
+                        EventManager.instance.OnUsePickup.Invoke(weaponPointIndex);
                         break;
                     }
                 default:

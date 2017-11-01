@@ -9,6 +9,7 @@ public class PickupInteractorController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        GetComponent<Renderer>().enabled = Mecha_InventoryManager.Instance.touchingPickup();
         io.enabled = Mecha_InventoryManager.Instance.touchingPickup();
-	}
+    }
 }
