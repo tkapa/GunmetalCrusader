@@ -15,7 +15,7 @@ public class Sticker : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        Transform.Rotate(Vector3.right * Time.deltaTime * RotateSpeed);
+        this.transform.Rotate(Vector3.right * Time.deltaTime * RotateSpeed);
 	}
 
     void StickerCOllected()
