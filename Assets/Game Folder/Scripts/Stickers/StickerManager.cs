@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class StickerManager : MonoBehaviour {
-
+    public static StickerManager Instance;
     public List<GameObject> StickerSlots;
 
     public List<GameObject> StickerObjects;
@@ -21,17 +21,25 @@ public class StickerManager : MonoBehaviour {
 	void Update () {
 		
 	}
-
     void PlaceStickers()
     {
-        List<GameObject> eachsticker = StickerObjects;
-        foreach (Transform Locale in StickerWorldLocations)
-        {
-            int LocationNmbr = Random.Range(0, StickerWorldLocations.Count);
-            eachsticker[Random.Range(0, eachsticker.Count)].transform.position = StickerWorldLocations[LocationNmbr].position;
-            StickerWorldLocations.Remove(StickerWorldLocations[LocationNmbr]);
+        
+            List<GameObject> eachsticker = StickerObjects;
+            foreach (Transform Locale in StickerWorldLocations)
+            {
+            Debug.Log("started");
+                //int LocationNmbr = Random.Range(0, StickerWorldLocations.Count);
+
+                if (Locale.gameObject.name != "UsedLocation")
+                //{
+                    eachsticker[Random.Range(0, eachsticker.Count)].transform.position = Locale.position;
+                 //   StickerWorldLocations[LocationNmbr].gameObject.name = "UsedLocation";
+              //  }
+            Debug.Log("ended");
         }
+
     }
+   
 
     public void PickedUpSticker()
     {
