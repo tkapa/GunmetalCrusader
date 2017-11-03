@@ -84,7 +84,9 @@ public class Enemy : MonoBehaviour {
             target = FindObjectOfType<Player>();
 
         SetValues(gameManager.currentRound, gameManager.maximumNumberOfRounds);
-	}
+
+        healthComponent = this.GetComponent<EnemyHealthComponent>();
+    }
 
     public virtual void Update()
     {
@@ -141,8 +143,6 @@ public class Enemy : MonoBehaviour {
     //Checks the dstance from this unit to the player
     public void CheckDistance()
     {
-
-
         if (Vector3.Distance(transform.position, target.transform.position) < attackingDistance)
         {
             if (state != Enemy_States.EES_Attacking && state != Enemy_States.EES_Falling)
@@ -177,8 +177,8 @@ public class Enemy : MonoBehaviour {
     //Used to set the heatlh, damage and speed values of this unit
     public void SetValues(int _round, int _maxRounds) {
         roundPercentage = (float)_round / _maxRounds;
-                
-		healthComponent.health = enemyHealthCurve.Evaluate(roundPercentage) * maximumEnemyHealth;
+
+        this.GetComponent<EnemyHealthComponent>().health = enemyHealthCurve.Evaluate(roundPercentage) * maximumEnemyHealth;
         damage = enemyHealthCurve.Evaluate(roundPercentage) * maximumEnemyDamage;
         
 		agent.speed = enemyHealthCurve.Evaluate(roundPercentage) * maximumEnemySpeed;

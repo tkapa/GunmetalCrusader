@@ -33,6 +33,7 @@ public class PickupScript : MonoBehaviour {
         if (Mecha_InventoryManager.Instance.comparePickup(this.gameObject))
         {
             CabinDisplay.SetActive(true);
+            CabinDisplay.transform.position = GameObject.FindGameObjectWithTag("CabinPickupDisplayPoint").transform.position;
         }
         else
         {

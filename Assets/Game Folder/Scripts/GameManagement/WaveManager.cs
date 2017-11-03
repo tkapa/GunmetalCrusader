@@ -36,7 +36,8 @@ public class WaveManager : MonoBehaviour {
         {
             print("Starting new round!");
 
-            hud.timeToNextRound = 0;
+            if(hud)
+                hud.timeToNextRound = 0;
 
             isCounting = false;
             EventManager.instance.OnStartRound.Invoke();
@@ -44,7 +45,9 @@ public class WaveManager : MonoBehaviour {
         else
         {
             roundIntervalTimer -= Time.deltaTime;
-            hud.timeToNextRound = roundIntervalTimer;
+
+            if (hud)
+                hud.timeToNextRound = roundIntervalTimer;
         }
     }
 }
