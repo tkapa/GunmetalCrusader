@@ -56,8 +56,11 @@ public class EnemySpawningManager : MonoBehaviour {
             ++deadEnemyCount;
             --aliveEnemyCount;
 
-            hud.eliminations = deadEnemyCount;
-            hud.enemyCount = aliveEnemyCount;
+            if (hud)
+            {
+                hud.eliminations = deadEnemyCount;
+                hud.enemyCount = aliveEnemyCount;
+            }
 
             print("Dead enemies: " + deadEnemyCount + "Kills Needed: " + roundEnemyCount);
 

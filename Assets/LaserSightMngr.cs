@@ -18,7 +18,7 @@ public class LaserSightMngr : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        displayTarget = Vector3.Lerp(displayTarget, target, 0.1f);
+        displayTarget = Vector3.Lerp(displayTarget, target, 1.0f);
         displayAngle = Mathf.Lerp(displayAngle, angle, 0.1f);
 
         emitter.color = beamCol;
@@ -35,18 +35,10 @@ public class LaserSightMngr : MonoBehaviour {
                     dir = Quaternion.AngleAxis(displayAngle * j, Vector3.right) * dir;
 
                     dir = Vector3.Normalize(dir);
-
-                    RaycastHit oHit;
+                    
                     Vector3[] hitPoint = new Vector3[2];
 
-                    if(Physics.Raycast(this.transform.position, dir, out oHit))
-                    {
-                        hitPoint[0] = oHit.point;
-                    }
-                    else
-                    {
-                        hitPoint[0] = this.transform.position + (dir * 1000);
-                    }
+                    hitPoint[0] = this.transform.position + (dir * 25);
 
                     hitPoint[1] = this.transform.position;
 

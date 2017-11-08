@@ -74,7 +74,7 @@ public class WeaponMaster : MonoBehaviour {
     // Points the weapon at the spot it's aiming at
     // TODO: Aim the muzzle
     // TODO: Make the weapon's aim dependent on the Arm IK and just the muzzle rotation changed here.
-    private void UpdateWeaponAim()
+    protected virtual void UpdateWeaponAim()
     {
         if (isEquipped)
         {

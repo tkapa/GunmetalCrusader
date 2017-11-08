@@ -66,4 +66,9 @@ public class GamepadPointer : MonoBehaviour {
     {
         return (go == hitObject);
     }
+
+    public bool testHitObjectTag(string testTag)
+    {
+        return (testTag == hitObject.tag);
+    }
 }

@@ -43,9 +43,11 @@ public class PickupScript : MonoBehaviour {
 
     public void OnUsePickup(int usageIndex)
     {
-        switch(pType)
+        Debug.Log("Pickup Used");
+        switch (pType)
         {
             case pickupType.pt_Weapon:
+                Debug.Log("TypeWeapon");
                 Mecha_InventoryManager.Instance.AddWeapon(WeaponPrefab, usageIndex);
                 break;
             default:

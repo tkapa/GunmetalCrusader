@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour {
     void UpdateStartRoundVariables()
     {
         ++currentRound;
-        print(currentRound);
+        print("Round " + currentRound.ToString());
 
 
         float roundPercentage = (float)currentRound / maximumNumberOfRounds;

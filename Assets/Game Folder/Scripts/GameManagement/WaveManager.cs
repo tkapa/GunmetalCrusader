@@ -9,6 +9,9 @@ public class WaveManager : MonoBehaviour {
 
     bool isCounting = true;
 
+    [SerializeField]
+    private GameObject[] WeaponPickups = new GameObject[2];
+
     HeadsUpInfo hud;
 
 	// Use this for initialization
@@ -20,6 +23,8 @@ public class WaveManager : MonoBehaviour {
 
             roundIntervalTimer = roundIntervalTime;
             isCounting = true;
+
+            SpawnPickup();
         });
     }
 	
@@ -49,5 +54,11 @@ public class WaveManager : MonoBehaviour {
             if (hud)
                 hud.timeToNextRound = roundIntervalTimer;
         }
+    }
+
+    void SpawnPickup()
+    {
+        GameObject sp = GameObject.FindGameObjectWithTag("WeaponSpawnPoint");
+        Instantiate(WeaponPickups[Random.Range(0, WeaponPickups.Length-1)], sp.transform);
     }
 }

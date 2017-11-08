@@ -87,14 +87,16 @@ public class WeaponJumpLocator : WeaponMaster {
                 myInterface = GameObject.FindGameObjectWithTag("ControllerUsingObj_" + weaponPointIndex.ToString());
 
                 if (myInterface != null)
-                    spawnedJumpTarget.transform.position = (myInterface.GetComponent<VRControllerInterface>().GetHitLocation());
+                {
+                    if(myInterface.GetComponent<VRControllerInterface>().testHitObjectTag("ground"))
+                        spawnedJumpTarget.transform.position = (myInterface.GetComponent<VRControllerInterface>().GetHitLocation());
+                }
             }
 
         } else if (spawnedJumpTarget != null && !LockedIn)
             ResetTargetting();
     }
-
-    //
+    
     private void ResetTargetting()
     {
         ChargeAmount = 0.0f;

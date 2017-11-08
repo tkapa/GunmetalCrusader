@@ -46,7 +46,7 @@ public class InterfaceObject : MonoBehaviour {
     // Called to test if the event was executed.
     public void ExecuteEvent(VRTK.VRTK_ControllerEvents cEvents)
     {
-        if (FreezeTimer <= 0.0f)
+        if (FreezeTimer <= 0.0f && this.enabled == true)
         {
             // Input checking
             switch (iButton)
@@ -65,6 +65,8 @@ public class InterfaceObject : MonoBehaviour {
                     {
                         if (!cEvents.triggerClicked)
                             return;
+                       
+                        Debug.Log("TRIGGER ME TIMBERS");
                         break;
                     }
                 case interfactButton.ib_Grip:
@@ -85,7 +87,7 @@ public class InterfaceObject : MonoBehaviour {
                             if (!cEvents.touchpadPressed)
                                 return;
                         }
-                            break;
+                        break;
                     }
                 default:
                     {
@@ -136,6 +138,10 @@ public class InterfaceObject : MonoBehaviour {
                     }
                 case interfaceEvent.ie_UsePickup:
                     {
+                      
+
+                        Debug.Log("PICKING UP");
+
                         EventManager.instance.OnUsePickup.Invoke(weaponPointIndex);
                         break;
                     }

@@ -15,13 +15,22 @@ public class Mecha_InventoryManager : MonoBehaviour {
     
     private GameObject touchedPickup;
 
-    // Use this for initialization
-    void Start () {
+    void Awake() { 
+    
         Instance = this;
+    }
+
+    // Use this for initialization
+    void Start() {
 
         // TODO: These should be added and taken away as the player enters and leaves a "match" by the Game Manager, not this script.
         for (int i = 0; i < TEMPORARY_WpRefs.Length; i++)
             AddWeapon(TEMPORARY_WpRefs[i], i);
+    }
+
+    void Update()
+    {
+        CheckCollisionWithPickup();
     }
 	
 	public void AddWeapon(GameObject weaponPrefab, int socketIndex)
@@ -47,11 +56,15 @@ public class Mecha_InventoryManager : MonoBehaviour {
         wp.GetComponent<WeaponMaster>().SetWeaponPointIndex(socketIndex);
     }
 
-    public void OnTriggerEnter(Collider other)
+    private void CheckCollisionWithPickup()
     {
-        if(other.tag == "Pickup")
+        touchedPickup = null;
+        foreach (PickupScript pickup in FindObjectsOfType<PickupScript>())
         {
-            touchedPickup = other.gameObject;
+            if(Vector3.Distance(pickup.transform.position, this.transform.position) < 25)
+            {
+                touchedPickup = pickup.gameObject;
+            }
         }
     }
 
