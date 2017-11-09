@@ -181,6 +181,7 @@ public class Enemy : MonoBehaviour {
     //Called when the enemy dies
     public virtual void OnDeath() {
         EventManager.instance.OnEnemyDeath.Invoke();
+        StickerManager.Instance.EnemyDiedStickerRelevance();
         Destroy(this.gameObject);
     }
 

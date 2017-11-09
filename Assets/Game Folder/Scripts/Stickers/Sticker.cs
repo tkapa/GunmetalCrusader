@@ -6,6 +6,7 @@ public class Sticker : MonoBehaviour {
 
     public float RotateSpeed;
 
+    
 
 
 	// Use this for initialization
@@ -18,7 +19,7 @@ public class Sticker : MonoBehaviour {
         this.transform.Rotate(Vector3.up * Time.deltaTime * RotateSpeed);
 	}
 
-    void StickerCOllected()
+    public void StickerCOllected()
     {
         Destroy(this.gameObject);
     }
