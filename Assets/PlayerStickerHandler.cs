@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class PlayerStickerHandler : MonoBehaviour {
 
-    public float TimeBetweenChecks;
+    private GameObject[] StickersAvailable;
 
-    private float Checker;
 	// Use this for initialization
 	void Start () {
 		
@@ -14,7 +13,26 @@ public class PlayerStickerHandler : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        Checker -= Time.deltaTime;
-		
+        CheckFOrStickers();
 	}
+
+    
+
+   void  CheckFOrStickers()
+    {
+        StickersAvailable = GameObject.FindGameObjectsWithTag("Sticker");
+
+        foreach(GameObject I in StickersAvailable)
+        {
+            if (Vector3.Distance(this.transform.position, I.transform.position) <= 3)
+                {
+
+            }
+        }
+
+
+    }
+
+
+
 }

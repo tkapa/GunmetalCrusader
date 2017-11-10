@@ -58,6 +58,8 @@ public class Mecha_MovementHandler : MonoBehaviour {
     [SerializeField]
     private float mechaGroundClearance = 3.0f;
 
+    public LayerMask floorMask;
+
     // Use this for initialization
     void Start () {
         // Bind Events
@@ -99,7 +101,6 @@ public class Mecha_MovementHandler : MonoBehaviour {
             if (MaxDist - currDist < StopThreshold)
             {
                 bMidJump = false;
-                //this.gameObject.GetComponent<Rigidbody>().isKinematic = false;
                 EventManager.instance.OnMechaJumpEnd.Invoke();
             }
             else
@@ -117,7 +118,8 @@ public class Mecha_MovementHandler : MonoBehaviour {
         }
         else
         {
-            if (!Physics.Raycast(transform.position + new Vector3(0,-mechaGroundClearance,0), -transform.up, mechaGravity * Time.deltaTime))
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, -transform.up, out hit))
             {
                 this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y - (mechaGravity * Time.deltaTime), this.transform.position.z);
             }
