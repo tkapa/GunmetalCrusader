@@ -48,6 +48,18 @@ public class Mecha_MovementHandler : MonoBehaviour {
     [SerializeField]
     private GameObject launchParticlePrefab;
 
+    // Reference to the jump-smonke particles.
+    [Tooltip("Reference to the prefab containing launch particles.")]
+    [SerializeField]
+    private float mechaGravity = 0.2f;
+
+    // Reference to the jump-smonke particles.
+    [Tooltip("Reference to the prefab containing launch particles.")]
+    [SerializeField]
+    private float mechaGroundClearance = 3.0f;
+
+    public LayerMask floorMask;
+
     // Use this for initialization
     void Start () {
         // Bind Events
@@ -89,7 +101,6 @@ public class Mecha_MovementHandler : MonoBehaviour {
             if (MaxDist - currDist < StopThreshold)
             {
                 bMidJump = false;
-                //this.gameObject.GetComponent<Rigidbody>().isKinematic = false;
                 EventManager.instance.OnMechaJumpEnd.Invoke();
             }
             else
@@ -107,8 +118,14 @@ public class Mecha_MovementHandler : MonoBehaviour {
         }
         else
         {
-            rb.constraints = RigidbodyConstraints.FreezeRotation;
-			jumpParticles.Stop(true);
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, -transform.up, out hit))
+            {
+                this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y - (mechaGravity * Time.deltaTime), this.transform.position.z);
+            }
+
+            rb.constraints = RigidbodyConstraints.FreezeAll;
+            jumpParticles.Stop(true);
         }
     }
 }

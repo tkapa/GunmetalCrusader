@@ -77,14 +77,21 @@ public class GameSceneChanger : MonoBehaviour {
             SceneManager.LoadScene(storedScene, LoadSceneMode.Additive);
             // And Reset the Transition
             storedScene = -1;
-            // Now move the player, if there's a spawnpoint and a player
-            GameObject sp = GameObject.FindGameObjectWithTag("PlayerSpawn");
-            GameObject player = GameObject.FindGameObjectWithTag("Player");
-            // Null check to ensure shit didn't fuck up lol
-            if (sp != null && player != null)
-                player.transform.position = sp.transform.position;
-            else
-                Debug.Log("ERROR! Cannot find Player or Spawn Point during Scene Transition.");
+
+            StartCoroutine(MovePlayerToSpawnPoint());
         }
+    }
+
+    IEnumerator MovePlayerToSpawnPoint()
+    {
+        yield return null;
+        // Now move the player, if there's a spawnpoint and a player
+        GameObject sp = GameObject.FindGameObjectWithTag("PlayerSpawn");
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        // Null check to ensure shit didn't fuck up lol
+        if (sp != null && player != null)
+            player.transform.position = sp.transform.position;
+        else
+            Debug.Log("ERROR! Cannot find Player or Spawn Point during Scene Transition.");
     }
 }

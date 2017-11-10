@@ -4,18 +4,33 @@ using UnityEngine;
 
 public class Mecha_InventoryManager : MonoBehaviour {
 
+    public static Mecha_InventoryManager Instance;
+
     [Tooltip("The points on the Mech that weapons will be spawned and parented to.")]
     [SerializeField]
     private Transform[] mechaWeaponSockets = new Transform[3];
 
     [SerializeField]
     private GameObject[] TEMPORARY_WpRefs = new GameObject[3];
+    
+    private GameObject touchedPickup;
+
+    void Awake() { 
+    
+        Instance = this;
+    }
 
     // Use this for initialization
-    void Start () {
+    void Start() {
+
         // TODO: These should be added and taken away as the player enters and leaves a "match" by the Game Manager, not this script.
         for (int i = 0; i < TEMPORARY_WpRefs.Length; i++)
             AddWeapon(TEMPORARY_WpRefs[i], i);
+    }
+
+    void Update()
+    {
+        CheckCollisionWithPickup();
     }
 	
 	public void AddWeapon(GameObject weaponPrefab, int socketIndex)
@@ -32,8 +47,42 @@ public class Mecha_InventoryManager : MonoBehaviour {
             return;
         }
 
+        // Kill old gun if it exists
+        if(mechaWeaponSockets[socketIndex].transform.childCount > 0)
+            Destroy(mechaWeaponSockets[socketIndex].transform.GetChild(0).gameObject);
+
         GameObject wp = (GameObject)Instantiate(weaponPrefab, mechaWeaponSockets[socketIndex]);
 
         wp.GetComponent<WeaponMaster>().SetWeaponPointIndex(socketIndex);
+    }
+
+    private void CheckCollisionWithPickup()
+    {
+        touchedPickup = null;
+        foreach (PickupScript pickup in FindObjectsOfType<PickupScript>())
+        {
+            if(Vector3.Distance(pickup.transform.position, this.transform.position) < 25)
+            {
+                touchedPickup = pickup.gameObject;
+            }
+        }
+    }
+
+    public void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject == touchedPickup)
+            touchedPickup = null;
+    }
+
+    public bool touchingPickup()
+    {
+        return !(touchedPickup == null);
+    }
+
+    public bool comparePickup (GameObject pickup)
+    {
+        if (!touchingPickup())
+            return false;
+        return pickup == touchedPickup;
     }
 }

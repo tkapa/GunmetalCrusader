@@ -73,6 +73,11 @@ public class NavigateShop : UnityEvent<bool>
 {
 }
 
+// Called when buying a weapon. Index is determined via the shop
+public class UsePickup : UnityEvent<int>
+{
+}
+
 
 public class EventManager : MonoBehaviour
 {
@@ -107,6 +112,7 @@ public class EventManager : MonoBehaviour
     public PlayerDeath OnPlayerDeath = new PlayerDeath();
     public ToggleShop OnToggleShop = new ToggleShop();
     public NavigateShop OnNavigateShop = new NavigateShop();
+    public UsePickup OnUsePickup = new UsePickup();
 
     // Self deletion on duplicate creation
     private void Awake()

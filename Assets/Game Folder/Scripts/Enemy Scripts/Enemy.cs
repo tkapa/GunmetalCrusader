@@ -59,12 +59,14 @@ public class Enemy : MonoBehaviour {
     [HideInInspector]
     public float destinationUpdateTime = 0.5f, destinationUpdateTimer;
 
+    public Animator myAnimator;
+
     [HideInInspector]
     public EnemyHealthComponent healthComponent;
 
     // Use this for initialization
     public virtual void Start () {
-        state = Enemy_States.EES_Falling;
+        state = Enemy_States.EES_Falling; // Make them track by default (TODO: Fix falling)
 
         if (!FindObjectOfType<GameManager>())
             Debug.LogError("There is no GameManager on the scene");
@@ -76,20 +78,18 @@ public class Enemy : MonoBehaviour {
         else
             agent = GetComponent<NavMeshAgent>();
 
-        agent.enabled = false;
-
         if (!FindObjectOfType<Player>())
             Debug.LogError("There is no Player script attached to the mech!");
         else
             target = FindObjectOfType<Player>();
 
         SetValues(gameManager.currentRound, gameManager.maximumNumberOfRounds);
-	}
+
+        healthComponent = this.GetComponent<EnemyHealthComponent>();
+    }
 
     public virtual void Update()
     {
-        print(state);
-
         switch (state)
         {
             case Enemy_States.EES_Tracking:
@@ -101,12 +101,22 @@ public class Enemy : MonoBehaviour {
                 break;
         }
 
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            TakeDamage(999999);
+        }
+
         CheckDistance();
+        SetAnimationProperites();
     }
 
     //Changes how the enemy attacks
     public virtual void Attack()
     {
+        this.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
+        this.transform.LookAt(target.transform);
+        this.transform.rotation = Quaternion.Euler(new Vector3(0, this.transform.rotation.eulerAngles.y, 0));
+
         if (attackIntervalCounter < 0)
         {
             print(damage);
@@ -122,7 +132,12 @@ public class Enemy : MonoBehaviour {
     {
         if (destinationUpdateTimer < 0)
         {
-            agent.SetDestination(moveToTransform);
+            if(agent.isOnNavMesh)
+                agent.SetDestination(moveToTransform);
+            else
+            {
+                TakeDamage(999999);
+            }
             destinationUpdateTimer = destinationUpdateTime;
         }
         else
@@ -141,18 +156,22 @@ public class Enemy : MonoBehaviour {
     //Checks the dstance from this unit to the player
     public void CheckDistance()
     {
-
-
-        if (Vector3.Distance(transform.position, target.transform.position) < attackingDistance)
+        if (Vector3.Distance(transform.position, target.transform.position) < attackingDistance * 0.8)
         {
             if (state != Enemy_States.EES_Attacking && state != Enemy_States.EES_Falling)
+            { 
+                agent.enabled = false;
                 state = Enemy_States.EES_Attacking;
+            }
                            
         }
-        else
+        else if (Vector3.Distance(transform.position, target.transform.position) > attackingDistance * 1.5)
         {
             if (state != Enemy_States.EES_Tracking && state != Enemy_States.EES_Falling)
-                state = Enemy_States.EES_Tracking;                           
+            {
+                agent.enabled = true;
+                state = Enemy_States.EES_Tracking; 
+            }
         }
 
     }
@@ -160,15 +179,14 @@ public class Enemy : MonoBehaviour {
     //Called when the enemy dies
     public virtual void OnDeath() {
         EventManager.instance.OnEnemyDeath.Invoke();
+        StickerManager.Instance.EnemyDiedStickerRelevance();
         Destroy(this.gameObject);
     }
 
     public virtual void OnCollisionEnter(Collision collision)
     {
-		print ("Collision");
         if (state == Enemy_States.EES_Falling && collision.gameObject.tag == "Floor")
         {
-			print ("pathing");
             state = Enemy_States.EES_Tracking;
             agent.enabled = true;
         }
@@ -177,14 +195,21 @@ public class Enemy : MonoBehaviour {
     //Used to set the heatlh, damage and speed values of this unit
     public void SetValues(int _round, int _maxRounds) {
         roundPercentage = (float)_round / _maxRounds;
-                
-		healthComponent.health = enemyHealthCurve.Evaluate(roundPercentage) * maximumEnemyHealth;
+
+        this.GetComponent<EnemyHealthComponent>().health = enemyHealthCurve.Evaluate(roundPercentage) * maximumEnemyHealth;
         damage = enemyHealthCurve.Evaluate(roundPercentage) * maximumEnemyDamage;
         
-		agent.speed = enemyHealthCurve.Evaluate(roundPercentage) * maximumEnemySpeed;
+		agent.speed = enemyHealthCurve.Evaluate(roundPercentage) * maximumEnemySpeed + 5.0f;
         agent.stoppingDistance = attackingDistance;
 
 		destinationUpdateTimer = destinationUpdateTime;
 		attackIntervalCounter = attackInterval;
+    }
+
+    private void SetAnimationProperites()
+    {
+        // Todo: More here  
+        myAnimator.SetFloat("MovementSpeedMultiplier", agent.speed);
+        myAnimator.SetBool("IsMoving", (Vector3.Magnitude(this.GetComponent<Rigidbody>().velocity) > 1.0f));
     }
 }

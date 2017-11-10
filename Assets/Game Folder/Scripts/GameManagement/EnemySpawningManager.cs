@@ -33,6 +33,8 @@ public class EnemySpawningManager : MonoBehaviour {
     [HideInInspector]
     public List<GameObject> spawningObjects = new List<GameObject>();
 
+    HeadsUpInfo hud;
+
     bool isSpawning = false;
 
 	// Use this for initialization
@@ -53,6 +55,13 @@ public class EnemySpawningManager : MonoBehaviour {
         EventManager.instance.OnEnemyDeath.AddListener(() => {
             ++deadEnemyCount;
             --aliveEnemyCount;
+
+            if (hud)
+            {
+                hud.eliminations = deadEnemyCount;
+                hud.enemyCount = aliveEnemyCount;
+            }
+
             print("Dead enemies: " + deadEnemyCount + "Kills Needed: " + roundEnemyCount);
 
             if (deadEnemyCount == roundEnemyCount)

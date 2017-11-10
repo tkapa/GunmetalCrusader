@@ -23,6 +23,9 @@ public class WeaponMaster : MonoBehaviour {
     // Holds whether the weapon is currently firing.
     protected bool isReloading = false;
 
+    private float PickupDelay = 0.25f;
+    private float PickupDelayTimer = 0.0f;
+
     /*
      * Called on instance create
      */
@@ -65,12 +68,13 @@ public class WeaponMaster : MonoBehaviour {
     protected virtual void Update()
     {
         UpdateWeaponAim();
+        PickupDelayTimer -= Time.deltaTime;
     }
 
     // Points the weapon at the spot it's aiming at
     // TODO: Aim the muzzle
     // TODO: Make the weapon's aim dependent on the Arm IK and just the muzzle rotation changed here.
-    private void UpdateWeaponAim()
+    protected virtual void UpdateWeaponAim()
     {
         if (isEquipped)
         {
@@ -99,7 +103,10 @@ public class WeaponMaster : MonoBehaviour {
     {
         isEquipped = !isEquipped;
         if (isEquipped)
+        {
             Debug.Log(weaponName + " at " + weaponPointIndex.ToString() + " equipped.");
+            PickupDelayTimer = PickupDelay;
+        }
         else
             Debug.Log(weaponName + " at " + weaponPointIndex.ToString() + " is no longer equipped.");
     }
@@ -107,7 +114,7 @@ public class WeaponMaster : MonoBehaviour {
     // Called when the weapon receives fire input
     protected virtual void OnFireInput(bool startFire)
     {
-        if (isEquipped)
+        if (isEquipped && PickupDelayTimer <= 0.0f)
         {
             isFiring = startFire;
             if (isFiring)

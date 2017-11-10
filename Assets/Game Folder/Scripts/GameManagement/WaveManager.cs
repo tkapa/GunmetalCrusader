@@ -9,6 +9,11 @@ public class WaveManager : MonoBehaviour {
 
     bool isCounting = true;
 
+    [SerializeField]
+    private GameObject[] WeaponPickups = new GameObject[2];
+
+    HeadsUpInfo hud;
+
 	// Use this for initialization
 	void Start () {
         roundIntervalTimer = roundIntervalTime;
@@ -18,6 +23,8 @@ public class WaveManager : MonoBehaviour {
 
             roundIntervalTimer = roundIntervalTime;
             isCounting = true;
+
+            SpawnPickup();
         });
     }
 	
@@ -34,12 +41,24 @@ public class WaveManager : MonoBehaviour {
         {
             print("Starting new round!");
 
+            if(hud)
+                hud.timeToNextRound = 0;
+
             isCounting = false;
             EventManager.instance.OnStartRound.Invoke();
         }
         else
         {
             roundIntervalTimer -= Time.deltaTime;
+
+            if (hud)
+                hud.timeToNextRound = roundIntervalTimer;
         }
+    }
+
+    void SpawnPickup()
+    {
+        GameObject sp = GameObject.FindGameObjectWithTag("WeaponSpawnPoint");
+        Instantiate(WeaponPickups[Random.Range(0, WeaponPickups.Length-1)], sp.transform);
     }
 }

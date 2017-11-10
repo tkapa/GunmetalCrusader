@@ -116,6 +116,18 @@ public class WeaponPrimary : WeaponMaster
     [SerializeField]
     private GameObject muzzleFlashObject;
 
+    // The game object representing the muzzle flash. Should be a particle system on a kill timer.
+    [Tooltip("The game object representing the muzzle flash. Should be a particle system on a kill timer.")]
+    [SerializeField]
+    private GameObject laserSightObj;
+
+    // The game object representing the muzzle flash. Should be a particle system on a kill timer.
+    [Tooltip("The game object representing the muzzle flash. Should be a particle system on a kill timer.")]
+    [SerializeField]
+    private GameObject lasPoint;
+
+    private GameObject spawnedLaserSightObj;
+
     /*
      * Called on instance create
      */
@@ -123,6 +135,8 @@ public class WeaponPrimary : WeaponMaster
     {
         // Call Superclass function
         base.Start();
+
+        spawnedLaserSightObj = Instantiate(laserSightObj, lasPoint.transform);
 
         // Bind Animations
         weaponAnimation.AddClip(fireAnim, "Fire");
@@ -157,6 +171,39 @@ public class WeaponPrimary : WeaponMaster
 
         // Decrement the recoilTimer
         resetVolley();
+
+        ammoReserves = 99999;
+    }
+
+    protected override void UpdateWeaponAim()
+    {
+        base.UpdateWeaponAim();
+
+        if (isEquipped && !isReloading)
+        {
+            spawnedLaserSightObj.SetActive(true);
+
+            GameObject myInterface;
+            if (InputManager.inst.useGamePad)
+            {
+                // TODO: Move this into the IK script for the Mech's Arms
+                myInterface = GameObject.FindGameObjectWithTag("UsingGamepadControllerObj");
+
+                if (myInterface != null)
+                    spawnedLaserSightObj.GetComponent<LaserSightMngr>().target = (myInterface.GetComponent<GamepadPointer>().GetHitLocation());
+            }
+            else
+            {
+                // TODO: Move this into the IK script for the Mech's Arms
+                myInterface = GameObject.FindGameObjectWithTag("ControllerUsingObj_" + weaponPointIndex.ToString());
+
+                if (myInterface != null)
+                    spawnedLaserSightObj.GetComponent<LaserSightMngr>().target = (myInterface.GetComponent<VRControllerInterface>().GetHitLocation());
+            }
+        }else
+        {
+            spawnedLaserSightObj.SetActive(false);
+        }
     }
 
     /*
@@ -187,6 +234,9 @@ public class WeaponPrimary : WeaponMaster
             multiplier = Mathf.Lerp(minSpreadPercentage, 1.0f, (float)volleyLength/ (float)maxVolleyLength);
         }
         multiplier = Mathf.Clamp(multiplier, 0, 1);
+
+        spawnedLaserSightObj.GetComponent<LaserSightMngr>().angle = multiplier * ((maxSpreadAmount.x + maxSpreadAmount.y) / 2);
+
         return new Vector2(Random.Range(-maxSpreadAmount.x, maxSpreadAmount.x) * multiplier, Random.Range(-maxSpreadAmount.y, maxSpreadAmount.y) * multiplier);
     }
 
@@ -326,6 +376,9 @@ public class WeaponPrimary : WeaponMaster
     {
         recoilTimer -= Time.deltaTime;
         if (recoilTimer <= 0.0f)
+        {
             volleyLength = 0;
+            spawnedLaserSightObj.GetComponent<LaserSightMngr>().angle = minSpreadPercentage * ((maxSpreadAmount.x + maxSpreadAmount.y) / 2);
+        }
     }
 }

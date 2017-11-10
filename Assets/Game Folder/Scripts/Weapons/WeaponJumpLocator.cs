@@ -79,7 +79,7 @@ public class WeaponJumpLocator : WeaponMaster {
                 myInterface = GameObject.FindGameObjectWithTag("UsingGamepadControllerObj");
 
                 if (myInterface != null)
-                    spawnedJumpTarget.transform.position = myInterface.GetComponent<GamepadPointer>().GetHitLocation();
+                    spawnedJumpTarget.transform.position = (myInterface.GetComponent<GamepadPointer>().GetHitLocation());
             }
             else
             {
@@ -87,13 +87,16 @@ public class WeaponJumpLocator : WeaponMaster {
                 myInterface = GameObject.FindGameObjectWithTag("ControllerUsingObj_" + weaponPointIndex.ToString());
 
                 if (myInterface != null)
-                    spawnedJumpTarget.transform.position = myInterface.GetComponent<VRControllerInterface>().GetHitLocation();
+                {
+                    if(myInterface.GetComponent<VRControllerInterface>().testHitObjectTag("ground"))
+                        spawnedJumpTarget.transform.position = (myInterface.GetComponent<VRControllerInterface>().GetHitLocation());
+                }
             }
+
         } else if (spawnedJumpTarget != null && !LockedIn)
             ResetTargetting();
     }
-
-    //
+    
     private void ResetTargetting()
     {
         ChargeAmount = 0.0f;
@@ -104,9 +107,28 @@ public class WeaponJumpLocator : WeaponMaster {
     // FiredFunctionality
     private void ChargeJumpTarget()
     {
-        GameObject myInterface = GameObject.FindGameObjectWithTag("ControllerUsingObj_" + weaponPointIndex.ToString());
+        bool isCol = false;
 
-        if (myInterface != null && !myInterface.GetComponent<VRControllerInterface>().testHitObjectAgainst(null)) {
+        GameObject myInterface;
+        if (InputManager.inst.useGamePad)
+        {
+            // TODO: Move this into the IK script for the Mech's Arms
+            myInterface = GameObject.FindGameObjectWithTag("UsingGamepadControllerObj");
+
+            if (myInterface != null)
+                isCol = (myInterface.GetComponent<GamepadPointer>().testHitObjectAgainst(null));
+        }
+        else
+        {
+            // TODO: Move this into the IK script for the Mech's Arms
+            myInterface = GameObject.FindGameObjectWithTag("ControllerUsingObj_" + weaponPointIndex.ToString());
+
+            if (myInterface != null)
+                isCol = (myInterface.GetComponent<VRControllerInterface>().testHitObjectAgainst(null));
+        }
+
+        if (myInterface != null && !isCol) {
+            
             if (isEquipped)
             {
                 if (isFiring)

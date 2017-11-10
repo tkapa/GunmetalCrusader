@@ -5,8 +5,8 @@ using UnityEngine;
 public class InterfaceObject : MonoBehaviour {
 
     // Enum Declaration
-    public enum interfaceEvent { ie_None, ie_EquipWeapon, ie_ReloadWeapon, ie_EquipReloadHybrid, ie_OpenShop, ie_CloseShop, ie_PurchaseWeapon };
-    public enum interfactButton { ib_None, ie_TouchOnly, ib_CirclePad, ib_Trigger, ib_Grip };
+    public enum interfaceEvent { ie_None, ie_EquipWeapon, ie_ReloadWeapon, ie_EquipReloadHybrid, ie_OpenShop, ie_CloseShop, ie_PurchaseWeapon, ie_UsePickup };
+    public enum interfactButton { ib_None, ie_TouchOnly, ib_CirclePad, ib_Trigger, ib_TriggerAndCirclePad, ib_Grip };
 
     // The event to be executed upon usage of this interface point.
     [Tooltip("The event to be executed upon usage of this interface point.")]
@@ -20,8 +20,7 @@ public class InterfaceObject : MonoBehaviour {
 
     // The index of this weapon. Generally speaking for GC:SO, 0 = Left Arm, 1 = Right Arm, 2 = Jump jet target locator, 3 = Missile Pods if I get my way ;).
     [Tooltip("The index of this weapon. Generally speaking for GC:SO, 0 = Left Arm, 1 = Right Arm, 2 = Jump jet target locator, 3 = Missile Pods if I get my way ;)")]
-    [SerializeField]
-    private int weaponPointIndex = 0;
+    public int weaponPointIndex = 0;
 
     // The amount of time between allowed uses of this object.
     [Tooltip("The amount of time between allowed uses of this object.")]
@@ -29,6 +28,8 @@ public class InterfaceObject : MonoBehaviour {
     private float FreezeInterval = 1.0f;
 
     private float FreezeTimer = 0.0f;
+
+    private bool pickedItemExists = false;
 
     // Init
     void Start()
@@ -45,7 +46,7 @@ public class InterfaceObject : MonoBehaviour {
     // Called to test if the event was executed.
     public void ExecuteEvent(VRTK.VRTK_ControllerEvents cEvents)
     {
-        if (FreezeTimer <= 0.0f)
+        if (FreezeTimer <= 0.0f && this.enabled == true)
         {
             // Input checking
             switch (iButton)
@@ -64,12 +65,28 @@ public class InterfaceObject : MonoBehaviour {
                     {
                         if (!cEvents.triggerClicked)
                             return;
+                       
+                        Debug.Log("TRIGGER ME TIMBERS");
                         break;
                     }
                 case interfactButton.ib_Grip:
                     {
                         if (!cEvents.gripClicked)
                             return;
+                        break;
+                    }
+                case interfactButton.ib_TriggerAndCirclePad:
+                    {
+                        if (GameObject.FindGameObjectWithTag("ControllerUsingObj_" + weaponPointIndex.ToString()))
+                        {
+                            if (!cEvents.triggerClicked)
+                                return;
+                        }
+                        else
+                        {
+                            if (!cEvents.touchpadPressed)
+                                return;
+                        }
                         break;
                     }
                 default:
@@ -99,17 +116,33 @@ public class InterfaceObject : MonoBehaviour {
                     }
                 case interfaceEvent.ie_EquipReloadHybrid:
                     {
-                        // Let the controller know that it's now tagged
-                        cEvents.gameObject.GetComponent<VRControllerInterface>().linkedweap = weaponPointIndex;
-                        cEvents.gameObject.GetComponent<VRControllerInterface>().displayLines = false;
-                        cEvents.gameObject.tag = "ControllerUsingObj_" + weaponPointIndex.ToString();
+                        if (GameObject.FindGameObjectWithTag("ControllerUsingObj_" + weaponPointIndex.ToString()))
+                        {
+                            EventManager.instance.OnWeaponReload.Invoke(weaponPointIndex);
+                        }
+                        else
+                        {
+                            // Let the controller know that it's now tagged
+                            cEvents.gameObject.GetComponent<VRControllerInterface>().linkedweap = weaponPointIndex;
+                            cEvents.gameObject.GetComponent<VRControllerInterface>().displayLines = false;
+                            cEvents.gameObject.tag = "ControllerUsingObj_" + weaponPointIndex.ToString();
 
-                        EventManager.instance.OnWeaponEquipAndReload.Invoke(weaponPointIndex);                       
+                            EventManager.instance.OnWeaponEquip.Invoke(weaponPointIndex);
+                        }                    
                         break;
                     }
                 case interfaceEvent.ie_OpenShop:
                     {
                         EventManager.instance.OnWeaponEquip.Invoke(weaponPointIndex);
+                        break;
+                    }
+                case interfaceEvent.ie_UsePickup:
+                    {
+                      
+
+                        Debug.Log("PICKING UP");
+
+                        EventManager.instance.OnUsePickup.Invoke(weaponPointIndex);
                         break;
                     }
                 default:
