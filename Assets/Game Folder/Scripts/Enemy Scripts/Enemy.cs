@@ -66,7 +66,7 @@ public class Enemy : MonoBehaviour {
 
     // Use this for initialization
     public virtual void Start () {
-        state = Enemy_States.EES_Tracking; // Make them track by default (TODO: Fix falling)
+        state = Enemy_States.EES_Falling; // Make them track by default (TODO: Fix falling)
 
         if (!FindObjectOfType<GameManager>())
             Debug.LogError("There is no GameManager on the scene");
@@ -77,8 +77,6 @@ public class Enemy : MonoBehaviour {
             Debug.LogError("Enemy does not have a NavMeshAgent!");
         else
             agent = GetComponent<NavMeshAgent>();
-
-        agent.enabled = true;
 
         if (!FindObjectOfType<Player>())
             Debug.LogError("There is no Player script attached to the mech!");
@@ -210,7 +208,7 @@ public class Enemy : MonoBehaviour {
 
     private void SetAnimationProperites()
     {
-        // Todo: More here
+        // Todo: More here  
         myAnimator.SetFloat("MovementSpeedMultiplier", agent.speed);
         myAnimator.SetBool("IsMoving", (Vector3.Magnitude(this.GetComponent<Rigidbody>().velocity) > 1.0f));
     }

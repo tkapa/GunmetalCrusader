@@ -18,7 +18,7 @@ public class Scrapper : Enemy {
     {
         if (attackIntervalCounter < 0)
         {
-            GameObject p = Instantiate(projectile, firePoint.position, transform.rotation);
+            GameObject p = Instantiate(projectile, firePoint.position, firePoint.rotation);
             p.GetComponent<ScrapperProjectile>().parent = this;
             attackIntervalCounter = attackInterval;
         }
