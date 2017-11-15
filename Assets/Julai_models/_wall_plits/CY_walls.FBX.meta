@@ -1,0 +1,173 @@
+fileFormatVersion: 2
+guid: 7e7589260a0f12d468ee405889e9e2ff
+timeCreated: 1456786395
+licenseType: Store
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: kolonn_reshetk225
+    100004: kolonn_reshetk226
+    100006: kolonn_reshetk227
+    100008: kolonn_reshetk228
+    100010: m_plita_yzor024
+    100012: m_plita_yzor025
+    100014: Object002
+    100016: trubatonnel014
+    100018: undg_plita008
+    100020: undg_plita009
+    100022: kolonn_reshetk229
+    100024: kolonn_reshetk230
+    100026: kolonn_reshetk231
+    100028: kolonn_reshetk232
+    100030: kolonn_reshetk233
+    100032: kolonn_reshetk234
+    100034: kolonn_reshetk235
+    100036: kolonn_reshetk236
+    100038: kolonn_reshetk237
+    100040: kolonn_reshetk238
+    400000: //RootNode
+    400002: kolonn_reshetk225
+    400004: kolonn_reshetk226
+    400006: kolonn_reshetk227
+    400008: kolonn_reshetk228
+    400010: m_plita_yzor024
+    400012: m_plita_yzor025
+    400014: Object002
+    400016: trubatonnel014
+    400018: undg_plita008
+    400020: undg_plita009
+    400022: kolonn_reshetk229
+    400024: kolonn_reshetk230
+    400026: kolonn_reshetk231
+    400028: kolonn_reshetk232
+    400030: kolonn_reshetk233
+    400032: kolonn_reshetk234
+    400034: kolonn_reshetk235
+    400036: kolonn_reshetk236
+    400038: kolonn_reshetk237
+    400040: kolonn_reshetk238
+    2300000: kolonn_reshetk225
+    2300002: kolonn_reshetk226
+    2300004: kolonn_reshetk227
+    2300006: kolonn_reshetk228
+    2300008: m_plita_yzor024
+    2300010: m_plita_yzor025
+    2300012: Object002
+    2300014: trubatonnel014
+    2300016: undg_plita008
+    2300018: undg_plita009
+    2300020: kolonn_reshetk229
+    2300022: kolonn_reshetk230
+    2300024: kolonn_reshetk231
+    2300026: kolonn_reshetk232
+    2300028: kolonn_reshetk233
+    2300030: kolonn_reshetk234
+    2300032: kolonn_reshetk235
+    2300034: kolonn_reshetk236
+    2300036: kolonn_reshetk237
+    2300038: kolonn_reshetk238
+    3300000: kolonn_reshetk225
+    3300002: kolonn_reshetk226
+    3300004: kolonn_reshetk227
+    3300006: kolonn_reshetk228
+    3300008: m_plita_yzor024
+    3300010: m_plita_yzor025
+    3300012: Object002
+    3300014: trubatonnel014
+    3300016: undg_plita008
+    3300018: undg_plita009
+    3300020: kolonn_reshetk229
+    3300022: kolonn_reshetk230
+    3300024: kolonn_reshetk231
+    3300026: kolonn_reshetk232
+    3300028: kolonn_reshetk233
+    3300030: kolonn_reshetk234
+    3300032: kolonn_reshetk235
+    3300034: kolonn_reshetk236
+    3300036: kolonn_reshetk237
+    3300038: kolonn_reshetk238
+    4300000: trubatonnel014
+    4300002: kolonn_reshetk228
+    4300004: m_plita_yzor024
+    4300006: m_plita_yzor025
+    4300008: kolonn_reshetk227
+    4300010: kolonn_reshetk226
+    4300012: kolonn_reshetk225
+    4300014: Object002
+    4300016: undg_plita009
+    4300018: undg_plita008
+    4300020: kolonn_reshetk229
+    4300022: kolonn_reshetk230
+    4300024: kolonn_reshetk231
+    4300026: kolonn_reshetk232
+    4300028: kolonn_reshetk233
+    4300030: kolonn_reshetk234
+    4300032: kolonn_reshetk235
+    4300034: kolonn_reshetk236
+    4300036: kolonn_reshetk237
+    4300038: kolonn_reshetk238
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleRotations: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
