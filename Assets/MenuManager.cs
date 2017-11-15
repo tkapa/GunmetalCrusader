@@ -5,7 +5,7 @@ using UnityEngine;
 [ExecuteInEditMode]
 public class MenuManager : MonoBehaviour {
 
-   
+    public Material Skyyyy;
 
     public float SkyRot;
 
@@ -18,5 +18,14 @@ public class MenuManager : MonoBehaviour {
 	void Update () {
 
         RenderSettings.skybox.SetFloat("_Rotation", Time.time * SkyRot);
+    }
+
+    public void LoadLevel()
+    {
+
+        RenderSettings.skybox = Skyyyy;
+        GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<GameSceneChanger>().LoadScene(3);
+
+     
     }
 }

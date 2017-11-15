@@ -27,6 +27,11 @@ public class GameStartHandler : MonoBehaviour {
         {
             ExpandMenu();
         }
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            StartTut();
+        }
     }
 
     public void TutValueChanged()
@@ -66,7 +71,7 @@ public class GameStartHandler : MonoBehaviour {
     void StartTut()
     {
         DiminishMenu();
-
+        GameObject.FindGameObjectWithTag("MenuManager").GetComponent<Animator>().SetTrigger("Start");
     }
 
 }
