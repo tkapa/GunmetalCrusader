@@ -17,7 +17,7 @@ public class StickerManager : MonoBehaviour {
 	void Start ()
     {
         //PlaceStickers();
-
+        Instance = this;
     }
 	
 	// Update is called once per frame
