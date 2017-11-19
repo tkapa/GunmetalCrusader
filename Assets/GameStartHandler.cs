@@ -5,14 +5,14 @@ using UnityEngine;
 public class GameStartHandler : MonoBehaviour {
 
 
-    public bool Tutorial = true;
-    private bool HasPlayed;
+    
 
 
     public Animator MyAnim;
 
 	// Use this for initialization
-	void Start () {
+	void Start ()
+    {
         ExpandMenu();
     }
 	
@@ -30,25 +30,30 @@ public class GameStartHandler : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            StartTut();
+            GameStarted();
         }
     }
 
-    public void TutValueChanged()
-    {
-        if (Tutorial) Tutorial = false;
-        else Tutorial = true;
-    }
+    
 
     public void GameStarted()
     {
-        if (Tutorial)
-        {
-            StartTut();
-        }
 
-        else StartNoTut();
-        HasPlayed = true;
+        DiminishMenu();
+        GameObject.FindGameObjectWithTag("MenuManager").GetComponent<Animator>().SetTrigger("Start");
+
+
+
+    }
+
+    public void OpenCredits()
+    {
+        GameObject.FindGameObjectWithTag("MenuManager").GetComponent<Animator>().SetTrigger("OpenCredits");
+    }
+
+    public void CloseCredits()
+    {
+        GameObject.FindGameObjectWithTag("MenuManager").GetComponent<Animator>().SetTrigger("CloseCredits");
     }
 
     void ExpandMenu()
@@ -63,15 +68,6 @@ public class GameStartHandler : MonoBehaviour {
         Debug.Log("MenuClosed");
     }
 
-    void StartNoTut()
-    {
-        DiminishMenu();
-    }
-
-    void StartTut()
-    {
-        DiminishMenu();
-        GameObject.FindGameObjectWithTag("MenuManager").GetComponent<Animator>().SetTrigger("Start");
-    }
+    
 
 }
