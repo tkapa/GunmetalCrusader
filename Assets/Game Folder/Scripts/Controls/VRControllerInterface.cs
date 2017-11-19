@@ -14,6 +14,8 @@ public class VRControllerInterface : GamepadPointer {
     // Controller Data
     private VRTK.VRTK_ControllerEvents cEvents = null;
 
+    private VRTK.VRTK_ControllerReference cReference = null;
+
     // Current Overlapped Interface Object
     private InterfaceObject io = null;
 
