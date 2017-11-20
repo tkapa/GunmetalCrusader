@@ -46,6 +46,11 @@ public class GameStartHandler : MonoBehaviour {
 
     }
 
+    public void GameEnd()
+    {
+        Application.Quit();
+    }
+
     public void OpenCredits()
     {
         GameObject.FindGameObjectWithTag("MenuManager").GetComponent<Animator>().SetTrigger("OpenCredits");
