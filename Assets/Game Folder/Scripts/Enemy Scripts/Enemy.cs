@@ -180,6 +180,13 @@ public class Enemy : MonoBehaviour {
     public virtual void OnDeath() {
         EventManager.instance.OnEnemyDeath.Invoke();
         StickerManager.Instance.EnemyDiedStickerRelevance();
+        
+        if (GameObject.Find("PlayerStart").GetComponent<Wave0Script>() != null)
+        {
+            Wave0Script.Instance.SwarmersAlive--;
+        }
+            
+        
         Destroy(this.gameObject);
     }
 
