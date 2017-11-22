@@ -62,8 +62,6 @@ public class EnemySpawningManager : MonoBehaviour {
                 hud.enemyCount = aliveEnemyCount;
             }
 
-            print("Dead enemies: " + deadEnemyCount + "Kills Needed: " + roundEnemyCount);
-
             if (deadEnemyCount == roundEnemyCount)
                 EventManager.instance.OnEndRound.Invoke();
         });
@@ -113,32 +111,54 @@ public class EnemySpawningManager : MonoBehaviour {
         float scrapSpawnChance = scrapSpawnRate.Evaluate(roundPercentage);
 
         if (chance < glitSpawnChance)
-            SpawnGlitch();
+            SpawnGlitch(spawningObjects[Random.Range(0, spawningObjects.Count)].transform);
         else if (chance < shepSpawnChance)
-            SpawnShepherd();
-        else if (chance < scrapSpawnChance)
-            SpawnScrapper();
+            SpawnShepherd(spawningObjects[Random.Range(0, spawningObjects.Count)].transform);
         else
-            SpawnSwarmer();
+            SpawnSwarmer(spawningObjects[Random.Range(0, spawningObjects.Count)].transform);
     }
 
-    public void SpawnSwarmer()
+    public void SpawnSwarmer(Transform point)
     {
-        Instantiate(swarmerPrefab, spawningObjects[Random.Range(0, spawningObjects.Count)].transform);
+        if (aliveEnemyCount >= maximumAliveEnemyCount)
+            return;
+
+        ++spawnedEnemyCount;
+        ++aliveEnemyCount;
+
+        Instantiate(swarmerPrefab, point);
     }
 
-    void SpawnShepherd()
+    public void SpawnShepherd(Transform point)
     {
-        Instantiate(shepherdPrefab, spawningObjects[Random.Range(0, spawningObjects.Count)].transform);
+        if (aliveEnemyCount >= maximumAliveEnemyCount)
+            return;
+
+        ++spawnedEnemyCount;
+        ++aliveEnemyCount;
+
+        Instantiate(shepherdPrefab, );
     }
 
-    void SpawnGlitch()
+    public void SpawnGlitch(Transform point)
     {
-        Instantiate(glitchPrefab, spawningObjects[Random.Range(0, spawningObjects.Count)].transform);
+        if (aliveEnemyCount >= maximumAliveEnemyCount)
+            return;
+
+        ++spawnedEnemyCount;
+        ++aliveEnemyCount;
+
+        Instantiate(glitchPrefab, point);
     }
 
-    void SpawnScrapper()
+    public void SpawnScrapper(Transform point)
     {
-        Instantiate(glitchPrefab, spawningObjects[Random.Range(0, spawningObjects.Count)].transform);
+        if (aliveEnemyCount >= maximumAliveEnemyCount)
+            return;
+
+        ++spawnedEnemyCount;
+        ++aliveEnemyCount;
+
+        Instantiate(glitchPrefab, point);
     }
 }
