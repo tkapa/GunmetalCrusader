@@ -53,6 +53,11 @@ public class StartRound : UnityEvent
 {
 }
 
+//Called when the round begins
+public class StartRoundTwo : UnityEvent
+{
+}
+
 //Called when the round ends
 public class EndRound : UnityEvent
 {
@@ -108,6 +113,7 @@ public class EventManager : MonoBehaviour
     public StartGame OnStartGame = new StartGame();
     public EndGame OnEndGame = new EndGame();
     public StartRound OnStartRound = new StartRound();
+    public StartRoundTwo OnStartRoundLate = new StartRoundTwo();
     public EndRound OnEndRound = new EndRound();
     public PlayerDeath OnPlayerDeath = new PlayerDeath();
     public ToggleShop OnToggleShop = new ToggleShop();

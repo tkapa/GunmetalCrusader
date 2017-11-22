@@ -9,7 +9,7 @@ public class EnemySpawningObject : MonoBehaviour {
 
     float updateObjectsTime = 0.5f, updateObjectsCounter;
 
-    public float maximumDistanceFromPlayer = 20;
+    public float maximumDistanceFromPlayer = 40;
 
 	// Use this for initialization
 	void Start () {

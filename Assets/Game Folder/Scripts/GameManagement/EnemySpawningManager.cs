@@ -30,6 +30,8 @@ public class EnemySpawningManager : MonoBehaviour {
         glitchPrefab,
         scrapperPrefab;
 
+    public GameObject leftSpawnParent, rightSpawnParent, otherSpawnParent;
+
     [HideInInspector]
     public List<GameObject> spawningObjects = new List<GameObject>();
 
@@ -42,15 +44,36 @@ public class EnemySpawningManager : MonoBehaviour {
         if (swarmerPrefab == null)
             Debug.LogError("The swarmer prefab is not set!");
 
+        rightSpawnParent.SetActive(false);
+        otherSpawnParent.SetActive(false);
+
         gameManager = FindObjectOfType<GameManager>();
 
-        EventManager.instance.OnStartRound.AddListener(()=> {
+        EventManager.instance.OnStartRoundLate.AddListener(()=> {
             
             isSpawning = true;
             spawnedEnemyCount = 0;
             deadEnemyCount = 0;
             spawningIntervalTimer = spawningInterval;
             roundPercentage = (float)gameManager.currentRound / gameManager.maximumNumberOfRounds;
+
+            if(gameManager.currentRound == 2)
+            {
+                leftSpawnParent.SetActive(false);
+                rightSpawnParent.SetActive(true);
+            }
+
+            if(gameManager.currentRound == 3)
+            {
+                leftSpawnParent.SetActive(true);
+            }
+
+            if(gameManager.currentRound >= 4)
+            {
+                leftSpawnParent.SetActive(false);
+                rightSpawnParent.SetActive(false);
+                otherSpawnParent.SetActive(true);
+            }
         });
         EventManager.instance.OnEnemyDeath.AddListener(() => {
             ++deadEnemyCount;
@@ -137,7 +160,7 @@ public class EnemySpawningManager : MonoBehaviour {
         ++spawnedEnemyCount;
         ++aliveEnemyCount;
 
-        Instantiate(shepherdPrefab, );
+        Instantiate(shepherdPrefab, point);
     }
 
     public void SpawnGlitch(Transform point)
