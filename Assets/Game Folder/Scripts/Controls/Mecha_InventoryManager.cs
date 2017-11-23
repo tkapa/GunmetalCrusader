@@ -22,10 +22,6 @@ public class Mecha_InventoryManager : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
-
-        // TODO: These should be added and taken away as the player enters and leaves a "match" by the Game Manager, not this script.
-        for (int i = 0; i < TEMPORARY_WpRefs.Length; i++)
-            AddWeapon(TEMPORARY_WpRefs[i], i);
     }
 
     void Update()
@@ -84,5 +80,20 @@ public class Mecha_InventoryManager : MonoBehaviour {
         if (!touchingPickup())
             return false;
         return pickup == touchedPickup;
+    }
+
+    public void InitializeInventory()
+    {
+        for (int i = 0; i < TEMPORARY_WpRefs.Length; i++)
+            AddWeapon(TEMPORARY_WpRefs[i], i);
+    }
+
+    public void ClearInventory()
+    {
+        for (int i = 0; i < mechaWeaponSockets.Length; i++)
+        {
+            if(mechaWeaponSockets[i].transform.childCount > 0)
+                Destroy(mechaWeaponSockets[i].transform.GetChild(0).gameObject);
+        }
     }
 }

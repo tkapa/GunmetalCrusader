@@ -67,8 +67,6 @@ public class InterfaceObject : MonoBehaviour {
                     {
                         if (!cEvents.triggerClicked)
                             return;
-                       
-                        Debug.Log("TRIGGER ME TIMBERS");
                         break;
                     }
                 case interfactButton.ib_Grip:
@@ -140,10 +138,6 @@ public class InterfaceObject : MonoBehaviour {
                     }
                 case interfaceEvent.ie_UsePickup:
                     {
-                      
-
-                        Debug.Log("PICKING UP");
-
                         EventManager.instance.OnUsePickup.Invoke(weaponPointIndex);
                         break;
                     }
@@ -160,8 +154,6 @@ public class InterfaceObject : MonoBehaviour {
 
                 case interfaceEvent.ie_ExitGame:
                     {
-
-
                         Debug.Log("Quit");
                         GameObject.FindGameObjectWithTag("Player").GetComponent<GameStartHandler>().GameEnd();
                         //  EventManager.instance.OnUsePickup.Invoke(weaponPointIndex);

@@ -14,6 +14,7 @@ public class GameStartHandler : MonoBehaviour {
 	void Start ()
     {
         ExpandMenu();
+       
     }
 	
 	// Update is called once per frame
@@ -28,17 +29,17 @@ public class GameStartHandler : MonoBehaviour {
             ExpandMenu();
         }
 
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            GameStarted();
-        }
+        //if (Input.GetKeyDown(KeyCode.Q))
+        //{
+        //    GameStarted();
+        //}
     }
 
     
 
     public void GameStarted()
     {
-
+        Debug.Log("game started");
         DiminishMenu();
         GameObject.FindGameObjectWithTag("MenuManager").GetComponent<Animator>().SetTrigger("Start");
 
@@ -65,12 +66,14 @@ public class GameStartHandler : MonoBehaviour {
     {
         MyAnim.SetTrigger("OpenMenu");
         Debug.Log("MenuExpanded");
+        Mecha_InventoryManager.Instance.ClearInventory();
     }
 
     void DiminishMenu()
     {
         MyAnim.SetTrigger("CloseMenu");
         Debug.Log("MenuClosed");
+        Mecha_InventoryManager.Instance.InitializeInventory();
     }
 
     

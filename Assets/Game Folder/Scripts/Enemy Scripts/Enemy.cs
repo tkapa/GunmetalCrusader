@@ -64,6 +64,12 @@ public class Enemy : MonoBehaviour {
     [HideInInspector]
     public EnemyHealthComponent healthComponent;
 
+    [SerializeField]
+    private GameObject[] FallParticles = new GameObject[1];
+
+    [SerializeField]
+    private GameObject LandingParticles;
+
     // Use this for initialization
     public virtual void Start () {
         state = Enemy_States.EES_Falling; // Make them track by default (TODO: Fix falling)
@@ -159,7 +165,8 @@ public class Enemy : MonoBehaviour {
         if (Vector3.Distance(transform.position, target.transform.position) < attackingDistance * 0.8)
         {
             if (state != Enemy_States.EES_Attacking && state != Enemy_States.EES_Falling)
-            { 
+            {
+                GetComponent<Rigidbody>().isKinematic = true;
                 agent.enabled = false;
                 state = Enemy_States.EES_Attacking;
             }
@@ -169,6 +176,7 @@ public class Enemy : MonoBehaviour {
         {
             if (state != Enemy_States.EES_Tracking && state != Enemy_States.EES_Falling)
             {
+                GetComponent<Rigidbody>().isKinematic = false;
                 agent.enabled = true;
                 state = Enemy_States.EES_Tracking; 
             }
@@ -179,14 +187,15 @@ public class Enemy : MonoBehaviour {
     //Called when the enemy dies
     public virtual void OnDeath() {
         EventManager.instance.OnEnemyDeath.Invoke();
-        StickerManager.Instance.EnemyDiedStickerRelevance();
+        //StickerManager.Instance.EnemyDiedStickerRelevance();
         
-        if (GameObject.Find("PlayerStart").GetComponent<Wave0Script>() != null)
+        if (FindObjectOfType<Wave0Script>() != null)
         {
             Wave0Script.Instance.SwarmersAlive--;
         }
-            
-        
+
+        Instantiate(LandingParticles, this.transform.position, LandingParticles.transform.rotation);
+
         Destroy(this.gameObject);
     }
 
@@ -195,6 +204,8 @@ public class Enemy : MonoBehaviour {
         if (state == Enemy_States.EES_Falling && collision.gameObject.tag == "Floor")
         {
             state = Enemy_States.EES_Tracking;
+            KillFallParticles();
+            Instantiate(LandingParticles, this.transform.position, LandingParticles.transform.rotation);
             agent.enabled = true;
         }
     }
@@ -207,7 +218,7 @@ public class Enemy : MonoBehaviour {
         damage = enemyHealthCurve.Evaluate(roundPercentage) * maximumEnemyDamage;
         
 		agent.speed = enemyHealthCurve.Evaluate(roundPercentage) * maximumEnemySpeed + 5.0f;
-        agent.stoppingDistance = attackingDistance;
+        //agent.stoppingDistance = attackingDistance;
 
 		destinationUpdateTimer = destinationUpdateTime;
 		attackIntervalCounter = attackInterval;
@@ -215,8 +226,26 @@ public class Enemy : MonoBehaviour {
 
     private void SetAnimationProperites()
     {
+        if(state == Enemy_States.EES_Falling)
+            myAnimator.SetBool("InAir", true);
+        else
+            myAnimator.SetBool("InAir", false);
+
+
+        if (state == Enemy_States.EES_Tracking)
+            myAnimator.SetBool("Attacking", false);
+        else if (state == Enemy_States.EES_Attacking)
+            myAnimator.SetBool("Attacking", true);
+
         // Todo: More here  
-        myAnimator.SetFloat("MovementSpeedMultiplier", agent.speed);
-        myAnimator.SetBool("IsMoving", (Vector3.Magnitude(this.GetComponent<Rigidbody>().velocity) > 1.0f));
+        myAnimator.SetFloat("AnimSpeed", agent.speed);
+    }
+
+    private void KillFallParticles()
+    {
+        foreach(GameObject go in FallParticles)
+        {
+            Destroy(go);
+        }
     }
 }

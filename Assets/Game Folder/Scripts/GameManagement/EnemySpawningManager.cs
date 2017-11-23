@@ -44,8 +44,10 @@ public class EnemySpawningManager : MonoBehaviour {
         if (swarmerPrefab == null)
             Debug.LogError("The swarmer prefab is not set!");
 
-        rightSpawnParent.SetActive(false);
-        otherSpawnParent.SetActive(false);
+        if (rightSpawnParent)
+            rightSpawnParent.SetActive(false);
+        if (otherSpawnParent)
+            otherSpawnParent.SetActive(false);
 
         gameManager = FindObjectOfType<GameManager>();
 

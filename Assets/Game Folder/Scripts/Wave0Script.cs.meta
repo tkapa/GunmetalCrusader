@@ -1,10 +1,25 @@
 fileFormatVersion: 2
 guid: 6f7c7df9895bdf441bd872b50b7c86fc
-timeCreated: 1511210959
-licenseType: Free
+timeCreated: 1511444080
+licenseType: Pro
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - batchSwarmer: {instanceID: 0}
+  - batchShephard: {instanceID: 0}
+  - genlocation: {instanceID: 0}
+  - GrenadeLauncherPrefab: {fileID: 1082306992147096, guid: 067bfad8084f7c347801b7ccf9948313,
+      type: 2}
+  - TutLines: {instanceID: 0}
+  - opening: {instanceID: 0}
+  - PreAndroidLines: {instanceID: 0}
+  - Androidsonright: {instanceID: 0}
+  - ANdroidsOnBothSides: {instanceID: 0}
+  - LetsGoToGrenadeLauncher: {instanceID: 0}
+  - HowTojump: {instanceID: 0}
+  - howToPickupWeapon: {instanceID: 0}
+  - ShephardSpawned: {instanceID: 0}
+  - FinalLine: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

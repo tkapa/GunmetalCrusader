@@ -23,19 +23,46 @@ public class Wave0Script : MonoBehaviour {
     //stuff for wave 3
     private bool DoneWave3;
 
+    //stuff for final wave
+
     //the spawn points for the final wave (swarmer spawn points)
     public GameObject[] SpawnPoints4;
     //the spawn point of shephards
     public GameObject[] ShephardSpawns;
+
+    private bool DoneWave4;
+
+   
 
    
     //check to see if player has killed all the swarmers we spawned (happens each wave)
     public float SwarmersAlive;
     public bool CheckingSwarmers;
 
+    //gernade launcher spawn
+    public GameObject genlocation;
+    public GameObject GrenadeLauncherPrefab;
 
     //the audiosource lines play from
     public AudioSource TutLines;
+
+    //the individual lines
+    public AudioClip opening;
+    public AudioClip PreAndroidLines;
+
+    public AudioClip Androidsonright;
+
+    public AudioClip ANdroidsOnBothSides;
+
+    public AudioClip LetsGoToGrenadeLauncher;
+
+    public AudioClip HowTojump;
+
+    public AudioClip howToPickupWeapon;
+
+    public AudioClip ShephardSpawned;
+
+    public AudioClip FinalLine;
 
 
     //the shit we need to disable at the start, and enable at the end of wave 0
@@ -55,6 +82,16 @@ public class Wave0Script : MonoBehaviour {
         {
             P.SetActive(false);
         }
+        TutLines.PlayOneShot(opening);
+        Invoke("preFirstWave", 10);
+    }
+
+
+    //the voice lines before Wave 1
+    void preFirstWave()
+    {
+        TutLines.PlayOneShot(PreAndroidLines);
+        Invoke("EnemySpawnbatch1", 10);
     }
 
 	void Update () {
@@ -85,19 +122,18 @@ public class Wave0Script : MonoBehaviour {
                 SwarmersAlive = 0;
                 CheckingSwarmers = false;
             }
+
+            if (SwarmersAlive <= 0 && DoneWave1 == true && DoneWave2 == true && DoneWave3 == true && DoneWave4 == false)
+            {
+                KilledWave4();
+                SwarmersAlive = 0;
+                CheckingSwarmers = false;
+            }
         }
 	}
 
     //functions below update are designed to happen "In Order"
 
-
-
-    //the voice lines before Wave 1
-    void Opening()
-    {
-        
-    }
-    
 
     //spawn the first wave of enemies
     void EnemySpawnbatch1()
@@ -115,9 +151,11 @@ public class Wave0Script : MonoBehaviour {
     //voice lines between first and second batch
     void AfterWave1()
     {
-
+        Invoke("EnemySpawnbatch2", 5);
         DoneWave1 = true;
     }
+
+    
 
 
     //spawn the second batch
@@ -128,12 +166,14 @@ public class Wave0Script : MonoBehaviour {
             Instantiate(batchSwarmer, O.transform.position, Quaternion.identity);
             SwarmersAlive++;
         }
+        TutLines.PlayOneShot(Androidsonright);
         CheckingSwarmers = true;
     }
 
     //voice lines between second and third batch
     void AfterWave2()
     {
+        Invoke("EnemySpawnbatch3", 5);
         DoneWave2 = true;
     }
 
@@ -152,29 +192,39 @@ public class Wave0Script : MonoBehaviour {
             Instantiate(batchSwarmer, I.transform.position, Quaternion.identity);
             SwarmersAlive++;
         }
+        TutLines.PlayOneShot(ANdroidsOnBothSides);
         CheckingSwarmers = true;
     }
 
     void AfterWave3()
     {
-
+        if(genlocation)
+            Instantiate(GrenadeLauncherPrefab, genlocation.transform.position, Quaternion.identity);
+        else
+            Instantiate(GrenadeLauncherPrefab, GameObject.FindGameObjectWithTag("WeaponSpawnPoint").transform.position, Quaternion.identity);
+        Invoke("JumpSequence", 5);
         //probs play a voice line then do the jump stuff
         DoneWave3 = true;
     }
 
     void JumpSequence()
     {
-
+        TutLines.PlayOneShot(LetsGoToGrenadeLauncher);
     }
+
+    //EXTERNAL CALL REQUIRED, PLAYERGRABBEDJUMPINDICATOR BUT HASNT JUMPED YET
+
     //EXTERNAL CALL REQUIRED, DID PLAYER JUMP AND LANG WITHIN (X) UNITS OF GRENADE LAUNCHER
     void PostJump()
     {
-
+        TutLines.PlayOneShot(howToPickupWeapon);
+        
     }
     //EXTERNAL CALL REQUIRED, DID PLAYER PICKUP GRENADE LAUNCHER!
     void PickedUpGrenadeLauncher()
     {
         //probs wait a bit then call the voice line before wave 4, then start wave 4
+        Invoke("EnemySpawnbatch4", 7);
     }
 
     //spawn the wave with a shephard and some more enemies
@@ -190,10 +240,21 @@ public class Wave0Script : MonoBehaviour {
             Instantiate(batchShephard, Y.transform.position, Quaternion.identity);
             SwarmersAlive++;
         }
+        TutLines.PlayOneShot(ShephardSpawned);
         CheckingSwarmers = true;
         
     }
 
+
+    void KilledWave4()
+    {
+        TutLines.PlayOneShot(FinalLine);
+        DoneWave4 = true;
+    }
+    void AndroidAttackingTheBigbanana()
+    {
+
+    }
 
     void StartRealGame()
     {
@@ -204,6 +265,7 @@ public class Wave0Script : MonoBehaviour {
             P.SetActive(true);
         }
 
+        EventManager.instance.OnStartGame.Invoke(); // Start the real game
 
         //destroy all our spawn points for wave 0 to save space
         foreach (GameObject U in SpawnPoints4)
