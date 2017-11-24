@@ -54,12 +54,12 @@ public class GameStartHandler : MonoBehaviour {
 
     public void OpenCredits()
     {
-        GameObject.FindGameObjectWithTag("MenuManager").GetComponent<Animator>().SetTrigger("OpenCredits");
+        MyAnim.SetTrigger("OpenCredits");
     }
 
     public void CloseCredits()
     {
-        GameObject.FindGameObjectWithTag("MenuManager").GetComponent<Animator>().SetTrigger("CloseCredits");
+        MyAnim.SetTrigger("CloseCredits");
     }
 
     void ExpandMenu()

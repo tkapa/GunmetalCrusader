@@ -91,39 +91,38 @@ public class Wave0Script : MonoBehaviour {
     void preFirstWave()
     {
         TutLines.PlayOneShot(PreAndroidLines);
-        Invoke("EnemySpawnbatch1", 10);
+        Invoke("EnemySpawnbatch1", 14);
     }
 
 	void Update () {
         //are the first wave of swarmers still alive
 		if (CheckingSwarmers)
         {
-            //okay if there are none left alive, which wave did we just finish, and what do we do now
-
 
             //finished wave 1
-            if (SwarmersAlive <= 0 && DoneWave1 == false && DoneWave2 == false && DoneWave3 == false)
+            if (SwarmersAlive <= 0 && !DoneWave1 && !DoneWave2 && !DoneWave3 && !DoneWave4)
             {
+                print("Call After Wave 1");
                 AfterWave1();
                 SwarmersAlive = 0;
                 CheckingSwarmers = false;
             }
             //finished wave2
-            if (SwarmersAlive <= 0 && DoneWave1 == true && DoneWave2 == false && DoneWave3 == false)
+           else if (SwarmersAlive <= 0 && DoneWave1 && !DoneWave2 && !DoneWave3 && !DoneWave4)
             {
                 AfterWave2();
                 SwarmersAlive = 0;
                 CheckingSwarmers = false;
             }
             //finished wave 3
-            if (SwarmersAlive <= 0 && DoneWave1 == true && DoneWave2 == true && DoneWave3 == false)
+           else if (SwarmersAlive <= 0 && DoneWave1 && DoneWave2  && !DoneWave3  && !DoneWave4)
             {
                 AfterWave3();
                 SwarmersAlive = 0;
                 CheckingSwarmers = false;
             }
 
-            if (SwarmersAlive <= 0 && DoneWave1 == true && DoneWave2 == true && DoneWave3 == true && DoneWave4 == false)
+          else  if (SwarmersAlive <= 0 && DoneWave1 == true && DoneWave2 == true && DoneWave3 == true && DoneWave4 == false)
             {
                 KilledWave4();
                 SwarmersAlive = 0;
@@ -151,6 +150,8 @@ public class Wave0Script : MonoBehaviour {
     //voice lines between first and second batch
     void AfterWave1()
     {
+        print("Wave 1 Clear.");
+        TutLines.PlayOneShot(Androidsonright);
         Invoke("EnemySpawnbatch2", 5);
         DoneWave1 = true;
     }
@@ -166,7 +167,7 @@ public class Wave0Script : MonoBehaviour {
             Instantiate(batchSwarmer, O.transform.position, Quaternion.identity);
             SwarmersAlive++;
         }
-        TutLines.PlayOneShot(Androidsonright);
+       
         CheckingSwarmers = true;
     }
 
@@ -202,6 +203,7 @@ public class Wave0Script : MonoBehaviour {
             Instantiate(GrenadeLauncherPrefab, genlocation.transform.position, Quaternion.identity);
         else
             Instantiate(GrenadeLauncherPrefab, GameObject.FindGameObjectWithTag("WeaponSpawnPoint").transform.position, Quaternion.identity);
+
         Invoke("JumpSequence", 5);
         //probs play a voice line then do the jump stuff
         DoneWave3 = true;
@@ -214,12 +216,12 @@ public class Wave0Script : MonoBehaviour {
 
     //EXTERNAL CALL REQUIRED, PLAYERGRABBEDJUMPINDICATOR BUT HASNT JUMPED YET
 
-    //EXTERNAL CALL REQUIRED, DID PLAYER JUMP AND LANG WITHIN (X) UNITS OF GRENADE LAUNCHER
+    //EXTERNAL CALL REQUIRED, DID PLAYER JUMP AND LANG WITHIN (X) UNITS OF GRENADE LAUNCHER (CLOSE ENOUGH TO OPEN WEAPON PICKUP OBJETS)
     void PostJump()
     {
-        TutLines.PlayOneShot(howToPickupWeapon);
-        
+        TutLines.PlayOneShot(howToPickupWeapon);        
     }
+
     //EXTERNAL CALL REQUIRED, DID PLAYER PICKUP GRENADE LAUNCHER!
     void PickedUpGrenadeLauncher()
     {

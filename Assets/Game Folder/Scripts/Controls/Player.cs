@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour {
 
@@ -22,8 +23,10 @@ public class Player : MonoBehaviour {
     {
         health -= damage;
 
-        if(health <= 0)
-            EventManager.instance.OnPlayerDeath.Invoke();
+        if (health <= 0)
+        {
+            SceneManager.LoadScene(0);
+        }
     }
 
     public void ShutDown(float downTime)

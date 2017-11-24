@@ -18,6 +18,11 @@ public class EnemyHealthComponent : MonoBehaviour {
     public void OnDeath()
     {
         print("Enemy Killed");
+        if (FindObjectOfType<Wave0Script>() != null)
+        {
+            FindObjectOfType<Wave0Script>().SwarmersAlive--;
+        }
+
         Destroy(this.gameObject);
         EventManager.instance.OnEnemyDeath.Invoke();
     }

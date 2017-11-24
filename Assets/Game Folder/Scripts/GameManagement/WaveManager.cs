@@ -14,6 +14,11 @@ public class WaveManager : MonoBehaviour {
 
     HeadsUpInfo hud;
 
+    [SerializeField]
+    private GameManager gm;
+
+    private GameObject spawnedPickup;
+
     // Use this for initialization
     void Start()
     {
@@ -62,6 +67,12 @@ public class WaveManager : MonoBehaviour {
     void SpawnPickup()
     {
         GameObject sp = GameObject.FindGameObjectWithTag("WeaponSpawnPoint");
-        Instantiate(WeaponPickups[Random.Range(0, WeaponPickups.Length - 1)], sp.transform);
+
+        Destroy(spawnedPickup);
+
+        if(gm.currentRound < WeaponPickups.Length)
+            spawnedPickup = Instantiate(WeaponPickups[Random.Range(0, gm.currentRound)], sp.transform) as GameObject;
+        else
+            spawnedPickup = Instantiate(WeaponPickups[Random.Range(0, WeaponPickups.Length - 1)], sp.transform) as GameObject;
     }
 }

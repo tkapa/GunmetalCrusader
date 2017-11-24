@@ -189,10 +189,7 @@ public class Enemy : MonoBehaviour {
         EventManager.instance.OnEnemyDeath.Invoke();
         //StickerManager.Instance.EnemyDiedStickerRelevance();
         
-        if (FindObjectOfType<Wave0Script>() != null)
-        {
-            Wave0Script.Instance.SwarmersAlive--;
-        }
+
 
         Instantiate(LandingParticles, this.transform.position, LandingParticles.transform.rotation);
 

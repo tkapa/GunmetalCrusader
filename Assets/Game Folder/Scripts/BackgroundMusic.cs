@@ -25,6 +25,7 @@ public class BackgroundMusic : MonoBehaviour {
             StartCoroutine("Fade", false);
         });
 
+        StartCoroutine("Fade", true);
     }
 	
 	// Update is called once per frame
