@@ -103,12 +103,7 @@ public class WeaponMaster : MonoBehaviour {
     {
         isEquipped = !isEquipped;
         if (isEquipped)
-        {
-            Debug.Log(weaponName + " at " + weaponPointIndex.ToString() + " equipped.");
             PickupDelayTimer = PickupDelay;
-        }
-        else
-            Debug.Log(weaponName + " at " + weaponPointIndex.ToString() + " is no longer equipped.");
     }
 
     // Called when the weapon receives fire input

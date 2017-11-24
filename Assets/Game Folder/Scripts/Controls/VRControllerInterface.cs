@@ -1,14 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
-[RequireComponent(typeof(SphereCollider))]
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(LineRenderer))]
 public class VRControllerInterface : GamepadPointer { 
 
     // Collision Data
-    private SphereCollider col;
+    private Collider col;
     private Rigidbody rb;
 
     // Controller Data
@@ -17,7 +17,12 @@ public class VRControllerInterface : GamepadPointer {
     private VRTK.VRTK_ControllerReference cReference = null;
 
     // Current Overlapped Interface Object
-    private InterfaceObject io = null;
+    [SerializeField]
+    //private List<InterfaceObject> io = new List<InterfaceObject>();
+    private Dictionary<InterfaceObject, float> io2 = new Dictionary<InterfaceObject, float>();
+
+    public GameObject fuckmylifeOBJ;
+    public float fuckmylifeINT = 0.25f;
 
     // Linked Weapon Index
     public int linkedweap = -1;
@@ -32,9 +37,8 @@ public class VRControllerInterface : GamepadPointer {
         base.Start();
 
         // Set up the Collider
-        col = this.GetComponent<SphereCollider>();
+        col = this.GetComponent<Collider>();
         col.isTrigger = false;
-        col.radius = 0.2f;
 
         // Set up the Rigid Body
         rb = this.GetComponent<Rigidbody>();
@@ -51,22 +55,38 @@ public class VRControllerInterface : GamepadPointer {
     {
         base.Update();
 
-        // Tell the Interface Object that we're touching to check if it can do it's stuff.
-        if (io)
+        if (Vector3.Distance(this.transform.position, fuckmylifeOBJ.transform.position) < fuckmylifeINT)
         {
-            io.ExecuteEvent(cEvents);
+            io2[fuckmylifeOBJ.GetComponent<InterfaceObject>()] = Time.time + 0.1f;
+        }
+
+        // Tell the Interface Object that we're touching to check if it can do it's stuff.
+        List<InterfaceObject> keyCopy = io2.Keys.ToList();
+        for (int index = 0; index < keyCopy.Count; ++index)
+        {
+            if (io2[keyCopy[index]] > Time.time)
+            {
+                keyCopy.RemoveAt(index);
+                --index;
+            }
+        }
+        foreach (InterfaceObject obj in keyCopy)
+        {
+            io2.Remove(obj);
+        }
+
+        if (io2.Count > 0)
+        {
+            foreach (InterfaceObject i in io2.Keys) { i.ExecuteEvent(cEvents); }
         }
 
         if (cEvents.touchpadPressed && !circlePressed)
         {
-            if(io == null)
-            {
-                //Unlink Here
-                tag = "UntaggedController";
-                EventManager.instance.OnWeaponEquip.Invoke(linkedweap);
-                linkedweap = -1;
-                displayLines = false;
-            }
+            //Unlink Here
+            tag = "UntaggedController";
+            EventManager.instance.OnWeaponEquip.Invoke(linkedweap);
+            linkedweap = -1;
+            displayLines = false;
 
             circlePressed = true;
         }
@@ -89,19 +109,26 @@ public class VRControllerInterface : GamepadPointer {
         }
     }
 
-    void OnTriggerEnter(Collider other)
+    void OnTriggerStay(Collider other)
     {
         if (other.transform.tag == "InterfacePoint")
         {
-            io = other.gameObject.GetComponent<InterfaceObject>();
+            io2[other.gameObject.GetComponent<InterfaceObject>()] = Time.time + 0.1f;
+
+            Debug.Log("Added: " + other.name);
         }
     }
 
+    /*
     void OnTriggerExit(Collider other)
     {
         if (other.transform.tag == "InterfacePoint")
         {
-            io = null;
+            if (io2.ContainsKey(other.gameObject.GetComponent<InterfaceObject>()))
+                io.Remove(other.gameObject.GetComponent<InterfaceObject>());
+
+            Debug.Log("Removed: " + other.name);
         }
     }
+    */
 }

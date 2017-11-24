@@ -23,7 +23,6 @@ public class GamepadPointer : MonoBehaviour {
 
     // Update is called once per frame
     protected virtual void Update () {
-        this.GetComponent<SphereCollider>().radius = 0.125f;
         CastRays();
         SetBeamPoints();
 	}
@@ -34,7 +33,6 @@ public class GamepadPointer : MonoBehaviour {
 
         if (Physics.Raycast(transform.position, Vector3.Normalize(this.transform.forward + rotOffset), out hit ))
         {
-
             if (hit.transform.gameObject.layer == mask)
                 return;
 
@@ -74,6 +72,8 @@ public class GamepadPointer : MonoBehaviour {
 
     public bool testHitObjectTag(string testTag)
     {
+        if (hitObject == null)
+            return false;
         return (testTag == hitObject.tag);
     }
 }

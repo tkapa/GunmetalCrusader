@@ -15,6 +15,8 @@ public class Mecha_InventoryManager : MonoBehaviour {
     
     private GameObject touchedPickup;
 
+    int LastPickup = 0;
+
     void Awake() { 
     
         Instance = this;
@@ -56,11 +58,14 @@ public class Mecha_InventoryManager : MonoBehaviour {
     {
         touchedPickup = null;
         foreach (PickupScript pickup in FindObjectsOfType<PickupScript>())
-        {
+        {/*
             if(Vector3.Distance(pickup.transform.position, this.transform.position) < 25)
             {
                 touchedPickup = pickup.gameObject;
             }
+            */
+            LastPickup = 1 - LastPickup;
+            EventManager.instance.OnUsePickup.Invoke(LastPickup);
         }
     }
 
