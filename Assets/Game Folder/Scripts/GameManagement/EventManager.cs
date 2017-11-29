@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+// Called when initializing the controller sides. Param equates to using controller ref and weapon index.
+public class WeapopnInit : UnityEvent<VRControllerInterface, int>
+{
+}
+
 // Called on Weapon Equip. Param equates to weapon index.
 public class WeaponEquip : UnityEvent<int>
 {
@@ -103,6 +108,7 @@ public class EventManager : MonoBehaviour
     }
 
     // Bind Events
+    public WeapopnInit OnWeapopnInit = new WeapopnInit();
     public WeaponEquip OnWeaponEquip = new WeaponEquip();
     public WeaponFire OnWeaponFire = new WeaponFire();
     public WeaponReload OnWeaponReload = new WeaponReload();

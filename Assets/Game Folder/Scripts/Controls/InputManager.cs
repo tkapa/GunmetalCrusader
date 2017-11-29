@@ -64,6 +64,38 @@ public class InputManager : MonoBehaviour {
     {
         if (useGamePad)
         {
+            // Trigger Input //
+            
+            // Left Weapon
+            if (Input.GetAxis("FireWeaponL") >= TriggerDeadZone && !leftTriggerDown)
+            {
+                EventManager.instance.OnWeaponFire.Invoke(leftWeaponIndex, true);
+                leftTriggerDown = true;
+            }
+            else if (Input.GetAxis("FireWeaponL") < TriggerDeadZone && leftTriggerDown)
+            {
+                //EventManager.instance.OnWeaponFire.Invoke(leftWeaponIndex, false);
+                leftTriggerDown = false;
+            }
+
+            // Right Weapon
+            if (Input.GetAxis("FireWeaponR") >= TriggerDeadZone && !rightTriggerDown)
+            {
+                EventManager.instance.OnWeaponFire.Invoke(rightWeaponIndex, true);
+                rightTriggerDown = true;
+            }
+            else if (Input.GetAxis("FireWeaponR") < TriggerDeadZone && rightTriggerDown)
+            {
+                EventManager.instance.OnWeaponFire.Invoke(rightWeaponIndex, false);
+                rightTriggerDown = false;
+            }
+
+            // Bumper Input //
+
+            // TODO: THat
+
+
+            /*
             // Face Button Inputs //
             reloadBtnDown = Input.GetKey(KeyCode.Joystick1Button2);
             snapBtnDown = Input.GetKey(KeyCode.Joystick1Button8);
@@ -162,6 +194,7 @@ public class InputManager : MonoBehaviour {
                 EventManager.instance.OnWeaponFire.Invoke(rightWeaponIndex, false);
                 rightTriggerDown = false;
             }
+            */
         }
     }
 }

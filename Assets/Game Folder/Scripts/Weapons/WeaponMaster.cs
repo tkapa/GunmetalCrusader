@@ -26,12 +26,20 @@ public class WeaponMaster : MonoBehaviour {
     private float PickupDelay = 0.25f;
     private float PickupDelayTimer = 0.0f;
 
+    protected VRControllerInterface vrCont;
+
     /*
      * Called on instance create
      */
     protected virtual void Start()
     {
         // Bind Events
+        EventManager.instance.OnWeapopnInit.AddListener((cref, i) =>
+        {
+            if (i == weaponPointIndex)
+                vrCont = cref;
+        });
+
         EventManager.instance.OnWeaponEquip.AddListener((i) =>
         {
             if (i == weaponPointIndex)
@@ -72,30 +80,10 @@ public class WeaponMaster : MonoBehaviour {
     }
 
     // Points the weapon at the spot it's aiming at
-    // TODO: Aim the muzzle
-    // TODO: Make the weapon's aim dependent on the Arm IK and just the muzzle rotation changed here.
     protected virtual void UpdateWeaponAim()
     {
         if (isEquipped)
-        {
-            GameObject myInterface;
-            if (InputManager.inst.useGamePad)
-            {
-                // TODO: Move this into the IK script for the Mech's Arms
-                myInterface = GameObject.FindGameObjectWithTag("UsingGamepadControllerObj");
-
-                if (myInterface != null)
-                    this.transform.LookAt(myInterface.GetComponent<GamepadPointer>().GetHitLocation());
-            }
-            else
-            {
-                // TODO: Move this into the IK script for the Mech's Arms
-                myInterface = GameObject.FindGameObjectWithTag("ControllerUsingObj_" + weaponPointIndex.ToString());
-
-                if (myInterface != null)
-                    this.transform.LookAt(myInterface.GetComponent<VRControllerInterface>().GetHitLocation());
-            }
-        }
+            this.transform.LookAt(vrCont.GetHitLocation());
     }
 
     // Called when the weapon is equipped
@@ -110,21 +98,12 @@ public class WeaponMaster : MonoBehaviour {
     protected virtual void OnFireInput(bool startFire)
     {
         if (isEquipped && PickupDelayTimer <= 0.0f)
-        {
             isFiring = startFire;
-            if (isFiring)
-                Debug.Log(weaponName + " at " + weaponPointIndex.ToString() + " has begun firing sequence.");
-            else
-                Debug.Log(weaponName + " at " + weaponPointIndex.ToString() + " has halted firing sequence.");
-        }
-        else
-            Debug.Log("WARNING: " + weaponName + " at " + weaponPointIndex.ToString() + " attempted fire without being equipped.");
     }
 
     // Called when the weapon reload is called.
     protected virtual void OnReload()
     {
-        Debug.Log(weaponName + " at " + weaponPointIndex.ToString() + " attempted reload.");
         isReloading = true;
     }
 

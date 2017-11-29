@@ -22,12 +22,7 @@ public class EnemyHealthComponent : MonoBehaviour {
         {
             FindObjectOfType<Wave0Script>().SwarmersAlive--;
         }
-<<<<<<< HEAD
         this.GetComponent<Enemy>().OnDeath();
-=======
-
-        Destroy(this.gameObject);
->>>>>>> Develop
         EventManager.instance.OnEnemyDeath.Invoke();
         Destroy(this.gameObject);
     }

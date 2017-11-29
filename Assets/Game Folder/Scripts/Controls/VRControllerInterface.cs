@@ -27,6 +27,13 @@ public class VRControllerInterface : GamepadPointer {
     // Linked Weapon Index
     public int linkedweap = -1;
 
+    // OtherController
+    public VRControllerInterface otherController;
+
+    // ResetSideTimer
+    public float holdMaxTimer = 1.2f;
+    private float holdTimer = 0.0f;
+
     // Trigger pressed
     private bool triggerPressed = false;
     private bool circlePressed = false;
@@ -55,6 +62,19 @@ public class VRControllerInterface : GamepadPointer {
     {
         base.Update();
 
+        // Resets the Controller Layout //
+        if (linkedweap == -1 || (holdTimer >= holdMaxTimer && cEvents.gripClicked)){
+            assignControllerSides();
+        }else if(cEvents.gripClicked){
+            holdTimer += Time.deltaTime;
+        }
+        else{
+            holdTimer = 0.0f;
+        }
+
+
+        /////////////////////////////////////////////////////////////
+        // THIS SHIT IS FUCKED //
         if (Vector3.Distance(this.transform.position, fuckmylifeOBJ.transform.position) < fuckmylifeINT)
         {
             io2[fuckmylifeOBJ.GetComponent<InterfaceObject>()] = Time.time + 0.1f;
@@ -80,6 +100,8 @@ public class VRControllerInterface : GamepadPointer {
             foreach (InterfaceObject i in io2.Keys) { i.ExecuteEvent(cEvents); }
         }
 
+        /////////////////////////////////////////////////////////////
+        /*
         if (cEvents.touchpadPressed && !circlePressed)
         {
             //Unlink Here
@@ -94,8 +116,12 @@ public class VRControllerInterface : GamepadPointer {
         {
             circlePressed = false;
         }
+        */
 
-        // Set weapon to start firing
+        // Circle Pad //
+
+
+        // Weapon Firing //
         if (cEvents.triggerPressed && !triggerPressed)
         {
             EventManager.instance.OnWeaponFire.Invoke(linkedweap, true);
@@ -117,6 +143,20 @@ public class VRControllerInterface : GamepadPointer {
 
             Debug.Log("Added: " + other.name);
         }
+    }
+
+    void assignControllerSides()
+    {
+        if(this.transform.localPosition.x < otherController.gameObject.transform.localPosition.x)
+        {
+            linkedweap = 0;
+        }
+        else
+        {
+            linkedweap = 1;
+        }
+
+        EventManager.instance.OnWeapopnInit.Invoke(this, linkedweap);
     }
 
     /*
