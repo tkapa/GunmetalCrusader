@@ -70,6 +70,9 @@ public class Enemy : MonoBehaviour {
     [SerializeField]
     private GameObject LandingParticles;
 
+    [SerializeField]
+    private GameObject DeathObj;
+
     // Use this for initialization
     public virtual void Start () {
         state = Enemy_States.EES_Falling; // Make them track by default (TODO: Fix falling)
@@ -191,7 +194,7 @@ public class Enemy : MonoBehaviour {
         
 
 
-        Instantiate(LandingParticles, this.transform.position, LandingParticles.transform.rotation);
+        Instantiate(DeathObj, this.transform.position, LandingParticles.transform.rotation);
 
         Destroy(this.gameObject);
     }

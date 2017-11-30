@@ -119,8 +119,7 @@ public class WeaponPrimary : WeaponMaster
     [Tooltip("How much heat is dispersed pert second.")]
     [SerializeField]
     private float HeatDisperseRate = 75.0f;
-
-    [SerializeField]
+    
     private float currentHeatValue = 0.0f;
 
     // The game object representing the muzzle flash. Should be a particle system on a kill timer.
@@ -133,6 +132,11 @@ public class WeaponPrimary : WeaponMaster
     private bool hasOverheated = false;
 
     private GameObject spawnedLaserSightObj;
+
+    // Game object that spawns the vfx for when a weapon has overheated.
+    [Tooltip("Game object that spawns the vfx for when a weapon has overheated.")]
+    [SerializeField]
+    private GameObject OverheatVFX;
 
     /*
      * Called on instance create
@@ -255,6 +259,8 @@ public class WeaponPrimary : WeaponMaster
             OnFireInput(false);
 
             weaponAnimation.Play("Reload");
+
+            Instantiate(OverheatVFX, muzzles[currentMuzzle].transform);
         }
         else {
             // Play anim
