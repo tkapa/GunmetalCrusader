@@ -5,7 +5,7 @@ using UnityEngine;
 public class InterfaceObject : MonoBehaviour {
 
     // Enum Declaration
-    public enum interfaceEvent { ie_None, ie_EquipWeapon, ie_ReloadWeapon, ie_EquipReloadHybrid, ie_OpenShop, ie_CloseShop, ie_PurchaseWeapon, ie_UsePickup, ie_StartGame, ie_ExitGame, ie_OpenCredits,ie_CloseCredits };
+    public enum interfaceEvent { ie_None, ie_StartGame, ie_ExitGame, ie_OpenCredits,ie_CloseCredits };
     public enum interfactButton { ib_None, ie_TouchOnly, ib_CirclePad, ib_Trigger, ib_TriggerAndCirclePad, ib_Grip };
 
     // The event to be executed upon usage of this interface point.
@@ -98,50 +98,6 @@ public class InterfaceObject : MonoBehaviour {
             // Functionality
             switch (iEvent)
             {
-                case interfaceEvent.ie_EquipWeapon:
-                    {
-                        // Let the controller know that it's now tagged
-                        cEvents.gameObject.GetComponent<VRControllerInterface>().linkedweap = weaponPointIndex;
-                        cEvents.gameObject.GetComponent<VRControllerInterface>().displayLines = false;
-                        cEvents.gameObject.tag = "ControllerUsingObj_" + weaponPointIndex.ToString();
-
-                        // And tell the event manager
-                        EventManager.instance.OnWeaponEquip.Invoke(weaponPointIndex);
-                        break;
-                    }
-                case interfaceEvent.ie_ReloadWeapon:
-                    {
-                        EventManager.instance.OnWeaponReload.Invoke(weaponPointIndex);
-                        break;
-                    }
-                case interfaceEvent.ie_EquipReloadHybrid:
-                    {
-                        if (GameObject.FindGameObjectWithTag("ControllerUsingObj_" + weaponPointIndex.ToString()))
-                        {
-                            EventManager.instance.OnWeaponReload.Invoke(weaponPointIndex);
-                        }
-                        else
-                        {
-                            // Let the controller know that it's now tagged
-                            cEvents.gameObject.GetComponent<VRControllerInterface>().linkedweap = weaponPointIndex;
-                            cEvents.gameObject.GetComponent<VRControllerInterface>().displayLines = false;
-                            cEvents.gameObject.tag = "ControllerUsingObj_" + weaponPointIndex.ToString();
-
-                            EventManager.instance.OnWeaponEquip.Invoke(weaponPointIndex);
-                        }                    
-                        break;
-                    }
-                case interfaceEvent.ie_OpenShop:
-                    {
-                        EventManager.instance.OnWeaponEquip.Invoke(weaponPointIndex);
-                        break;
-                    }
-                case interfaceEvent.ie_UsePickup:
-                    {
-                        EventManager.instance.OnUsePickup.Invoke(weaponPointIndex);
-                        break;
-                    }
-
                 case interfaceEvent.ie_StartGame:
                     {
 

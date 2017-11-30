@@ -64,7 +64,7 @@ public class VRControllerInterface : GamepadPointer {
 
         // Resets the Controller Layout //
         if (linkedweap == -1 || (holdTimer >= holdMaxTimer && cEvents.gripClicked)){
-            assignControllerSides();
+            initController();
         }else if(cEvents.gripClicked){
             holdTimer += Time.deltaTime;
         }
@@ -145,7 +145,7 @@ public class VRControllerInterface : GamepadPointer {
         }
     }
 
-    void assignControllerSides()
+    protected override void initController()
     {
         if(this.transform.localPosition.x < otherController.gameObject.transform.localPosition.x)
         {
@@ -156,19 +156,6 @@ public class VRControllerInterface : GamepadPointer {
             linkedweap = 1;
         }
 
-        EventManager.instance.OnWeapopnInit.Invoke(this, linkedweap);
+        EventManager.instance.OnWeaponInit.Invoke(this, linkedweap);
     }
-
-    /*
-    void OnTriggerExit(Collider other)
-    {
-        if (other.transform.tag == "InterfacePoint")
-        {
-            if (io2.ContainsKey(other.gameObject.GetComponent<InterfaceObject>()))
-                io.Remove(other.gameObject.GetComponent<InterfaceObject>());
-
-            Debug.Log("Removed: " + other.name);
-        }
-    }
-    */
 }

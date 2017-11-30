@@ -14,19 +14,34 @@ public class WeaponMaster : MonoBehaviour {
     [SerializeField]
     protected string weaponName = "DUMMY_WEAPON_NAME";
 
-    // Is the weapon currently active and in use?
-    protected bool isEquipped = false;
-
     // Holds whether the weapon is currently firing.
     protected bool isFiring = false;
-
-    // Holds whether the weapon is currently firing.
-    protected bool isReloading = false;
 
     private float PickupDelay = 0.25f;
     private float PickupDelayTimer = 0.0f;
 
-    protected VRControllerInterface vrCont;
+    [SerializeField] // TEMP
+    protected GamepadPointer vrCont;
+
+    // Is the weapon in target locator mode or is it in firing mode
+    private bool isInJumpMode = false;
+
+    // The game object that materialises where the player is pointing.
+    [Tooltip("The game object that materialises where the player is pointing.")]
+    [SerializeField]
+    private GameObject jumpTargetObject;
+
+    // The game object that was spawned.
+    private GameObject spawnedJumpTarget;
+
+    private Mecha_MovementHandler playerjumper;
+
+    // How long the jump takes to charge in seconds.
+    [Tooltip("How long the jump takes to charge in seconds.")]
+    [SerializeField]
+    private float jumpChargeTime = 3.0f;
+
+    private float jumpChargeTimer = 0.0f;
 
     /*
      * Called on instance create
@@ -34,16 +49,21 @@ public class WeaponMaster : MonoBehaviour {
     protected virtual void Start()
     {
         // Bind Events
-        EventManager.instance.OnWeapopnInit.AddListener((cref, i) =>
+        EventManager.instance.OnWeaponSwitch.AddListener((i) =>
+        {
+            if (i == weaponPointIndex)
+            {
+                isInJumpMode = !isInJumpMode;
+                OnFireInput(false);
+            }
+        });
+
+        EventManager.instance.OnWeaponInit.AddListener((cref, i) =>
         {
             if (i == weaponPointIndex)
                 vrCont = cref;
-        });
 
-        EventManager.instance.OnWeaponEquip.AddListener((i) =>
-        {
-            if (i == weaponPointIndex)
-                OnEquip();
+            Debug.Log("lMAOOOOOOOOOOOOOOO");
         });
 
         EventManager.instance.OnWeaponFire.AddListener((i, b) =>
@@ -52,22 +72,8 @@ public class WeaponMaster : MonoBehaviour {
                 OnFireInput(b);
         });
 
-        EventManager.instance.OnWeaponReload.AddListener((i) =>
-        {
-            if (i == weaponPointIndex)
-                OnReload();
-        });
-
-        EventManager.instance.OnWeaponEquipAndReload.AddListener((i) =>
-        {
-            if (i == weaponPointIndex)
-            {
-                if (isEquipped)
-                    OnReload();
-                else
-                    OnEquip();
-            }
-        });
+        // Initializing variables
+        playerjumper = FindObjectOfType<Mecha_MovementHandler>();
     }
 
     /*
@@ -77,39 +83,64 @@ public class WeaponMaster : MonoBehaviour {
     {
         UpdateWeaponAim();
         PickupDelayTimer -= Time.deltaTime;
+
+        if (isInJumpMode)
+            jumpChargeTimer = Mathf.Clamp(jumpChargeTimer + Time.deltaTime, 0, jumpChargeTime);
+        else
+            jumpChargeTimer = Mathf.Clamp(jumpChargeTimer - Time.deltaTime, 0, jumpChargeTime);
     }
 
     // Points the weapon at the spot it's aiming at
     protected virtual void UpdateWeaponAim()
     {
-        if (isEquipped)
-            this.transform.LookAt(vrCont.GetHitLocation());
-    }
-
-    // Called when the weapon is equipped
-    protected virtual void OnEquip()
-    {
-        isEquipped = !isEquipped;
-        if (isEquipped)
-            PickupDelayTimer = PickupDelay;
+        this.transform.LookAt(vrCont.GetHitLocation());
     }
 
     // Called when the weapon receives fire input
     protected virtual void OnFireInput(bool startFire)
     {
-        if (isEquipped && PickupDelayTimer <= 0.0f)
-            isFiring = startFire;
-    }
+        if(startFire && isInJumpMode)
+        {
+            // Do jump checking and stuff here
+            if(jumpChargeTimer >= jumpChargeTime)
+            {
+                // Todo: Move the isCol stuff somewhere else to change the colour of lasers
+                bool isCol = vrCont.testHitObjectTag("Floor");
 
-    // Called when the weapon reload is called.
-    protected virtual void OnReload()
-    {
-        isReloading = true;
+                if (!isCol)
+                    EventManager.instance.OnMechaJumpStart.Invoke();
+                else
+                {
+                    // Notify player they can't jump to that surface
+                }
+            }
+        }
+        else
+            isFiring = startFire;
     }
 
     // Sets the weapon point index
     public void SetWeaponPointIndex(int i)
     {
         weaponPointIndex = i;
+    }
+
+    // Updates and spawns the jump target locator
+    private void UpdateJumpTarget()
+    {
+        if (!isInJumpMode){
+            Destroy(spawnedJumpTarget);
+            return;
+        }
+        else if (playerjumper.isJumping())
+        {
+            return;
+        }
+        else { 
+            if (spawnedJumpTarget == null)
+                spawnedJumpTarget = (GameObject)Instantiate(jumpTargetObject, new Vector3(0, 0, 0), Quaternion.identity);
+
+            spawnedJumpTarget.transform.position = vrCont.GetHitLocation();
+        }
     }
 }

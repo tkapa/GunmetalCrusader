@@ -120,6 +120,7 @@ public class WeaponPrimary : WeaponMaster
     [SerializeField]
     private float HeatDisperseRate = 75.0f;
 
+    [SerializeField]
     private float currentHeatValue = 0.0f;
 
     // The game object representing the muzzle flash. Should be a particle system on a kill timer.
@@ -164,9 +165,6 @@ public class WeaponPrimary : WeaponMaster
         // Decrement the fireTimer
         fireTimer -= Time.deltaTime;
 
-        // Call CheckReloadDone to...check if the reload is done.
-        CheckReloadDone();
-
         // Decrement the reloadTimer
         reloadTimer -= Time.deltaTime;
 
@@ -191,16 +189,8 @@ public class WeaponPrimary : WeaponMaster
             return;
         }
 
-        if (isEquipped)
-        {
-            spawnedLaserSightObj.SetActive(true);
-
-            spawnedLaserSightObj.GetComponent<LaserSightMngr>().target = vrCont.GetHitLocation();
-
-        }else
-        {
-            spawnedLaserSightObj.SetActive(false);
-        }
+        spawnedLaserSightObj.SetActive(true);
+        spawnedLaserSightObj.GetComponent<LaserSightMngr>().target = vrCont.GetHitLocation();
     }
 
     /*
@@ -257,31 +247,19 @@ public class WeaponPrimary : WeaponMaster
         incrementVolley();
 
         currentHeatValue += HeatAccrueRate;
-        if(currentHeatValue > 100.0f)
+        HeatRetensionTimer = 0.0f;
+        if (currentHeatValue > 100.0f)
         {
             currentHeatValue = 100.0f;
             hasOverheated = true;
             OnFireInput(false);
+
+            weaponAnimation.Play("Reload");
         }
-
-        // Play anim
-        weaponAnimation.Play("Fire");
-    }
-
-    /*
-     * TakeFireInput is called when OnWeaponReload is called
-     */
-    protected override void OnReload()
-    {
-        //
-    }
-
-    /*
-	 * Called once a frame to see if we are done reloading, if at all.
-	 */
-    void CheckReloadDone()
-    {
-        //
+        else {
+            // Play anim
+            weaponAnimation.Play("Fire");
+        }
     }
 
     /*

@@ -128,4 +128,9 @@ public class Mecha_MovementHandler : MonoBehaviour {
             jumpParticles.Stop(true);
         }
     }
+
+    public bool isJumping()
+    {
+        return bMidJump;
+    }
 }

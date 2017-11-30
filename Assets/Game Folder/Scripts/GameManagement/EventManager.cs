@@ -4,12 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 // Called when initializing the controller sides. Param equates to using controller ref and weapon index.
-public class WeapopnInit : UnityEvent<VRControllerInterface, int>
-{
-}
-
-// Called on Weapon Equip. Param equates to weapon index.
-public class WeaponEquip : UnityEvent<int>
+public class WeaponInit : UnityEvent<GamepadPointer, int>
 {
 }
 
@@ -19,12 +14,7 @@ public class WeaponFire : UnityEvent<int,bool>
 }
 
 // Called on Weapon Reload. Param equates to weapon index.
-public class WeaponReload : UnityEvent<int>
-{
-}
-
-// Called on Weapon Reload. Param equates to weapon index.
-public class WeaponEquipAndReload : UnityEvent<int>
+public class WeaponSwitch : UnityEvent<int>
 {
 }
 
@@ -108,11 +98,9 @@ public class EventManager : MonoBehaviour
     }
 
     // Bind Events
-    public WeapopnInit OnWeapopnInit = new WeapopnInit();
-    public WeaponEquip OnWeaponEquip = new WeaponEquip();
+    public WeaponInit OnWeaponInit = new WeaponInit();
     public WeaponFire OnWeaponFire = new WeaponFire();
-    public WeaponReload OnWeaponReload = new WeaponReload();
-    public WeaponEquipAndReload OnWeaponEquipAndReload = new WeaponEquipAndReload();
+    public WeaponSwitch OnWeaponSwitch = new WeaponSwitch();
     public MechaJumpStart OnMechaJumpStart = new MechaJumpStart();
     public MechaJumpEnd OnMechaJumpEnd = new MechaJumpEnd();
     public EnemyDeath OnEnemyDeath = new EnemyDeath();
