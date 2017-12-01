@@ -4,13 +4,30 @@ using UnityEngine;
 
 public class ScoreManager : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		
+	public float playerScore = 0;
+
+	private static ScoreManager inst;
+	public static ScoreManager instance{
+		get{ 
+			if (inst == null) {
+				var newSM = new GameObject ("ScoreManager");
+				inst = newSM.AddComponent<ScoreManager> ();
+			}
+
+			return inst;
+		}
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+
+	private void Awake(){
+		if (inst != null) {
+			DestroyImmediate (this);
+			return;
+		}
+
+		inst = this;
+	}
+
+	public void ScoreIncrease(float _score){
+		playerScore += _score;
 	}
 }

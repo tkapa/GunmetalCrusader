@@ -27,9 +27,4 @@ public class Scrapper : Enemy {
 
         CheckDistance();
     }
-
-    public override void TakeDamage(float damage)
-    {
-        base.TakeDamage(damage);
-    }
 }
