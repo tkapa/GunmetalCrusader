@@ -4,8 +4,13 @@ using UnityEngine;
 
 public class EnemyHealthComponent : MonoBehaviour {
 
+	public GameObject androidGiblets;
+
     [HideInInspector]
     public float health = 100.0f;
+
+	[SerializeField]
+	private float scoreValue = 10;
 
     public void TakeDamage(float damage)
     {
@@ -17,18 +22,13 @@ public class EnemyHealthComponent : MonoBehaviour {
 
     public void OnDeath()
     {
-        print("Enemy Killed");
         if (FindObjectOfType<Wave0Script>() != null)
         {
             FindObjectOfType<Wave0Script>().SwarmersAlive--;
         }
-<<<<<<< HEAD
-        this.GetComponent<Enemy>().OnDeath();
-=======
-
-        Destroy(this.gameObject);
->>>>>>> Develop
         EventManager.instance.OnEnemyDeath.Invoke();
+		ScoreManager.instance.ScoreIncrease (scoreValue);
+		Instantiate(androidGiblets, this.transform.position, androidGiblets.transform.rotation);
         Destroy(this.gameObject);
     }
 }

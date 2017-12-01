@@ -18,22 +18,6 @@ public class WeaponPrimary : WeaponMaster
     [SerializeField]
     private bool autoRefire = false;
 
-    // The maximum amount of ammo in a single clip
-    [Tooltip("The maximum amount of ammo in a single clip.")]
-    [SerializeField]
-    private int maxAmmoCount = 255;
-
-    // The amount of ammo in the current clip
-    private int ammoCount;
-
-    // The maximum amount of reserve ammo.
-    [Tooltip("The maximum amount of reserve ammo.")]
-    [SerializeField]
-    private int maxAmmoReserves = 16;
-
-    // The amount of reserve ammo remaining.
-    private int ammoReserves;
-
     // The amount of time (in seconds) that a reload takes.
     [Tooltip("The amount of time (in seconds) that a reload takes.")]
     [SerializeField]
@@ -126,7 +110,33 @@ public class WeaponPrimary : WeaponMaster
     [SerializeField]
     private GameObject lasPoint;
 
+    // How much heat is added every shot.
+    [Tooltip("How much heat is added every shot.")]
+    [SerializeField]
+    private float HeatAccrueRate = 5.0f;
+
+    // How much heat is dispersed pert second.
+    [Tooltip("How much heat is dispersed pert second.")]
+    [SerializeField]
+    private float HeatDisperseRate = 75.0f;
+    
+    private float currentHeatValue = 0.0f;
+
+    // The game object representing the muzzle flash. Should be a particle system on a kill timer.
+    [Tooltip("How long between stoping firing and cooldown.")]
+    [SerializeField]
+    private float HeatRetensionTime = 1.5f;
+
+    private float HeatRetensionTimer = 0.0f;
+
+    private bool hasOverheated = false;
+
     private GameObject spawnedLaserSightObj;
+
+    // Game object that spawns the vfx for when a weapon has overheated.
+    [Tooltip("Game object that spawns the vfx for when a weapon has overheated.")]
+    [SerializeField]
+    private GameObject OverheatVFX;
 
     /*
      * Called on instance create
@@ -143,10 +153,6 @@ public class WeaponPrimary : WeaponMaster
         weaponAnimation["Fire"].speed = fireAnimSpeed;
         weaponAnimation.AddClip(reloadAnim, "Reload");
         weaponAnimation["Reload"].speed = reloadAnimSpeed;
-
-        // Init ammo variables
-        ammoCount = maxAmmoCount;
-        ammoReserves = maxAmmoReserves;
     }
 
     /*
@@ -163,47 +169,32 @@ public class WeaponPrimary : WeaponMaster
         // Decrement the fireTimer
         fireTimer -= Time.deltaTime;
 
-        // Call CheckReloadDone to...check if the reload is done.
-        CheckReloadDone();
-
         // Decrement the reloadTimer
         reloadTimer -= Time.deltaTime;
 
         // Decrement the recoilTimer
         resetVolley();
 
-        ammoReserves = 99999;
+        HeatRetensionTimer += Time.deltaTime;
+        if(HeatRetensionTimer > HeatRetensionTime)
+        {
+            currentHeatValue -= HeatDisperseRate * Time.deltaTime;
+            if (currentHeatValue < 0) { currentHeatValue = 0; hasOverheated = false; }
+        }
     }
 
     protected override void UpdateWeaponAim()
     {
         base.UpdateWeaponAim();
 
-        if (isEquipped && !isReloading)
-        {
-            spawnedLaserSightObj.SetActive(true);
-
-            GameObject myInterface;
-            if (InputManager.inst.useGamePad)
-            {
-                // TODO: Move this into the IK script for the Mech's Arms
-                myInterface = GameObject.FindGameObjectWithTag("UsingGamepadControllerObj");
-
-                if (myInterface != null)
-                    spawnedLaserSightObj.GetComponent<LaserSightMngr>().target = (myInterface.GetComponent<GamepadPointer>().GetHitLocation());
-            }
-            else
-            {
-                // TODO: Move this into the IK script for the Mech's Arms
-                myInterface = GameObject.FindGameObjectWithTag("ControllerUsingObj_" + weaponPointIndex.ToString());
-
-                if (myInterface != null)
-                    spawnedLaserSightObj.GetComponent<LaserSightMngr>().target = (myInterface.GetComponent<VRControllerInterface>().GetHitLocation());
-            }
-        }else
+        if (hasOverheated)
         {
             spawnedLaserSightObj.SetActive(false);
+            return;
         }
+
+        spawnedLaserSightObj.SetActive(true);
+        spawnedLaserSightObj.GetComponent<LaserSightMngr>().target = vrCont.GetHitLocation();
     }
 
     /*
@@ -211,7 +202,7 @@ public class WeaponPrimary : WeaponMaster
      */
     void CheckFire()
     {
-        if (isFiring && ammoCount > 0)
+        if (isFiring && hasOverheated == false)
         {
             if(fireTimer <= 0.0f)
                 DoFire();
@@ -248,8 +239,6 @@ public class WeaponPrimary : WeaponMaster
         // Spawn our projectiles
         for (int i = 0; i < projectilesPerShot; i++) // For Shotguns, fire more than one
         {
-
-
             Instantiate(firedObject, muzzles[currentMuzzle].transform.position, Quaternion.Euler(muzzles[currentMuzzle].transform.eulerAngles + new Vector3(CalcSpreadAmount().x, CalcSpreadAmount().y, 0)));//muzzles[currentMuzzle].transform.rotation);
                                                                                                                                                                                                              // Play a particle effect.
             Instantiate(muzzleFlashObject, muzzles[currentMuzzle].transform);//muzzles[currentMuzzle].transform.rotation);                     
@@ -260,52 +249,22 @@ public class WeaponPrimary : WeaponMaster
         fireTimer = fireInterval;
         isFiring = autoRefire;
         incrementVolley();
-        modifyAmmo(-1);
 
-        // Play anim
-        weaponAnimation.Play("Fire");
-    }
-
-    /*
-     * TakeFireInput is called when OnWeaponReload is called
-     */
-    protected override void OnReload()
-    {
-        base.Start();
-
-        // If we have any spare clips
-        if (ammoReserves > 0)
+        currentHeatValue += HeatAccrueRate;
+        HeatRetensionTimer = 0.0f;
+        if (currentHeatValue > 100.0f)
         {
-            // Clear our ammo
-            modifyReserves(ammoCount);
-            modifyAmmo(-maxAmmoCount);
-            // Set the reload timer
-            reloadTimer = maxReloadTime;
-            isReloading = true;
+            currentHeatValue = 100.0f;
+            hasOverheated = true;
+            OnFireInput(false);
 
-            // Play anim
             weaponAnimation.Play("Reload");
-        }
-    }
 
-    /*
-	 * Called once a frame to see if we are done reloading, if at all.
-	 */
-    void CheckReloadDone()
-    {
-        if (isReloading && reloadTimer <= 0)
-        {
-            isReloading = false;
-            if (ammoReserves >= maxAmmoCount)
-            {
-                fillAmmo();
-                modifyReserves(-maxAmmoCount);
-            }else
-            {
-                modifyAmmo(ammoReserves);
-                modifyReserves(-maxAmmoReserves);
-            }
-            resetMuzzle();
+            Instantiate(OverheatVFX, muzzles[currentMuzzle].transform);
+        }
+        else {
+            // Play anim
+            weaponAnimation.Play("Fire");
         }
     }
 
@@ -328,38 +287,6 @@ public class WeaponPrimary : WeaponMaster
     void resetMuzzle()
     {
         currentMuzzle = 0;
-    }
-
-    /*
-     * Used to add or subtract ammo.
-     */
-    void modifyAmmo(int amnt)
-    {
-        ammoCount = Mathf.Clamp(ammoCount + amnt, 0, maxAmmoCount);
-    }
-
-    /*
-     * Maxes out ammo count.
-     */
-    void fillAmmo()
-    {
-        ammoCount = maxAmmoCount;
-    }
-
-    /*
-     * Used to add or subtract clips.
-     */
-    void modifyReserves(int amnt)
-    {
-        ammoReserves = Mathf.Clamp(ammoReserves + amnt, 0, maxAmmoReserves);
-    }
-
-    /*
-     * Maxes out clip count.
-     */
-    void fillReserves()
-    {
-        ammoReserves = maxAmmoReserves;
     }
 
     /*

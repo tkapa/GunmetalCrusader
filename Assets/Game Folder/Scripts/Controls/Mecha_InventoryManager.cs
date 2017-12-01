@@ -29,6 +29,25 @@ public class Mecha_InventoryManager : MonoBehaviour {
     void Update()
     {
         CheckCollisionWithPickup();
+
+        // TEMP
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            EventManager.instance.OnWeaponFire.Invoke(0,true);
+            EventManager.instance.OnWeaponFire.Invoke(1, true);
+        }
+        else if (Input.GetKeyUp(KeyCode.Space))
+        {
+            EventManager.instance.OnWeaponFire.Invoke(0, false);
+            EventManager.instance.OnWeaponFire.Invoke(1, false);
+        }
+
+        if(Input.GetKeyDown(KeyCode.Q))
+        {
+            AddWeapon(TEMPORARY_WpRefs[0], 0); // TEMP
+
+            AddWeapon(TEMPORARY_WpRefs[1], 1); // TEMP
+        }
     }
 	
 	public void AddWeapon(GameObject weaponPrefab, int socketIndex)

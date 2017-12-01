@@ -205,15 +205,8 @@ public class Wave0Script : MonoBehaviour {
             Instantiate(GrenadeLauncherPrefab, genlocation.transform.position, Quaternion.identity);
         else
             Instantiate(GrenadeLauncherPrefab, GameObject.FindGameObjectWithTag("WeaponSpawnPoint").transform.position, Quaternion.identity);
-<<<<<<< HEAD
         */
         //Invoke("JumpSequence", 5);
-=======
-
-        Invoke("JumpSequence", 5);
->>>>>>> Develop
-        //probs play a voice line then do the jump stuff
-        //DoneWave3 = true;
     }
 
     void JumpSequence()

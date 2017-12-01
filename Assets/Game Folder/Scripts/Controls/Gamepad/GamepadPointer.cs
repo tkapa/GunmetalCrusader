@@ -23,6 +23,8 @@ public class GamepadPointer : MonoBehaviour {
 
     // Update is called once per frame
     protected virtual void Update () {
+            initController(); // TEMP
+
         CastRays();
         SetBeamPoints();
 	}
@@ -75,5 +77,11 @@ public class GamepadPointer : MonoBehaviour {
         if (hitObject == null)
             return false;
         return (testTag == hitObject.tag);
+    }
+
+    protected virtual void initController()
+    {
+        EventManager.instance.OnWeaponInit.Invoke(this, 0);
+        EventManager.instance.OnWeaponInit.Invoke(this, 1);
     }
 }

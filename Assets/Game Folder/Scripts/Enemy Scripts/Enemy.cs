@@ -70,6 +70,9 @@ public class Enemy : MonoBehaviour {
     [SerializeField]
     private GameObject LandingParticles;
 
+    [SerializeField]
+    private GameObject DeathObj;
+
     // Use this for initialization
     public virtual void Start () {
         state = Enemy_States.EES_Falling; // Make them track by default (TODO: Fix falling)
@@ -89,9 +92,8 @@ public class Enemy : MonoBehaviour {
         else
             target = FindObjectOfType<Player>();
 
+		healthComponent = this.GetComponent<EnemyHealthComponent>();
         SetValues(gameManager.currentRound, gameManager.maximumNumberOfRounds);
-
-        healthComponent = this.GetComponent<EnemyHealthComponent>();
     }
 
     public virtual void Update()
@@ -105,11 +107,6 @@ public class Enemy : MonoBehaviour {
             case Enemy_States.EES_Attacking:
                 Attack();
                 break;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            TakeDamage(999999);
         }
 
         CheckDistance();
@@ -142,21 +139,12 @@ public class Enemy : MonoBehaviour {
                 agent.SetDestination(moveToTransform);
             else
             {
-                TakeDamage(999999);
+                healthComponent.TakeDamage(999999);
             }
             destinationUpdateTimer = destinationUpdateTime;
         }
         else
             destinationUpdateTimer -= Time.deltaTime;
-    }
-
-    //Allow the enemy to die
-    public virtual void TakeDamage(float damage)
-    {
-        health -= damage;
-
-        if (health <= 0)
-            OnDeath();
     }
 
     //Checks the dstance from this unit to the player
@@ -182,18 +170,6 @@ public class Enemy : MonoBehaviour {
             }
         }
 
-    }
-
-    //Called when the enemy dies
-    public virtual void OnDeath() {
-        EventManager.instance.OnEnemyDeath.Invoke();
-        //StickerManager.Instance.EnemyDiedStickerRelevance();
-        
-
-
-        Instantiate(LandingParticles, this.transform.position, LandingParticles.transform.rotation);
-
-        Destroy(this.gameObject);
     }
 
     public virtual void OnCollisionEnter(Collision collision)

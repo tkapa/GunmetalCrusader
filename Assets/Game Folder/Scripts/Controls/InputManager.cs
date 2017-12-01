@@ -64,65 +64,9 @@ public class InputManager : MonoBehaviour {
     {
         if (useGamePad)
         {
-            // Face Button Inputs //
-            reloadBtnDown = Input.GetKey(KeyCode.Joystick1Button2);
-            snapBtnDown = Input.GetKey(KeyCode.Joystick1Button8);
-            int invert = -1; if (CameraInversion) { invert = 1; } // Grab Inversion Multiplier
-
-            // Y Button // 
-            if (Input.GetKey(KeyCode.Joystick1Button3))
-            {
-                //if (FindObjectOfType<WeaponShopActivator>().GetPlayerColliding() && Input.GetKeyDown(KeyCode.Joystick1Button3))
-                //{
-                    //jetBtnDown = false;
-                    //if(!GameObject.FindGameObjectWithTag("WeaponShop").GetComponent<WeaponShopController>().CheckIfShopOpen())
-                        //EventManager.instance.OnToggleShop.Invoke(true);
-                    //else
-                        //EventManager.instance.OnToggleShop.Invoke(false);
-                //}
-                //else
-                    jetBtnDown = true;
-            }else
-                jetBtnDown = false;
-
-            // Camea Look //
-            Vector3 tempRotation = GamepadCam.transform.localEulerAngles; // Grab old rotation
-
-            tempRotation.y = tempRotation.y + Input.GetAxis("HorizontalLook") * (CameraLookSpeed * Time.deltaTime); // Apply Yaw
-
-            tempRotation.x = tempRotation.x + Input.GetAxis("VerticalLook") * (CameraLookSpeed * -invert * Time.deltaTime); // Apply Pitch
-
-            GamepadCam.transform.localEulerAngles = tempRotation; // Reapply to the Camera
-
-            // Targetting //
-            if (!snapBtnDown) // Ignore this and set it to the camera's rotation if the snap button is down
-            {
-                tempRotation = GamepadTargetLocator.transform.localEulerAngles; // Grab old rotation
-
-                tempRotation.y = tempRotation.y + Input.GetAxis("Horizontal") * (CameraLookSpeed / 2 * Time.deltaTime); // Apply Yaw
-
-                tempRotation.x = tempRotation.x + Input.GetAxis("Vertical") * (CameraLookSpeed / 2 * invert * Time.deltaTime); // Apply Pitch
-            }
-            GamepadTargetLocator.transform.localEulerAngles = tempRotation; // Reapply to the Camera
-
-            // Left Weapon //
-            // Equip/Reload
-            if (Input.GetKeyDown(KeyCode.Joystick1Button4))
-            {
-                if (reloadBtnDown) // Do Reload
-                    EventManager.instance.OnWeaponReload.Invoke(leftWeaponIndex);
-                else
-                {
-                    if (jetBtnDown) // Set index to the jump jets
-                        leftWeaponIndex = 2;
-                    else // Set index to the left-hand weapon
-                        leftWeaponIndex = 0;
-
-                    EventManager.instance.OnWeaponEquip.Invoke(leftWeaponIndex);
-                }
-            }
-
-            //Fire/Unfire
+            // Trigger Input //
+            
+            // Left Weapon
             if (Input.GetAxis("FireWeaponL") >= TriggerDeadZone && !leftTriggerDown)
             {
                 EventManager.instance.OnWeaponFire.Invoke(leftWeaponIndex, true);
@@ -130,28 +74,11 @@ public class InputManager : MonoBehaviour {
             }
             else if (Input.GetAxis("FireWeaponL") < TriggerDeadZone && leftTriggerDown)
             {
-                EventManager.instance.OnWeaponFire.Invoke(leftWeaponIndex, false);
+                //EventManager.instance.OnWeaponFire.Invoke(leftWeaponIndex, false);
                 leftTriggerDown = false;
             }
 
-            // Left Weapon //
-            // Equip/Reload
-            if (Input.GetKeyDown(KeyCode.Joystick1Button5))
-            {
-                if (reloadBtnDown) // Do Reload
-                    EventManager.instance.OnWeaponReload.Invoke(rightWeaponIndex);
-                else
-                {
-                    if (jetBtnDown) // Set index to the jump jets
-                        rightWeaponIndex = 2;
-                    else // Set index to the left-hand weapon
-                        rightWeaponIndex = 1;
-
-                    EventManager.instance.OnWeaponEquip.Invoke(rightWeaponIndex);
-                }
-            }
-
-            //Fire/Unfire
+            // Right Weapon
             if (Input.GetAxis("FireWeaponR") >= TriggerDeadZone && !rightTriggerDown)
             {
                 EventManager.instance.OnWeaponFire.Invoke(rightWeaponIndex, true);

@@ -13,7 +13,7 @@ Category {
 
 	// We must be transparent, so other objects are drawn before this one.
 	Tags { "Queue"="Transparent" "RenderType"="Opaque" }
-
+	Blend SrcAlpha OneMinusSrcAlpha
 
 	SubShader {
 
