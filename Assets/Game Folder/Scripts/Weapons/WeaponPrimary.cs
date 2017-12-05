@@ -143,6 +143,7 @@ public class WeaponPrimary : WeaponMaster
      */
     protected override void Start()
     {
+        Debug.Log("called primary start");
         // Call Superclass function
         base.Start();
 

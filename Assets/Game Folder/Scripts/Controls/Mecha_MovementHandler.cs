@@ -60,6 +60,21 @@ public class Mecha_MovementHandler : MonoBehaviour {
 
     public LayerMask floorMask;
 
+    //the audio clips we give to the soundmanager to play
+    [Tooltip("the audio clips we give to the soundmanager to play")]
+    [SerializeField]
+    private AudioClip _JumpStarto;
+
+    [SerializeField]
+    private AudioClip _JumpLando;
+    private bool CalledStopJumpForAudio;
+
+
+    [SerializeField]
+    private AudioClip _JumpContinious;
+    private bool CalledContiniousJumpSound; 
+   
+
     // Use this for initialization
     void Start () {
         // Bind Events
@@ -83,7 +98,7 @@ public class Mecha_MovementHandler : MonoBehaviour {
         currDist = 0.0f;
         travelSpeed = 0.0f;
         jumpStartPosition = this.transform.position;
-
+        SoundManager.Instance.SpawnAudioAtPoint(_JumpStarto, this.transform.position);
         jumpParticles.Play(true);
         Instantiate(launchParticlePrefab, this.transform);
         //this.gameObject.GetComponent<Rigidbody>().isKinematic = true;
@@ -94,14 +109,22 @@ public class Mecha_MovementHandler : MonoBehaviour {
     {
         if(bMidJump)
         {
+            CalledStopJumpForAudio = false;
             rb.constraints = RigidbodyConstraints.FreezeAll;
 			Vector3 Target = GameObject.FindGameObjectWithTag("JumpReticule").transform.position;
+
 
             float MaxDist = Vector3.Distance(new Vector3(jumpStartPosition.x, 0, jumpStartPosition.z), new Vector3(Target.x, 0, Target.z));
             if (MaxDist - currDist < StopThreshold)
             {
                 bMidJump = false;
                 EventManager.instance.OnMechaJumpEnd.Invoke();
+                CalledContiniousJumpSound = false;
+                if (!CalledStopJumpForAudio)
+                {
+                    SoundManager.Instance.SpawnAudioAtPoint(_JumpLando, this.transform.position);
+                    CalledStopJumpForAudio = true;
+                }
             }
             else
             {
@@ -114,6 +137,13 @@ public class Mecha_MovementHandler : MonoBehaviour {
                 NewPos.y = Height;
 
                 this.transform.position = NewPos;
+
+                if (!CalledContiniousJumpSound)
+                {
+                    SoundManager.Instance.SpawnAudioAtPoint(_JumpContinious, this.transform.position);
+
+                    CalledContiniousJumpSound = true;
+                }
             }
         }
         else
@@ -126,6 +156,7 @@ public class Mecha_MovementHandler : MonoBehaviour {
 
             rb.constraints = RigidbodyConstraints.FreezeAll;
             jumpParticles.Stop(true);
+           
         }
     }
 

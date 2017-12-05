@@ -48,6 +48,7 @@ public class WeaponMaster : MonoBehaviour {
      */
     protected virtual void Start()
     {
+        Debug.Log("called weaponmaster start");
         // Bind Events
         EventManager.instance.OnWeaponSwitch.AddListener((i) =>
         {
@@ -62,8 +63,8 @@ public class WeaponMaster : MonoBehaviour {
         {
             if (i == weaponPointIndex)
                 vrCont = cref;
-
-            Debug.Log("lMAOOOOOOOOOOOOOOO");
+            Debug.Log(vrCont.name);
+           // Debug.Log("lMAOOOOOOOOOOOOOOO");
         });
 
         EventManager.instance.OnWeaponFire.AddListener((i, b) =>
@@ -94,6 +95,7 @@ public class WeaponMaster : MonoBehaviour {
     protected virtual void UpdateWeaponAim()
     {
         this.transform.LookAt(vrCont.GetHitLocation());
+        Debug.Log("vr cont in update weapon" + vrCont.name);
     }
 
     // Called when the weapon receives fire input

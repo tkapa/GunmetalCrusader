@@ -71,6 +71,7 @@ public class Mecha_InventoryManager : MonoBehaviour {
         GameObject wp = (GameObject)Instantiate(weaponPrefab, mechaWeaponSockets[socketIndex]);
 
         wp.GetComponent<WeaponMaster>().SetWeaponPointIndex(socketIndex);
+        Debug.Log("calledsetweapon from inven manager");
     }
 
     private void CheckCollisionWithPickup()

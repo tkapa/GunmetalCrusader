@@ -23,7 +23,7 @@ public class GamepadPointer : MonoBehaviour {
 
     // Update is called once per frame
     protected virtual void Update () {
-            initController(); // TEMP
+           // initController(); // TEMP
 
         CastRays();
         SetBeamPoints();

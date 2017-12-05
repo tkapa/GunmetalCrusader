@@ -21,11 +21,13 @@ public class WeaponSwitch : UnityEvent<int>
 // Called on Mecha Jump Start.
 public class MechaJumpStart : UnityEvent
 {
+   
 }
 
 // Called on Mecha Jump End.
 public class MechaJumpEnd : UnityEvent
 {
+
 }
 
 //Called when an enemy dies
