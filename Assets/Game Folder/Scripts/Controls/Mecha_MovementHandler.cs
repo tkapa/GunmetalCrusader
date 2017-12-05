@@ -98,7 +98,7 @@ public class Mecha_MovementHandler : MonoBehaviour {
         currDist = 0.0f;
         travelSpeed = 0.0f;
         jumpStartPosition = this.transform.position;
-        SoundManager.Instance.SpawnAudioAtPoint(_JumpStarto, this.transform.position);
+      //  SoundManager.Instance.SpawnAudioAtPoint(_JumpStarto, this.transform.position);
         jumpParticles.Play(true);
         Instantiate(launchParticlePrefab, this.transform);
         //this.gameObject.GetComponent<Rigidbody>().isKinematic = true;
@@ -122,7 +122,7 @@ public class Mecha_MovementHandler : MonoBehaviour {
                 CalledContiniousJumpSound = false;
                 if (!CalledStopJumpForAudio)
                 {
-                    SoundManager.Instance.SpawnAudioAtPoint(_JumpLando, this.transform.position);
+                  //  SoundManager.Instance.SpawnAudioAtPoint(_JumpLando, this.transform.position);
                     CalledStopJumpForAudio = true;
                 }
             }
@@ -140,7 +140,7 @@ public class Mecha_MovementHandler : MonoBehaviour {
 
                 if (!CalledContiniousJumpSound)
                 {
-                    SoundManager.Instance.SpawnAudioAtPoint(_JumpContinious, this.transform.position);
+                  //  SoundManager.Instance.SpawnAudioAtPoint(_JumpContinious, this.transform.position);
 
                     CalledContiniousJumpSound = true;
                 }

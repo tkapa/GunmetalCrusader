@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 // Called when initializing the controller sides. Param equates to using controller ref and weapon index.
-public class WeaponInit : UnityEvent<GamepadPointer, int>
+public class WeaponInit : UnityEvent<int>
 {
 }
 

@@ -21,7 +21,7 @@ public class WeaponMaster : MonoBehaviour {
     private float PickupDelayTimer = 0.0f;
 
     [SerializeField] // TEMP
-    protected GamepadPointer vrCont;
+    protected VRControllerInterface vrCont;
 
     // Is the weapon in target locator mode or is it in firing mode
     private bool isInJumpMode = false;
@@ -48,23 +48,35 @@ public class WeaponMaster : MonoBehaviour {
      */
     protected virtual void Start()
     {
-        Debug.Log("called weaponmaster start");
+       // Debug.Log("called weaponmaster start");
         // Bind Events
         EventManager.instance.OnWeaponSwitch.AddListener((i) =>
         {
             if (i == weaponPointIndex)
             {
+                Debug.Log("fuck life. but hey the switch was received *click*");
                 isInJumpMode = !isInJumpMode;
                 OnFireInput(false);
             }
         });
 
-        EventManager.instance.OnWeaponInit.AddListener((cref, i) =>
+        EventManager.instance.OnWeaponInit.AddListener(( i) =>
         {
             if (i == weaponPointIndex)
-                vrCont = cref;
-            Debug.Log(vrCont.name);
-           // Debug.Log("lMAOOOOOOOOOOOOOOO");
+            {
+                foreach(VRControllerInterface vr in FindObjectsOfType<VRControllerInterface>())
+                {
+                    if (weaponPointIndex == vr.linkedweap)
+                    {
+                        vrCont = vr;
+                        break;
+                    }
+                }
+
+            }
+                //vrCont = cref;
+            //Debug.Log(vrCont.name);
+            //Debug.Log("lMAOOOOOOOOOOOOOOO");
         });
 
         EventManager.instance.OnWeaponFire.AddListener((i, b) =>
@@ -82,6 +94,19 @@ public class WeaponMaster : MonoBehaviour {
      */
     protected virtual void Update()
     {
+        if (!vrCont)
+        {
+            foreach (VRControllerInterface vr in FindObjectsOfType<VRControllerInterface>())
+            {
+                if (weaponPointIndex == vr.linkedweap)
+                {
+                    vrCont = vr;
+                    break;
+                }
+            }
+        }
+
+        UpdateJumpTarget();
         UpdateWeaponAim();
         PickupDelayTimer -= Time.deltaTime;
 
@@ -110,7 +135,12 @@ public class WeaponMaster : MonoBehaviour {
                 bool isCol = vrCont.testHitObjectTag("Floor");
 
                 if (!isCol)
+                {
                     EventManager.instance.OnMechaJumpStart.Invoke();
+
+                    isInJumpMode = false;
+                }
+
                 else
                 {
                     // Notify player they can't jump to that surface
@@ -131,6 +161,7 @@ public class WeaponMaster : MonoBehaviour {
     private void UpdateJumpTarget()
     {
         if (!isInJumpMode){
+            if(playerjumper.isJumping())
             Destroy(spawnedJumpTarget);
             return;
         }
