@@ -21,8 +21,8 @@ public class VRControllerInterface : GamepadPointer {
     //private List<InterfaceObject> io = new List<InterfaceObject>();
     private Dictionary<InterfaceObject, float> io2 = new Dictionary<InterfaceObject, float>();
 
-    public GameObject fuckmylifeOBJ;
-    public float fuckmylifeINT = 0.25f;
+    //public GameObject fuckmylifeOBJ;
+    //public float fuckmylifeINT = 0.25f;
 
     // Linked Weapon Index
     public int linkedweap = -1;
@@ -75,10 +75,10 @@ public class VRControllerInterface : GamepadPointer {
 
         /////////////////////////////////////////////////////////////
         // THIS SHIT IS FUCKED //
-        if (Vector3.Distance(this.transform.position, fuckmylifeOBJ.transform.position) < fuckmylifeINT)
-        {
-            io2[fuckmylifeOBJ.GetComponent<InterfaceObject>()] = Time.time + 0.1f;
-        }
+        //if (Vector3.Distance(this.transform.position, fuckmylifeOBJ.transform.position) < fuckmylifeINT)
+        //{
+        //    io2[fuckmylifeOBJ.GetComponent<InterfaceObject>()] = Time.time + 0.1f;
+        //}
 
         // Tell the Interface Object that we're touching to check if it can do it's stuff.
         List<InterfaceObject> keyCopy = io2.Keys.ToList();

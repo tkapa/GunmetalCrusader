@@ -81,7 +81,7 @@ public class GamepadPointer : MonoBehaviour {
 
     protected virtual void initController()
     {
-        EventManager.instance.OnWeaponInit.Invoke(this, 0);
-        EventManager.instance.OnWeaponInit.Invoke(this, 1);
+       // EventManager.instance.OnWeaponInit.Invoke(this, 0);
+       // EventManager.instance.OnWeaponInit.Invoke(this, 1);
     }
 }
