@@ -73,8 +73,14 @@ public class Enemy : MonoBehaviour {
     [SerializeField]
     private GameObject DeathObj;
 
-    // Use this for initialization
-    public virtual void Start () {
+    [SerializeField]
+    private AudioClip AttackPew;
+
+    //[SerializeField]
+    //private AudioSource AttackSource;
+
+  // Use this for initialization
+  public virtual void Start () {
         state = Enemy_States.EES_Falling; // Make them track by default (TODO: Fix falling)
 
         if (!FindObjectOfType<GameManager>())
@@ -125,6 +131,9 @@ public class Enemy : MonoBehaviour {
             print(damage);
             target.TakeDamage(damage);
             attackIntervalCounter = attackInterval;
+            //play soundfile
+            if (AttackPew !=  null)
+            this.gameObject.GetComponent<AudioSource>().PlayOneShot(AttackPew);
         }
         else
             attackIntervalCounter -= Time.deltaTime;
