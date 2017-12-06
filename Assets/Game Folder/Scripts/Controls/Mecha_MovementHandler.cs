@@ -60,18 +60,18 @@ public class Mecha_MovementHandler : MonoBehaviour {
 
     public LayerMask floorMask;
 
-    //the audio clips we give to the soundmanager to play
-    [Tooltip("the audio clips we give to the soundmanager to play")]
-    [SerializeField]
-    private AudioClip _JumpStarto;
+    ////the audio clips we give to the soundmanager to play
+    //[Tooltip("the audio clips we give to the soundmanager to play")]
+    //[SerializeField]
+    //private AudioClip _JumpStarto;
 
-    [SerializeField]
-    private AudioClip _JumpLando;
+  //  [SerializeField]
+   // private AudioClip _JumpLando;
     private bool CalledStopJumpForAudio;
 
 
-    [SerializeField]
-    private AudioClip _JumpContinious;
+   // [SerializeField]
+   // private AudioClip _JumpContinious;
     private bool CalledContiniousJumpSound; 
    
 
@@ -98,7 +98,7 @@ public class Mecha_MovementHandler : MonoBehaviour {
         currDist = 0.0f;
         travelSpeed = 0.0f;
         jumpStartPosition = this.transform.position;
-      //  SoundManager.Instance.SpawnAudioAtPoint(_JumpStarto, this.transform.position);
+        JacksSoundManager.Instance.MechJumped();
         jumpParticles.Play(true);
         Instantiate(launchParticlePrefab, this.transform);
         //this.gameObject.GetComponent<Rigidbody>().isKinematic = true;
@@ -122,7 +122,7 @@ public class Mecha_MovementHandler : MonoBehaviour {
                 CalledContiniousJumpSound = false;
                 if (!CalledStopJumpForAudio)
                 {
-                  //  SoundManager.Instance.SpawnAudioAtPoint(_JumpLando, this.transform.position);
+                    JacksSoundManager.Instance.MechLanded();
                     CalledStopJumpForAudio = true;
                 }
             }
@@ -140,7 +140,7 @@ public class Mecha_MovementHandler : MonoBehaviour {
 
                 if (!CalledContiniousJumpSound)
                 {
-                  //  SoundManager.Instance.SpawnAudioAtPoint(_JumpContinious, this.transform.position);
+                    JacksSoundManager.Instance.MechMidair();
 
                     CalledContiniousJumpSound = true;
                 }
