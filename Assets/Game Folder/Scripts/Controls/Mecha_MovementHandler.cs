@@ -70,10 +70,17 @@ public class Mecha_MovementHandler : MonoBehaviour {
     private bool CalledStopJumpForAudio;
 
 
-   // [SerializeField]
-   // private AudioClip _JumpContinious;
-    private bool CalledContiniousJumpSound; 
-   
+    // [SerializeField]
+    // private AudioClip _JumpContinious;
+    private bool CalledContiniousJumpSound;
+
+    // How long the jump takes to charge in seconds.
+    [Tooltip("How long the jump takes to charge in seconds.")]
+    public float jumpChargeTime = 3.0f;
+    public float jumpChargeTimer = 0.0f;
+
+    private bool isChargingJump = false;
+
 
     // Use this for initialization
     void Start () {
@@ -88,6 +95,7 @@ public class Mecha_MovementHandler : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
+        UpdateJumpCharge();
         JumpUpdate();
     }
 
@@ -163,5 +171,33 @@ public class Mecha_MovementHandler : MonoBehaviour {
     public bool isJumping()
     {
         return bMidJump;
+    }
+
+    public void SetJumpCharge()
+    {
+        isChargingJump = true;
+    }
+
+    public bool isCharged()
+    {
+        return (jumpChargeTimer >= jumpChargeTime);
+    }
+
+    private void UpdateJumpCharge()
+    {
+        if (isChargingJump)
+        {
+            jumpChargeTimer += Time.deltaTime;
+            if (jumpChargeTimer > jumpChargeTime)
+                jumpChargeTimer = jumpChargeTime;
+        }
+        else
+        {
+            jumpChargeTimer -= Time.deltaTime;
+            if (jumpChargeTimer < 0.0f)
+                jumpChargeTimer = 0.0f;
+        }
+
+        isChargingJump = false;
     }
 }

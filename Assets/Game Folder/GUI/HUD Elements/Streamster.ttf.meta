@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: ca2bf40a1ac92fa4b868b5bf5ffa5d93
+timeCreated: 1512630130
+licenseType: Pro
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Streamster
+  fontNames:
+  - Streamster
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
