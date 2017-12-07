@@ -28,7 +28,7 @@ public class Wave0Script : MonoBehaviour {
     //the spawn points for the final wave (swarmer spawn points)
     public GameObject[] SpawnPoints4;
     //the spawn point of shephards
-    public GameObject[] ShephardSpawns;
+ //   public GameObject[] ShephardSpawns;
 
     private bool DoneWave4;
 
@@ -237,12 +237,12 @@ public class Wave0Script : MonoBehaviour {
             Instantiate(batchSwarmer, U.transform.position, Quaternion.identity);
             SwarmersAlive++;
         }
-        foreach (GameObject Y in ShephardSpawns)
-        {
-            Instantiate(batchShephard, Y.transform.position, Quaternion.identity);
-            SwarmersAlive++;
-        }
-        TutLines.PlayOneShot(ShephardSpawned);
+        //foreach (GameObject Y in ShephardSpawns)
+        //{
+        //    Instantiate(batchShephard, Y.transform.position, Quaternion.identity);
+        //    SwarmersAlive++;
+        //}
+        //TutLines.PlayOneShot(ShephardSpawned);
         CheckingSwarmers = true;
         
     }
@@ -274,10 +274,10 @@ public class Wave0Script : MonoBehaviour {
         {
             Destroy(U.gameObject);
         }
-        foreach (GameObject Y in ShephardSpawns)
-        {
-            Destroy(Y.gameObject);
-        }
+        //foreach (GameObject Y in ShephardSpawns)
+        //{
+        //    Destroy(Y.gameObject);
+        //}
 
         foreach (GameObject O in SpawnPoints2)
         {
