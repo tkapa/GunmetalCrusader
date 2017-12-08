@@ -60,6 +60,28 @@ public class Mecha_MovementHandler : MonoBehaviour {
 
     public LayerMask floorMask;
 
+    ////the audio clips we give to the soundmanager to play
+    //[Tooltip("the audio clips we give to the soundmanager to play")]
+    //[SerializeField]
+    //private AudioClip _JumpStarto;
+
+  //  [SerializeField]
+   // private AudioClip _JumpLando;
+    private bool CalledStopJumpForAudio;
+
+
+    // [SerializeField]
+    // private AudioClip _JumpContinious;
+    private bool CalledContiniousJumpSound;
+
+    // How long the jump takes to charge in seconds.
+    [Tooltip("How long the jump takes to charge in seconds.")]
+    public float jumpChargeTime = 3.0f;
+    public float jumpChargeTimer = 0.0f;
+
+    private bool isChargingJump = false;
+
+
     // Use this for initialization
     void Start () {
         // Bind Events
@@ -76,6 +98,11 @@ public class Mecha_MovementHandler : MonoBehaviour {
         JumpUpdate();
     }
 
+    void Update()
+    {
+        UpdateJumpCharge();
+    }
+
     // Called when the rocket jump begins
     private void StartJump()
     {
@@ -83,7 +110,7 @@ public class Mecha_MovementHandler : MonoBehaviour {
         currDist = 0.0f;
         travelSpeed = 0.0f;
         jumpStartPosition = this.transform.position;
-
+        JacksSoundManager.Instance.MechJumped();
         jumpParticles.Play(true);
         Instantiate(launchParticlePrefab, this.transform);
         //this.gameObject.GetComponent<Rigidbody>().isKinematic = true;
@@ -94,14 +121,22 @@ public class Mecha_MovementHandler : MonoBehaviour {
     {
         if(bMidJump)
         {
+            CalledStopJumpForAudio = false;
             rb.constraints = RigidbodyConstraints.FreezeAll;
 			Vector3 Target = GameObject.FindGameObjectWithTag("JumpReticule").transform.position;
+
 
             float MaxDist = Vector3.Distance(new Vector3(jumpStartPosition.x, 0, jumpStartPosition.z), new Vector3(Target.x, 0, Target.z));
             if (MaxDist - currDist < StopThreshold)
             {
                 bMidJump = false;
                 EventManager.instance.OnMechaJumpEnd.Invoke();
+                CalledContiniousJumpSound = false;
+                if (!CalledStopJumpForAudio)
+                {
+                    JacksSoundManager.Instance.MechLanded();
+                    CalledStopJumpForAudio = true;
+                }
             }
             else
             {
@@ -114,6 +149,13 @@ public class Mecha_MovementHandler : MonoBehaviour {
                 NewPos.y = Height;
 
                 this.transform.position = NewPos;
+
+                if (!CalledContiniousJumpSound)
+                {
+                    JacksSoundManager.Instance.MechMidair();
+
+                    CalledContiniousJumpSound = true;
+                }
             }
         }
         else
@@ -126,11 +168,40 @@ public class Mecha_MovementHandler : MonoBehaviour {
 
             rb.constraints = RigidbodyConstraints.FreezeAll;
             jumpParticles.Stop(true);
+           
         }
     }
 
     public bool isJumping()
     {
         return bMidJump;
+    }
+
+    public void SetJumpCharge()
+    {
+        isChargingJump = true;
+    }
+
+    public bool isCharged()
+    {
+        return (jumpChargeTimer >= jumpChargeTime);
+    }
+
+    private void UpdateJumpCharge()
+    {
+        if (isChargingJump)
+        {
+            jumpChargeTimer += Time.deltaTime;
+            if (jumpChargeTimer > jumpChargeTime)
+                jumpChargeTimer = jumpChargeTime;
+        }
+        else
+        {
+            jumpChargeTimer -= Time.deltaTime;
+            if (jumpChargeTimer < 0.0f)
+                jumpChargeTimer = 0.0f;
+        }
+
+        isChargingJump = false;
     }
 }

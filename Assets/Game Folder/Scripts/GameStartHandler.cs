@@ -65,14 +65,12 @@ public class GameStartHandler : MonoBehaviour {
     void ExpandMenu()
     {
         MyAnim.SetTrigger("OpenMenu");
-        Debug.Log("MenuExpanded");
         Mecha_InventoryManager.Instance.ClearInventory();
     }
 
     void DiminishMenu()
     {
         MyAnim.SetTrigger("CloseMenu");
-        Debug.Log("MenuClosed");
         Mecha_InventoryManager.Instance.InitializeInventory();
     }
 

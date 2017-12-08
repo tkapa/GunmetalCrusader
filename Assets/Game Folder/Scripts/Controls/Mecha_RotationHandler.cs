@@ -12,6 +12,8 @@ public class Mecha_RotationHandler : MonoBehaviour {
     [SerializeField]
     private Vector2 CameraTurnSpeed = new Vector2(5.0f, 30.0f);
 
+    private bool CalledTurnSound;
+
     void Update()
     {
         if (Camera.main)
@@ -38,7 +40,16 @@ public class Mecha_RotationHandler : MonoBehaviour {
 
             float finalSpeed = Mathf.Lerp(CameraTurnSpeed.x, CameraTurnSpeed.y, Mathf.Abs(rotationSpeedAlpha));
 
-            if (rotationSpeedAlpha == 0) { finalSpeed = 0; }
+            if (rotationSpeedAlpha == 0) { finalSpeed = 0;  JacksSoundManager.Instance.StoppedTurning(); CalledTurnSound = false; }
+
+            else
+            {
+                if (!CalledTurnSound)
+                {
+                    JacksSoundManager.Instance.MechTurning();
+                    CalledTurnSound = true;
+                }
+            }
 
             tempRotation.y += (Mathf.Sign(rotationSpeedAlpha) * finalSpeed) * Time.deltaTime;
 

@@ -21,8 +21,8 @@ public class VRControllerInterface : GamepadPointer {
     //private List<InterfaceObject> io = new List<InterfaceObject>();
     private Dictionary<InterfaceObject, float> io2 = new Dictionary<InterfaceObject, float>();
 
-    public GameObject fuckmylifeOBJ;
-    public float fuckmylifeINT = 0.25f;
+    //public GameObject fuckmylifeOBJ;
+    //public float fuckmylifeINT = 0.25f;
 
     // Linked Weapon Index
     public int linkedweap = -1;
@@ -36,7 +36,8 @@ public class VRControllerInterface : GamepadPointer {
 
     // Trigger pressed
     private bool triggerPressed = false;
-    private bool circlePressed = false;
+    private bool touchpadPressed = false;
+    
 
     // Initializes the controller
     protected override void Start()
@@ -75,10 +76,10 @@ public class VRControllerInterface : GamepadPointer {
 
         /////////////////////////////////////////////////////////////
         // THIS SHIT IS FUCKED //
-        if (Vector3.Distance(this.transform.position, fuckmylifeOBJ.transform.position) < fuckmylifeINT)
-        {
-            io2[fuckmylifeOBJ.GetComponent<InterfaceObject>()] = Time.time + 0.1f;
-        }
+        //if (Vector3.Distance(this.transform.position, fuckmylifeOBJ.transform.position) < fuckmylifeINT)
+        //{
+        //    io2[fuckmylifeOBJ.GetComponent<InterfaceObject>()] = Time.time + 0.1f;
+        //}
 
         // Tell the Interface Object that we're touching to check if it can do it's stuff.
         List<InterfaceObject> keyCopy = io2.Keys.ToList();
@@ -119,7 +120,19 @@ public class VRControllerInterface : GamepadPointer {
         */
 
         // Circle Pad //
+        if (cEvents.touchpadPressed && !touchpadPressed)
+        {
+            Debug.Log("about to send the weaponswitch");
+            EventManager.instance.OnWeaponSwitch.Invoke(linkedweap   );
+            
+            touchpadPressed =true;
 
+        }
+
+        else if (!cEvents.touchpadPressed)
+        {
+            touchpadPressed = false;
+        }
 
         // Weapon Firing //
         if (cEvents.triggerPressed && !triggerPressed)
@@ -133,6 +146,8 @@ public class VRControllerInterface : GamepadPointer {
             EventManager.instance.OnWeaponFire.Invoke(linkedweap, false);
             triggerPressed = false;
         }
+
+
     }
 
     void OnTriggerStay(Collider other)
@@ -140,22 +155,29 @@ public class VRControllerInterface : GamepadPointer {
         if (other.transform.tag == "InterfacePoint")
         {
             io2[other.gameObject.GetComponent<InterfaceObject>()] = Time.time + 0.1f;
-
-            Debug.Log("Added: " + other.name);
         }
     }
 
     protected override void initController()
-    {
+    { //if weapon not enabled, cancel the function
+        if (FindObjectsOfType<WeaponMaster>().Length <=0)
+        {
+            return;
+        }
+
         if(this.transform.localPosition.x < otherController.gameObject.transform.localPosition.x)
         {
-            linkedweap = 0;
+            linkedweap = 1;
+            otherController.linkedweap = 0;
         }
         else
         {
-            linkedweap = 1;
+            linkedweap = 0;
+            otherController.linkedweap = 1;
         }
-
-        EventManager.instance.OnWeaponInit.Invoke(this, linkedweap);
+        Debug.Log("we are about to call the eventmanager instance");
+        EventManager.instance.OnWeaponInit.Invoke(0);
+        EventManager.instance.OnWeaponInit.Invoke(1);
+        Debug.Log("called eventmanager instance");
     }
 }

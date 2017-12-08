@@ -120,7 +120,7 @@ public class WeaponPrimary : WeaponMaster
     [SerializeField]
     private float HeatDisperseRate = 75.0f;
     
-    private float currentHeatValue = 0.0f;
+    public float currentHeatValue = 0.0f;
 
     // The game object representing the muzzle flash. Should be a particle system on a kill timer.
     [Tooltip("How long between stoping firing and cooldown.")]
@@ -129,7 +129,7 @@ public class WeaponPrimary : WeaponMaster
 
     private float HeatRetensionTimer = 0.0f;
 
-    private bool hasOverheated = false;
+    public bool hasOverheated = false;
 
     private GameObject spawnedLaserSightObj;
 
@@ -143,6 +143,7 @@ public class WeaponPrimary : WeaponMaster
      */
     protected override void Start()
     {
+       // Debug.Log("called primary start");
         // Call Superclass function
         base.Start();
 
@@ -204,8 +205,11 @@ public class WeaponPrimary : WeaponMaster
     {
         if (isFiring && hasOverheated == false)
         {
-            if(fireTimer <= 0.0f)
+            if (fireTimer <= 0.0f)
+            {
                 DoFire();
+                Debug.Log("Tha ting goes sKKRRRRRRRRRRRRR-AH!");
+            }
         }
         else
         {

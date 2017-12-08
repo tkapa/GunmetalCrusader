@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 // Called when initializing the controller sides. Param equates to using controller ref and weapon index.
-public class WeaponInit : UnityEvent<GamepadPointer, int>
+public class WeaponInit : UnityEvent<int>
 {
 }
 
@@ -21,11 +21,13 @@ public class WeaponSwitch : UnityEvent<int>
 // Called on Mecha Jump Start.
 public class MechaJumpStart : UnityEvent
 {
+   
 }
 
 // Called on Mecha Jump End.
 public class MechaJumpEnd : UnityEvent
 {
+
 }
 
 //Called when an enemy dies

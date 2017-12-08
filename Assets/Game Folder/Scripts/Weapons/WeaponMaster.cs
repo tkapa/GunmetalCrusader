@@ -21,7 +21,7 @@ public class WeaponMaster : MonoBehaviour {
     private float PickupDelayTimer = 0.0f;
 
     [SerializeField] // TEMP
-    protected GamepadPointer vrCont;
+    protected VRControllerInterface vrCont;
 
     // Is the weapon in target locator mode or is it in firing mode
     private bool isInJumpMode = false;
@@ -36,18 +36,12 @@ public class WeaponMaster : MonoBehaviour {
 
     private Mecha_MovementHandler playerjumper;
 
-    // How long the jump takes to charge in seconds.
-    [Tooltip("How long the jump takes to charge in seconds.")]
-    [SerializeField]
-    private float jumpChargeTime = 3.0f;
-
-    private float jumpChargeTimer = 0.0f;
-
     /*
      * Called on instance create
      */
     protected virtual void Start()
     {
+       // Debug.Log("called weaponmaster start");
         // Bind Events
         EventManager.instance.OnWeaponSwitch.AddListener((i) =>
         {
@@ -58,18 +52,27 @@ public class WeaponMaster : MonoBehaviour {
             }
         });
 
-        EventManager.instance.OnWeaponInit.AddListener((cref, i) =>
+        EventManager.instance.OnWeaponInit.AddListener(( i) =>
         {
             if (i == weaponPointIndex)
-                vrCont = cref;
+            {
+                foreach(VRControllerInterface vr in FindObjectsOfType<VRControllerInterface>())
+                {
+                    if (weaponPointIndex == vr.linkedweap)
+                    {
+                        vrCont = vr;
+                        break;
+                    }
+                }
 
-            Debug.Log("lMAOOOOOOOOOOOOOOO");
+            }
         });
 
         EventManager.instance.OnWeaponFire.AddListener((i, b) =>
         {
-            if (i == weaponPointIndex)
+            if (i == weaponPointIndex){
                 OnFireInput(b);
+            }
         });
 
         // Initializing variables
@@ -81,13 +84,24 @@ public class WeaponMaster : MonoBehaviour {
      */
     protected virtual void Update()
     {
+        if (!vrCont)
+        {
+            foreach (VRControllerInterface vr in FindObjectsOfType<VRControllerInterface>())
+            {
+                if (weaponPointIndex == vr.linkedweap)
+                {
+                    vrCont = vr;
+                    break;
+                }
+            }
+        }
+
+        UpdateJumpTarget();
         UpdateWeaponAim();
         PickupDelayTimer -= Time.deltaTime;
 
         if (isInJumpMode)
-            jumpChargeTimer = Mathf.Clamp(jumpChargeTimer + Time.deltaTime, 0, jumpChargeTime);
-        else
-            jumpChargeTimer = Mathf.Clamp(jumpChargeTimer - Time.deltaTime, 0, jumpChargeTime);
+            playerjumper.SetJumpCharge();
     }
 
     // Points the weapon at the spot it's aiming at
@@ -99,16 +113,21 @@ public class WeaponMaster : MonoBehaviour {
     // Called when the weapon receives fire input
     protected virtual void OnFireInput(bool startFire)
     {
-        if(startFire && isInJumpMode)
+        if (startFire && isInJumpMode)
         {
             // Do jump checking and stuff here
-            if(jumpChargeTimer >= jumpChargeTime)
+            if (playerjumper.isCharged())
             {
                 // Todo: Move the isCol stuff somewhere else to change the colour of lasers
                 bool isCol = vrCont.testHitObjectTag("Floor");
 
                 if (!isCol)
+                {
                     EventManager.instance.OnMechaJumpStart.Invoke();
+
+                    isInJumpMode = false;
+                }
+
                 else
                 {
                     // Notify player they can't jump to that surface
@@ -116,7 +135,9 @@ public class WeaponMaster : MonoBehaviour {
             }
         }
         else
+        {
             isFiring = startFire;
+        }
     }
 
     // Sets the weapon point index
@@ -129,7 +150,10 @@ public class WeaponMaster : MonoBehaviour {
     private void UpdateJumpTarget()
     {
         if (!isInJumpMode){
-            Destroy(spawnedJumpTarget);
+            if (!playerjumper.isJumping())
+            {
+                Destroy(spawnedJumpTarget);
+            }
             return;
         }
         else if (playerjumper.isJumping())

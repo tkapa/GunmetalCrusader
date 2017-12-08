@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SoundManager : MonoBehaviour {
-
+    public static SoundManager Instance;
     public GameObject audioPlayerPrefab;
 
     [Header("AI Audio Clips")]
@@ -18,11 +18,21 @@ public class SoundManager : MonoBehaviour {
 
     public AudioClip jumping;
 
+   
+
+    public AudioClip Landing;
+    
+
     [Header("Enemy Audio Clips")]
     [Space(10)]
     public AudioClip enemyDropIn;
 
     public AudioClip enemyDeath;
+
+    void Start()
+    {
+        Instance = this;
+    }
 
     public void SpawnAudioAtPoint(AudioClip clip, Vector3 point)
     {

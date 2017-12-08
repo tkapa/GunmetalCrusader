@@ -8,11 +8,14 @@ public class Mecha_InventoryManager : MonoBehaviour {
 
     [Tooltip("The points on the Mech that weapons will be spawned and parented to.")]
     [SerializeField]
-    private Transform[] mechaWeaponSockets = new Transform[3];
+    private Transform[] mechaWeaponSockets = new Transform[2];
 
     [SerializeField]
-    private GameObject[] TEMPORARY_WpRefs = new GameObject[3];
-    
+    private GameObject[] TEMPORARY_WpRefs = new GameObject[2];
+
+    [SerializeField]
+    public WeaponPrimary[] spawnedWeapons = new WeaponPrimary[2];
+
     private GameObject touchedPickup;
 
     int LastPickup = 0;
@@ -29,25 +32,6 @@ public class Mecha_InventoryManager : MonoBehaviour {
     void Update()
     {
         CheckCollisionWithPickup();
-
-        // TEMP
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            EventManager.instance.OnWeaponFire.Invoke(0,true);
-            EventManager.instance.OnWeaponFire.Invoke(1, true);
-        }
-        else if (Input.GetKeyUp(KeyCode.Space))
-        {
-            EventManager.instance.OnWeaponFire.Invoke(0, false);
-            EventManager.instance.OnWeaponFire.Invoke(1, false);
-        }
-
-        if(Input.GetKeyDown(KeyCode.Q))
-        {
-            AddWeapon(TEMPORARY_WpRefs[0], 0); // TEMP
-
-            AddWeapon(TEMPORARY_WpRefs[1], 1); // TEMP
-        }
     }
 	
 	public void AddWeapon(GameObject weaponPrefab, int socketIndex)
@@ -71,20 +55,19 @@ public class Mecha_InventoryManager : MonoBehaviour {
         GameObject wp = (GameObject)Instantiate(weaponPrefab, mechaWeaponSockets[socketIndex]);
 
         wp.GetComponent<WeaponMaster>().SetWeaponPointIndex(socketIndex);
+        spawnedWeapons[socketIndex] = wp.GetComponent<WeaponPrimary>();
     }
 
     private void CheckCollisionWithPickup()
     {
         touchedPickup = null;
         foreach (PickupScript pickup in FindObjectsOfType<PickupScript>())
-        {/*
-            if(Vector3.Distance(pickup.transform.position, this.transform.position) < 25)
+        {
+            if(Vector3.Distance(pickup.transform.position, this.transform.position) < 50.0f)
             {
-                touchedPickup = pickup.gameObject;
+                LastPickup = 1 - LastPickup;
+                pickup.OnUsePickup(LastPickup);
             }
-            */
-            LastPickup = 1 - LastPickup;
-            EventManager.instance.OnUsePickup.Invoke(LastPickup);
         }
     }
 
