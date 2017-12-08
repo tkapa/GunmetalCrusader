@@ -91,8 +91,9 @@ public class Wave0Script : MonoBehaviour {
     void preFirstWave()
     {
         TutLines.PlayOneShot(PreAndroidLines);
-        Invoke("EnemySpawnbatch1", 14);
+        Invoke("EnemySpawnbatch1", 18);
     }
+    
 
 	void Update () {
         //are the first wave of swarmers still alive
@@ -199,7 +200,10 @@ public class Wave0Script : MonoBehaviour {
 
     void AfterWave3()
     {
-        StartRealGame(); // For now just cut losses and finish the shit
+        TutLines.PlayOneShot(HowTojump);
+
+        Invoke("JumpSequence", 9);
+        //JumpSequence(); // For now just cut losses and finish the shit
         /*
         if(genlocation)
             Instantiate(GrenadeLauncherPrefab, genlocation.transform.position, Quaternion.identity);
@@ -211,7 +215,9 @@ public class Wave0Script : MonoBehaviour {
 
     void JumpSequence()
     {
-        TutLines.PlayOneShot(LetsGoToGrenadeLauncher);
+        TutLines.PlayOneShot(FinalLine);
+
+        StartRealGame();
     }
 
     //EXTERNAL CALL REQUIRED, PLAYERGRABBEDJUMPINDICATOR BUT HASNT JUMPED YET
