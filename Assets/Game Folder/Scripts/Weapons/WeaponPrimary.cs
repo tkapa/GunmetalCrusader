@@ -192,10 +192,11 @@ public class WeaponPrimary : WeaponMaster
         {
             spawnedLaserSightObj.SetActive(false);
             return;
-        }
+        }  
 
         spawnedLaserSightObj.SetActive(true);
         spawnedLaserSightObj.GetComponent<LaserSightMngr>().target = vrCont.GetHitLocation();
+        spawnedLaserSightObj.GetComponent<LaserSightMngr>().inJumpMode = isInJumpMode;
     }
 
     /*

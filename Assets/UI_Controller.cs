@@ -63,8 +63,6 @@ public class UI_Controller : MonoBehaviour {
         //if (displayBoost != moveHandle.jumpChargeTimer)
             displayBoost = moveHandle.jumpChargeTimer; // TODO : Maybe lerp this??
 
-        Debug.Log(((displayBoost / moveHandle.jumpChargeTime)) * BoostFullsize);
-
         BoostMask.sizeDelta = new Vector2(1000, ((displayBoost / moveHandle.jumpChargeTime)) * BoostFullsize);
 
         // Heat(s)

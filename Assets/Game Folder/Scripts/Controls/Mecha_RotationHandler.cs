@@ -16,12 +16,10 @@ public class Mecha_RotationHandler : MonoBehaviour {
 
     void Update()
     {
-        if (Camera.main)
+        if (Camera.main && !Player.p.Locked)
         {
             Vector3 tempRotation = this.transform.eulerAngles;
             float camYaw = Camera.main.transform.localEulerAngles.y;
-
-
 
             // Calculate the Rotation Speed Alpha
             float rotationSpeedAlpha = 0;

@@ -81,7 +81,6 @@ public class Mecha_MovementHandler : MonoBehaviour {
 
     private bool isChargingJump = false;
 
-
     // Use this for initialization
     void Start () {
         // Bind Events
@@ -164,11 +163,14 @@ public class Mecha_MovementHandler : MonoBehaviour {
             if (Physics.Raycast(transform.position, -transform.up, out hit))
             {
                 this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y - (mechaGravity * Time.deltaTime), this.transform.position.z);
+            }else if (Player.p.Locked && GameObject.FindGameObjectWithTag("MenuManager") == false)
+            {
+                Player.p.Locked = false;
+                Instantiate(launchParticlePrefab, this.transform);
             }
 
             rb.constraints = RigidbodyConstraints.FreezeAll;
-            jumpParticles.Stop(true);
-           
+            jumpParticles.Stop(true);           
         }
     }
 

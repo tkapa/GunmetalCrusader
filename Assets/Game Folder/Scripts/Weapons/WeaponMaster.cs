@@ -24,7 +24,7 @@ public class WeaponMaster : MonoBehaviour {
     protected VRControllerInterface vrCont;
 
     // Is the weapon in target locator mode or is it in firing mode
-    private bool isInJumpMode = false;
+    protected bool isInJumpMode = false;
 
     // The game object that materialises where the player is pointing.
     [Tooltip("The game object that materialises where the player is pointing.")]
@@ -45,7 +45,7 @@ public class WeaponMaster : MonoBehaviour {
         // Bind Events
         EventManager.instance.OnWeaponSwitch.AddListener((i) =>
         {
-            if (i == weaponPointIndex)
+            if (i == weaponPointIndex && !Player.p.Locked)
             {
                 isInJumpMode = !isInJumpMode;
                 OnFireInput(false);
@@ -113,7 +113,7 @@ public class WeaponMaster : MonoBehaviour {
     // Called when the weapon receives fire input
     protected virtual void OnFireInput(bool startFire)
     {
-        if (startFire && isInJumpMode)
+        if (startFire && isInJumpMode && !Player.p.Locked)
         {
             // Do jump checking and stuff here
             if (playerjumper.isCharged())

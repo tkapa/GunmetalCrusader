@@ -25,6 +25,10 @@ public class WaveManager : MonoBehaviour {
         EventManager.instance.OnStartGame.AddListener(() => {
             roundIntervalTimer = roundIntervalTime;
             isCounting = true;
+
+            Debug.Log("OnStartGame was triggered");
+
+            SpawnPickup();
         });
 
         EventManager.instance.OnEndRound.AddListener(() => {

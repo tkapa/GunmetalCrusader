@@ -5,15 +5,21 @@ using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour {
 
+    public static Player p;
+
     public float health = 100.0f;
     public float maxHealth = 100.0f;
     public float regenRate = 25.0f;
     public float regenTime = 5.0f;
     public float regenTimer = 0.0f;
 
-	// Use this for initialization
-	void Start () {
-		
+    public bool Locked = true;
+    public bool HasDoneJumpTutorial = false;
+    public bool HasJumpedYet = false;
+
+    // Use this for initialization
+    void Start () {
+        p = this;
 	}
 	
 	// Update is called once per frame

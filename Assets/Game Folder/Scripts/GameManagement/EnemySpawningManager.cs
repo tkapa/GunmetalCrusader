@@ -58,28 +58,12 @@ public class EnemySpawningManager : MonoBehaviour {
             deadEnemyCount = 0;
             spawningIntervalTimer = spawningInterval;
             roundPercentage = (float)gameManager.currentRound / gameManager.maximumNumberOfRounds;
-
-            if(gameManager.currentRound == 2)
-            {
-                leftSpawnParent.SetActive(false);
-                rightSpawnParent.SetActive(true);
-            }
-
-            if(gameManager.currentRound == 3)
-            {
-                leftSpawnParent.SetActive(true);
-            }
-
-            if(gameManager.currentRound >= 4)
-            {
-                leftSpawnParent.SetActive(false);
-                rightSpawnParent.SetActive(false);
-                otherSpawnParent.SetActive(true);
-            }
         });
         EventManager.instance.OnEnemyDeath.AddListener(() => {
             ++deadEnemyCount;
             --aliveEnemyCount;
+
+            Debug.Log(deadEnemyCount + "/" + roundEnemyCount);
 
             if (hud)
             {
@@ -132,12 +116,9 @@ public class EnemySpawningManager : MonoBehaviour {
         float chance = Random.Range(0, 100)/100.0f;
       
         float shepSpawnChance = shepherdSpawnRate.Evaluate(roundPercentage);
-        float glitSpawnChance = glitchSpawnRate.Evaluate(roundPercentage);
         float scrapSpawnChance = scrapSpawnRate.Evaluate(roundPercentage);
 
-        if (chance < glitSpawnChance)
-            SpawnGlitch(spawningObjects[Random.Range(0, spawningObjects.Count)].transform);
-        else if (chance < shepSpawnChance)
+        if (chance < shepSpawnChance)
             SpawnShepherd(spawningObjects[Random.Range(0, spawningObjects.Count)].transform);
         else
             SpawnSwarmer(spawningObjects[Random.Range(0, spawningObjects.Count)].transform);
