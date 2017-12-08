@@ -63,7 +63,7 @@ public class UI_Controller : MonoBehaviour {
         //if (displayBoost != moveHandle.jumpChargeTimer)
             displayBoost = moveHandle.jumpChargeTimer; // TODO : Maybe lerp this??
 
-        BoostMask.sizeDelta = new Vector2(1000, ((displayBoost / moveHandle.jumpChargeTime)) * BoostFullsize);
+        BoostMask.sizeDelta = new Vector2(506, ((displayBoost / moveHandle.jumpChargeTime)) * BoostFullsize);
 
         // Heat(s)
         for(int i = 0; i < 2; i++)
@@ -76,7 +76,7 @@ public class UI_Controller : MonoBehaviour {
                 //if (hasOverheated[i] != iRef.spawnedWeapons[i].hasOverheated)
                 hasOverheated[i] = iRef.spawnedWeapons[i].hasOverheated;
 
-                heatMask[i].sizeDelta = new Vector2(1000, ((displayHeat[i] / 100.0f)) * heatFullsize);
+                heatMask[i].sizeDelta = new Vector2(360, ((displayHeat[i] / 100.0f)) * heatFullsize);
                 overheatIcon[i].SetActive(hasOverheated[i]);
             }
         }
