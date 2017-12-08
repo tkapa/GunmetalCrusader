@@ -217,6 +217,7 @@ public class Wave0Script : MonoBehaviour {
 
     void JumpSequence()
     {
+        Debug.Log("Starting Real Game");
         TutLines.PlayOneShot(FinalLine);
 
         StartRealGame();

@@ -30,7 +30,9 @@ public class EnemySpawningManager : MonoBehaviour {
         glitchPrefab,
         scrapperPrefab;
 
-    public GameObject leftSpawnParent, rightSpawnParent, otherSpawnParent;
+    public GameObject leftSpawnParent, 
+        rightSpawnParent, 
+        otherSpawnParent;
 
     [HideInInspector]
     public List<GameObject> spawningObjects = new List<GameObject>();
@@ -71,7 +73,7 @@ public class EnemySpawningManager : MonoBehaviour {
                 hud.enemyCount = aliveEnemyCount;
             }
 
-            if (deadEnemyCount == roundEnemyCount)
+            if (deadEnemyCount >= roundEnemyCount)
                 EventManager.instance.OnEndRound.Invoke();
         });
     }
@@ -92,7 +94,7 @@ public class EnemySpawningManager : MonoBehaviour {
         else
             spawningIntervalTimer -= Time.deltaTime;
 
-        if (spawnedEnemyCount == roundEnemyCount)
+        if (spawnedEnemyCount >= roundEnemyCount)
             isSpawning = false;
     }
 
