@@ -203,6 +203,8 @@ public class Wave0Script : MonoBehaviour {
         TutLines.PlayOneShot(HowTojump);
 
         Invoke("JumpSequence", 9);
+
+        Player.p.HasDoneJumpTutorial = true;
         //JumpSequence(); // For now just cut losses and finish the shit
         /*
         if(genlocation)

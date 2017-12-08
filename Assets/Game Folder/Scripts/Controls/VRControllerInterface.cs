@@ -16,6 +16,8 @@ public class VRControllerInterface : GamepadPointer {
 
     private VRTK.VRTK_ControllerReference cReference = null;
 
+    public GameObject CirclePrompt;
+
     // Current Overlapped Interface Object
     [SerializeField]
     //private List<InterfaceObject> io = new List<InterfaceObject>();
@@ -72,6 +74,11 @@ public class VRControllerInterface : GamepadPointer {
         else{
             holdTimer = 0.0f;
         }
+
+        if (Player.p.HasDoneJumpTutorial && !Player.p.HasJumpedYet)
+            CirclePrompt.SetActive(true);
+        else
+            CirclePrompt.SetActive(false);
 
 
         /////////////////////////////////////////////////////////////

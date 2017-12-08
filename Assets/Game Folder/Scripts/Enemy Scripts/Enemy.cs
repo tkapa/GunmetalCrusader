@@ -199,7 +199,7 @@ public class Enemy : MonoBehaviour {
         this.GetComponent<EnemyHealthComponent>().health = enemyHealthCurve.Evaluate(roundPercentage) * maximumEnemyHealth;
         damage = enemyHealthCurve.Evaluate(roundPercentage) * maximumEnemyDamage;
         
-		agent.speed = enemyHealthCurve.Evaluate(roundPercentage) * maximumEnemySpeed + 5.0f;
+		agent.speed = enemyHealthCurve.Evaluate(roundPercentage) * maximumEnemySpeed + 8.0f;
         //agent.stoppingDistance = attackingDistance;
 
 		destinationUpdateTimer = destinationUpdateTime;

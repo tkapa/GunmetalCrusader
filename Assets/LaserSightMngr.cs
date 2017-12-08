@@ -56,7 +56,7 @@ public class LaserSightMngr : MonoBehaviour {
                         Points[pos].transform.position = hitPoint[0];
 
 
-                        Points[pos].SetActive(false);
+                        Points[pos].SetActive(true);
 
                         pos++;
                     }

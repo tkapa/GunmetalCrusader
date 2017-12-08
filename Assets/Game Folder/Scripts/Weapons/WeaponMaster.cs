@@ -126,6 +126,7 @@ public class WeaponMaster : MonoBehaviour {
                     EventManager.instance.OnMechaJumpStart.Invoke();
 
                     isInJumpMode = false;
+                    Player.p.HasJumpedYet = true;
                 }
 
                 else
