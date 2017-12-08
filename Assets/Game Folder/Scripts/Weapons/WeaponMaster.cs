@@ -47,7 +47,6 @@ public class WeaponMaster : MonoBehaviour {
         {
             if (i == weaponPointIndex)
             {
-                Debug.Log("fuck life. but hey the switch was received *click*");
                 isInJumpMode = !isInJumpMode;
                 OnFireInput(false);
             }
@@ -71,8 +70,9 @@ public class WeaponMaster : MonoBehaviour {
 
         EventManager.instance.OnWeaponFire.AddListener((i, b) =>
         {
-            if (i == weaponPointIndex)
+            if (i == weaponPointIndex){
                 OnFireInput(b);
+            }
         });
 
         // Initializing variables
@@ -113,10 +113,10 @@ public class WeaponMaster : MonoBehaviour {
     // Called when the weapon receives fire input
     protected virtual void OnFireInput(bool startFire)
     {
-        if(startFire && isInJumpMode)
+        if (startFire && isInJumpMode)
         {
             // Do jump checking and stuff here
-            if(playerjumper.isCharged())
+            if (playerjumper.isCharged())
             {
                 // Todo: Move the isCol stuff somewhere else to change the colour of lasers
                 bool isCol = vrCont.testHitObjectTag("Floor");
@@ -135,7 +135,9 @@ public class WeaponMaster : MonoBehaviour {
             }
         }
         else
+        {
             isFiring = startFire;
+        }
     }
 
     // Sets the weapon point index
@@ -148,8 +150,10 @@ public class WeaponMaster : MonoBehaviour {
     private void UpdateJumpTarget()
     {
         if (!isInJumpMode){
-            if(playerjumper.isJumping())
-            Destroy(spawnedJumpTarget);
+            if (!playerjumper.isJumping())
+            {
+                Destroy(spawnedJumpTarget);
+            }
             return;
         }
         else if (playerjumper.isJumping())

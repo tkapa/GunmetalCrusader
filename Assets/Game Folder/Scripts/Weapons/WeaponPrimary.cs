@@ -161,11 +161,6 @@ public class WeaponPrimary : WeaponMaster
 	 */
     protected override void Update()
     {
-        if (Input.GetKey(KeyCode.Space))        
-            isFiring = true;
-        else
-            isFiring = false;
-
         // Call Superclass function
         base.Update();
 
@@ -210,8 +205,11 @@ public class WeaponPrimary : WeaponMaster
     {
         if (isFiring && hasOverheated == false)
         {
-            if(fireTimer <= 0.0f)
+            if (fireTimer <= 0.0f)
+            {
                 DoFire();
+                Debug.Log("Tha ting goes sKKRRRRRRRRRRRRR-AH!");
+            }
         }
         else
         {

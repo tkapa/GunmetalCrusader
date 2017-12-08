@@ -155,8 +155,6 @@ public class VRControllerInterface : GamepadPointer {
         if (other.transform.tag == "InterfacePoint")
         {
             io2[other.gameObject.GetComponent<InterfaceObject>()] = Time.time + 0.1f;
-
-            Debug.Log("Added: " + other.name);
         }
     }
 
@@ -169,13 +167,13 @@ public class VRControllerInterface : GamepadPointer {
 
         if(this.transform.localPosition.x < otherController.gameObject.transform.localPosition.x)
         {
-            linkedweap = 0;
-            otherController.linkedweap = 1;
+            linkedweap = 1;
+            otherController.linkedweap = 0;
         }
         else
         {
-            linkedweap = 1;
-            otherController.linkedweap = 0;
+            linkedweap = 0;
+            otherController.linkedweap = 1;
         }
         Debug.Log("we are about to call the eventmanager instance");
         EventManager.instance.OnWeaponInit.Invoke(0);

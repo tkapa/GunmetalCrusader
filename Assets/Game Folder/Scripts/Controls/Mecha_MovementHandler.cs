@@ -95,8 +95,12 @@ public class Mecha_MovementHandler : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-        UpdateJumpCharge();
         JumpUpdate();
+    }
+
+    void Update()
+    {
+        UpdateJumpCharge();
     }
 
     // Called when the rocket jump begins

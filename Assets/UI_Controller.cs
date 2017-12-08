@@ -54,30 +54,32 @@ public class UI_Controller : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         // HP
-        if(displayHP != pRef.health)
+        //if(displayHP != pRef.health)
             displayHP = pRef.health; // TODO : Maybe lerp this??
 
         HPMask.sizeDelta = new Vector2((displayHP / pRef.maxHealth) * HPFullSize, 200);
 
         // Boost
-        if (displayBoost != moveHandle.jumpChargeTimer)
+        //if (displayBoost != moveHandle.jumpChargeTimer)
             displayBoost = moveHandle.jumpChargeTimer; // TODO : Maybe lerp this??
 
-        BoostMask.sizeDelta = new Vector2((displayBoost / moveHandle.jumpChargeTime) * BoostFullsize, 1000);
+        Debug.Log(((displayBoost / moveHandle.jumpChargeTime)) * BoostFullsize);
+
+        BoostMask.sizeDelta = new Vector2(1000, ((displayBoost / moveHandle.jumpChargeTime)) * BoostFullsize);
 
         // Heat(s)
         for(int i = 0; i < 2; i++)
         {
             if (iRef.spawnedWeapons[i] != null)
             {
-                if (displayHeat[i] != iRef.spawnedWeapons[i].currentHeatValue)
+                //if (displayHeat[i] != iRef.spawnedWeapons[i].currentHeatValue)
                 displayHeat[i] = iRef.spawnedWeapons[i].currentHeatValue; // TODO : Maybe lerp this??
 
-            if (hasOverheated[i] != iRef.spawnedWeapons[i].hasOverheated)
+                //if (hasOverheated[i] != iRef.spawnedWeapons[i].hasOverheated)
                 hasOverheated[i] = iRef.spawnedWeapons[i].hasOverheated;
 
-            heatMask[i].sizeDelta = new Vector2((displayBoost / moveHandle.jumpChargeTime) * heatFullsize, 1000);
-            overheatIcon[i].SetActive(hasOverheated[i]);
+                heatMask[i].sizeDelta = new Vector2(1000, ((displayHeat[i] / 100.0f)) * heatFullsize);
+                overheatIcon[i].SetActive(hasOverheated[i]);
             }
         }
     }

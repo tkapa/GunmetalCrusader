@@ -63,7 +63,7 @@ public class Mecha_InventoryManager : MonoBehaviour {
         touchedPickup = null;
         foreach (PickupScript pickup in FindObjectsOfType<PickupScript>())
         {
-            if(Vector3.Distance(pickup.transform.position, this.transform.position) < 15.0f)
+            if(Vector3.Distance(pickup.transform.position, this.transform.position) < 50.0f)
             {
                 LastPickup = 1 - LastPickup;
                 pickup.OnUsePickup(LastPickup);
